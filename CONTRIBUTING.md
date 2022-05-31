@@ -137,7 +137,7 @@ Follow these steps to start contributing:
 2. Clone your fork to your local disk, and add the base repository as a remote:
 
    ```bash
-   $ git clone git@github.com:<your Github handle>/transformers.git
+   $ git clone git@github.com:<your Github handle>/adapter-transformers.git
    $ cd adapter-transformers
    $ git remote add upstream https://github.com/Adapter-Hub/adapter-transformers.git
    ```
@@ -230,13 +230,13 @@ Follow these steps to start contributing:
    they can still be built. This check also runs in CI. To run a local check
    make sure you have installed the documentation builder requirements. First you will need to clone the
    repository containing our tools to build the documentation:
-   
+
    ```bash
    $ pip install git+https://github.com/huggingface/doc-builder
    ```
 
    Then, make sure you have all the dependencies to be able to build the doc with:
-   
+
    ```bash
    $ pip install ".[docs]"
    ```
@@ -307,7 +307,7 @@ Follow these steps to start contributing:
 6. All public methods must have informative docstrings that work nicely with sphinx. See `modeling_bert.py` for an
    example.
 7. Due to the rapidly growing repository, it is important to make sure that no files that would significantly weigh down the repository are added. This includes images, videos and other non-text files. We prefer to leverage a hf.co hosted `dataset` like
-   the ones hosted on [`hf-internal-testing`](https://huggingface.co/hf-internal-testing) in which to place these files and reference 
+   the ones hosted on [`hf-internal-testing`](https://huggingface.co/hf-internal-testing) in which to place these files and reference
    them by URL. We recommend putting them in the following dataset: [huggingface/documentation-images](https://huggingface.co/datasets/huggingface/documentation-images).
    If an external contribution, feel free to add the images to your PR and ask a Hugging Face member to migrate your images
    to this dataset.

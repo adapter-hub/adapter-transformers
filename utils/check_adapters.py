@@ -15,6 +15,7 @@ MODELS_WITH_ADAPTERS = [
     "t5",
     "deberta",
     "deberta-v2",
+    "transformer",
 ]
 
 IGNORE_NOT_IMPLEMENTING_MIXIN = [
