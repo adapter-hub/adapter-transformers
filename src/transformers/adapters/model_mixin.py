@@ -986,9 +986,19 @@ class ModelWithHeadsAdaptersMixin(ModelAdaptersMixin):
         If self.base_model is self, must inherit from a class that implements this method, to preclude infinite
         recursion
         """
+
+        # print("#=================================================================================================")
+        # # print(self) #Robertamodelwithheads #Big BirdModel with heads
+        # print("#====================================================================================================")
+        # print(self.base_model) #Robertamodel #BigBirdmodel
+        # print("#======================================================================================================")
+
         if self.base_model is self:
             super().add_adapter(adapter_name, config, overwrite_ok=overwrite_ok, set_active=set_active)
         else:
+            # print(config)
+            # print(adapter_name)
+            # print("#===========================================================================================")
             self.base_model.add_adapter(adapter_name, config, overwrite_ok=overwrite_ok, set_active=set_active)
 
     def train_adapter(self, adapter_setup: Union[list, AdapterCompositionBlock], train_embeddings=False):

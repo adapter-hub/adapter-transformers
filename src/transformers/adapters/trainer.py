@@ -256,7 +256,7 @@ class AdapterTrainerCallback(TrainerCallback):
     def on_step_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         # apply adapter fusion weight regularization on the value matrix
         model = kwargs.pop("model")
-        if self.trainer.train_adapter_fusion:
+        if hasattr(self.trainer, 'train_adapter_fusion') and self.trainer.train_adapter_fusion:
             fusion_reg_loss = model.base_model.get_fusion_regularization_loss()
             fusion_reg_loss.backward()
 

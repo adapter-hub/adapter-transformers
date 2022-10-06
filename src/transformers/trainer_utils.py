@@ -113,6 +113,7 @@ class EvalPrediction:
         label_ids: Union[np.ndarray, Tuple[np.ndarray]],
         inputs: Optional[Union[np.ndarray, Tuple[np.ndarray]]] = None,
     ):
+    
         self.predictions = predictions
         self.label_ids = label_ids
         self.inputs = inputs

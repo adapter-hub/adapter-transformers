@@ -1015,7 +1015,9 @@ class PreTrainedModel(nn.Module, ModuleUtilsMixin, GenerationMixin, PushToHubMix
         Returns:
             `nn.Module`: A torch module mapping vocabulary to hidden states.
         """
+        
         base_model = getattr(self, self.base_model_prefix, self)
+
         if base_model is not self:
             return base_model.get_input_embeddings()
         else:
@@ -1028,6 +1030,7 @@ class PreTrainedModel(nn.Module, ModuleUtilsMixin, GenerationMixin, PushToHubMix
         Args:
             value (`nn.Module`): A module mapping vocabulary to hidden states.
         """
+        
         base_model = getattr(self, self.base_model_prefix, self)
         if base_model is not self:
             base_model.set_input_embeddings(value)
@@ -1934,7 +1937,7 @@ class PreTrainedModel(nn.Module, ModuleUtilsMixin, GenerationMixin, PushToHubMix
                     mirror=mirror,
                     subfolder=subfolder if len(subfolder) > 0 else None,
                 )
-
+            
             try:
                 # Load from URL or cache if already cached
                 resolved_archive_file = cached_path(

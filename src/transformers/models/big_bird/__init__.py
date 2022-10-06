@@ -30,6 +30,7 @@ from ...utils import (
 
 _import_structure = {
     "configuration_big_bird": ["BIG_BIRD_PRETRAINED_CONFIG_ARCHIVE_MAP", "BigBirdConfig", "BigBirdOnnxConfig"],
+    "tokenization_big_bird": ["BigBirdTokenizer"],
 }
 
 try:
@@ -89,7 +90,7 @@ else:
 
 if TYPE_CHECKING:
     from .configuration_big_bird import BIG_BIRD_PRETRAINED_CONFIG_ARCHIVE_MAP, BigBirdConfig, BigBirdOnnxConfig
-
+    from .tokenization_big_bird import BigBirdTokenizer
     try:
         if not is_sentencepiece_available():
             raise OptionalDependencyNotAvailable()

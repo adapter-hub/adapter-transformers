@@ -530,7 +530,7 @@ class ModelWithFlexibleHeadsAdaptersMixin(ModelWithHeadsAdaptersMixin):
             if hasattr(self, self.base_model_prefix):
                 self = getattr(self, self.base_model_prefix)
             self._tie_encoder_decoder_weights(self.encoder, self.decoder, self.base_model_prefix)
-
+        
         return self.get_input_embeddings()
 
     def _resize_token_embeddings(self, new_num_tokens):

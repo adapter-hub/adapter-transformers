@@ -316,6 +316,7 @@ class RobertaSelfOutput(BertSelfOutputAdaptersMixin, nn.Module):
         return hidden_states
 
 
+
 # Copied from transformers.models.bert.modeling_bert.BertAttention with Bert->Roberta
 class RobertaAttention(nn.Module):
     def __init__(self, config, position_embedding_type=None, location_key: Optional[str] = None):

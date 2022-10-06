@@ -10,7 +10,6 @@ ADAPTER_MODEL_MAPPING_NAMES = OrderedDict(
     [
         ("xlm-roberta", "XLMRobertaAdapterModel"),
         ("roberta", "RobertaAdapterModel"),
-        ("big_bird", "BigBirdAdapterModel"),
         ("bert", "BertAdapterModel"),
         ("distilbert", "DistilBertAdapterModel"),
         ("deberta-v2", "DebertaV2AdapterModel"),
@@ -22,12 +21,10 @@ ADAPTER_MODEL_MAPPING_NAMES = OrderedDict(
         ("vit", "ViTAdapterModel"),
     ]
 )
-
 MODEL_WITH_HEADS_MAPPING_NAMES = OrderedDict(
     [
         ("xlm-roberta", "XLMRobertaModelWithHeads"),
         ("roberta", "RobertaModelWithHeads"),
-        ("big_bird", "BigBirdModelWithHeads"),
         ("bert", "BertModelWithHeads"),
         ("distilbert", "DistilBertModelWithHeads"),
         ("bart", "BartModelWithHeads"),
