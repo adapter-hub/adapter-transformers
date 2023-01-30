@@ -24,6 +24,17 @@ from torch import nn
 from torch.nn import CrossEntropyLoss
 
 from ...activations import ACT2FN
+from ...adapters.composition import adjust_tensors_for_parallel
+from ...adapters.context import ForwardContext
+from ...adapters.lora import Linear as LoRALinear
+from ...adapters.mixins.m2m_100 import (
+    M2M100DecoderLayerAdaptersMixin,
+    M2M100EncoderLayerAdaptersMixin,
+    M2M100ModelAdaptersMixin,
+    M2M100ModelWithHeadsAdaptersMixin,
+)
+from ...adapters.model_mixin import InvertibleAdaptersMixin
+from ...adapters.prefix_tuning import PrefixTuningShim
 from ...deepspeed import is_deepspeed_zero3_enabled
 from ...modeling_outputs import (
     BaseModelOutput,
@@ -199,11 +210,13 @@ class M2M100Attention(nn.Module):
 
     def __init__(
         self,
+        config: M2M100Config,
         embed_dim: int,
         num_heads: int,
         dropout: float = 0.0,
         is_decoder: bool = False,
         bias: bool = True,
+        location_key: Optional[str] = None,
     ):
         super().__init__()
         self.embed_dim = embed_dim
@@ -219,10 +232,12 @@ class M2M100Attention(nn.Module):
         self.scaling = self.head_dim**-0.5
         self.is_decoder = is_decoder
 
-        self.k_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
-        self.v_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
-        self.q_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
+        self.k_proj = LoRALinear(embed_dim, embed_dim, "selfattn", config, attn_key="k", bias=bias)
+        self.v_proj = LoRALinear(embed_dim, embed_dim, "selfattn", config, attn_key="v", bias=bias)
+        self.q_proj = LoRALinear(embed_dim, embed_dim, "selfattn", config, attn_key="q", bias=bias)
         self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
+
+        self.prefix_tuning = PrefixTuningShim(location_key + "_prefix" if location_key else None, config)
 
     def _shape(self, tensor: torch.Tensor, seq_len: int, bsz: int):
         return tensor.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2).contiguous()
@@ -342,22 +357,27 @@ class M2M100Attention(nn.Module):
 
 
 # Copied from transformers.models.mbart.modeling_mbart.MBartEncoderLayer with MBart->M2M100
-class M2M100EncoderLayer(nn.Module):
+class M2M100EncoderLayer(M2M100EncoderLayerAdaptersMixin, nn.Module):
     def __init__(self, config: M2M100Config):
         super().__init__()
+        self.config = config
         self.embed_dim = config.d_model
         self.self_attn = M2M100Attention(
+            config,
             embed_dim=self.embed_dim,
             num_heads=config.encoder_attention_heads,
             dropout=config.attention_dropout,
+            location_key="encoder",
         )
         self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)
         self.dropout = config.dropout
         self.activation_fn = ACT2FN[config.activation_function]
         self.activation_dropout = config.activation_dropout
-        self.fc1 = nn.Linear(self.embed_dim, config.encoder_ffn_dim)
-        self.fc2 = nn.Linear(config.encoder_ffn_dim, self.embed_dim)
+        self.fc1 = LoRALinear(self.embed_dim, config.encoder_ffn_dim, "intermediate", config)
+        self.fc2 = LoRALinear(config.encoder_ffn_dim, self.embed_dim, "output", config)
         self.final_layer_norm = nn.LayerNorm(self.embed_dim)
+
+        self._init_adapter_modules()
 
     def forward(
         self,
@@ -386,7 +406,8 @@ class M2M100EncoderLayer(nn.Module):
             output_attentions=output_attentions,
         )
         hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
-        hidden_states = residual + hidden_states
+        #hidden_states = residual + hidden_states
+        hidden_states = self.attention_adapters(hidden_states, residual, None)
 
         residual = hidden_states
         hidden_states = self.final_layer_norm(hidden_states)
@@ -394,7 +415,8 @@ class M2M100EncoderLayer(nn.Module):
         hidden_states = nn.functional.dropout(hidden_states, p=self.activation_dropout, training=self.training)
         hidden_states = self.fc2(hidden_states)
         hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
-        hidden_states = residual + hidden_states
+        #hidden_states = residual + hidden_states
+        hidden_states = self.output_adapters(hidden_states, residual, None)
 
         if hidden_states.dtype == torch.float16 and (
             torch.isinf(hidden_states).any() or torch.isnan(hidden_states).any()
@@ -411,16 +433,20 @@ class M2M100EncoderLayer(nn.Module):
 
 
 # Copied from transformers.models.mbart.modeling_mbart.MBartDecoderLayer with MBart->M2M100
-class M2M100DecoderLayer(nn.Module):
+class M2M100DecoderLayer(M2M100DecoderLayerAdaptersMixin, nn.Module):
     def __init__(self, config: M2M100Config):
         super().__init__()
+        self.config = config
+
         self.embed_dim = config.d_model
 
         self.self_attn = M2M100Attention(
+            config,
             embed_dim=self.embed_dim,
             num_heads=config.decoder_attention_heads,
             dropout=config.attention_dropout,
             is_decoder=True,
+            location_key="self",
         )
         self.dropout = config.dropout
         self.activation_fn = ACT2FN[config.activation_function]
@@ -428,15 +454,19 @@ class M2M100DecoderLayer(nn.Module):
 
         self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)
         self.encoder_attn = M2M100Attention(
+            config,
             self.embed_dim,
             config.decoder_attention_heads,
             dropout=config.attention_dropout,
             is_decoder=True,
+            location_key="cross",
         )
         self.encoder_attn_layer_norm = nn.LayerNorm(self.embed_dim)
         self.fc1 = nn.Linear(self.embed_dim, config.decoder_ffn_dim)
         self.fc2 = nn.Linear(config.decoder_ffn_dim, self.embed_dim)
         self.final_layer_norm = nn.LayerNorm(self.embed_dim)
+
+        self._init_adapter_modules()
 
     def forward(
         self,
@@ -483,7 +513,8 @@ class M2M100DecoderLayer(nn.Module):
             output_attentions=output_attentions,
         )
         hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
-        hidden_states = residual + hidden_states
+        #hidden_states = residual + hidden_states
+        hidden_states = self.attention_adapters(hidden_states, residual, None)
 
         # Cross-Attention Block
         cross_attn_present_key_value = None
@@ -503,7 +534,8 @@ class M2M100DecoderLayer(nn.Module):
                 output_attentions=output_attentions,
             )
             hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
-            hidden_states = residual + hidden_states
+            #hidden_states = residual + hidden_states
+            hidden_states = self.cross_attention_adapters(hidden_states, residual, None)
 
             # add cross-attn to positions 3,4 of present_key_value tuple
             present_key_value = present_key_value + cross_attn_present_key_value
@@ -515,7 +547,8 @@ class M2M100DecoderLayer(nn.Module):
         hidden_states = nn.functional.dropout(hidden_states, p=self.activation_dropout, training=self.training)
         hidden_states = self.fc2(hidden_states)
         hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
-        hidden_states = residual + hidden_states
+        #hidden_states = residual + hidden_states
+        hidden_states = self.output_adapters(hidden_states, residual, None)
 
         outputs = (hidden_states,)
 
@@ -673,7 +706,7 @@ M2M_100_INPUTS_DOCSTRING = r"""
 """
 
 
-class M2M100Encoder(M2M100PreTrainedModel):
+class M2M100Encoder(InvertibleAdaptersMixin, M2M100PreTrainedModel):
     """
     Transformer encoder consisting of *config.encoder_layers* self attention layers. Each layer is a
     [`M2M100EncoderLayer`].
@@ -685,6 +718,7 @@ class M2M100Encoder(M2M100PreTrainedModel):
 
     def __init__(self, config: M2M100Config, embed_tokens: Optional[nn.Embedding] = None):
         super().__init__(config)
+        self.config = config
 
         self.dropout = config.dropout
         self.layerdrop = config.encoder_layerdrop
@@ -782,6 +816,8 @@ class M2M100Encoder(M2M100PreTrainedModel):
 
         hidden_states = inputs_embeds + embed_pos
         hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
+
+        hidden_states = self.invertible_adapters_forward(hidden_states)
 
         # expand attention_mask
         if attention_mask is not None:
@@ -1127,7 +1163,7 @@ class M2M100Decoder(M2M100PreTrainedModel):
     "The bare M2M100 Model outputting raw hidden-states without any specific head on top.",
     M2M_100_START_DOCSTRING,
 )
-class M2M100Model(M2M100PreTrainedModel):
+class M2M100Model(M2M100ModelAdaptersMixin, M2M100PreTrainedModel):
     def __init__(self, config: M2M100Config):
         super().__init__(config)
 
@@ -1136,6 +1172,8 @@ class M2M100Model(M2M100PreTrainedModel):
 
         self.encoder = M2M100Encoder(config, self.shared)
         self.decoder = M2M100Decoder(config, self.shared)
+
+        self._init_adapter_modules()
 
         # Initialize weights and apply final processing
         self.post_init()
@@ -1161,6 +1199,7 @@ class M2M100Model(M2M100PreTrainedModel):
         output_type=Seq2SeqModelOutput,
         config_class=_CONFIG_FOR_DOC,
     )
+    @ForwardContext.wrap
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -1238,7 +1277,7 @@ class M2M100Model(M2M100PreTrainedModel):
 @add_start_docstrings(
     "The M2M100 Model with a language modeling head. Can be used for summarization.", M2M_100_START_DOCSTRING
 )
-class M2M100ForConditionalGeneration(M2M100PreTrainedModel):
+class M2M100ForConditionalGeneration(M2M100ModelWithHeadsAdaptersMixin, M2M100PreTrainedModel):
     base_model_prefix = "model"
     _keys_to_ignore_on_load_missing = [
         r"encoder.version",
@@ -1331,7 +1370,8 @@ class M2M100ForConditionalGeneration(M2M100PreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        lm_logits = self.lm_head(outputs[0])
+        lm_logits = self.model.encoder.invertible_adapters_forward(outputs[0], rev=True)
+        lm_logits = self.lm_head(lm_logits)
 
         masked_lm_loss = None
         if labels is not None:

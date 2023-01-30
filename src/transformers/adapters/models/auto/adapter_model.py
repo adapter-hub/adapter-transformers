@@ -21,6 +21,7 @@ ADAPTER_MODEL_MAPPING_NAMES = OrderedDict(
         ("gptj", "GPTJAdapterModel"),
         ("t5", "T5AdapterModel"),
         ("vit", "ViTAdapterModel"),
+        ("M2M100", "M2M100AdapterModel"),
     ]
 )
 MODEL_WITH_HEADS_MAPPING_NAMES = OrderedDict(

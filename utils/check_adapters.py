@@ -18,6 +18,7 @@ MODELS_WITH_ADAPTERS = [
     "deberta",
     "deberta_v2",
     "vit",
+    "m2m_100",
 ]
 
 IGNORE_NOT_IMPLEMENTING_MIXIN = [
@@ -25,6 +26,8 @@ IGNORE_NOT_IMPLEMENTING_MIXIN = [
     "BartDecoder",
     "MBartEncoder",
     "MBartDecoder",
+    "M2M100Encoder",
+    "M2M100Decoder",
     "T5Stack",
 ]
 
