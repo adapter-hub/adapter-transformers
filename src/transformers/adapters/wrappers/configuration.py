@@ -35,6 +35,10 @@ CONFIG_CLASS_KEYS_MAPPING = {
         "hidden_dropout_prob": "resid_pdrop",
         "attention_probs_dropout_prob": "attn_pdrop",
     },
+    "gpt_neox": {
+        "hidden_dropout_prob": "hidden_dropout_prob",
+        "attention_probs_dropout_prob": "attention_probs_dropout_prob",
+    },
     "gptj": {
         "hidden_dropout_prob": "resid_pdrop",
         "attention_probs_dropout_prob": "attn_pdrop",

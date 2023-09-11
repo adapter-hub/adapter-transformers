@@ -117,6 +117,7 @@ _REGULAR_SUPPORTED_MODEL_NAMES_AND_TASKS = [
     "electra",
     "gpt2",
     "gpt_neo",
+    "gpt_neox",
     "gptj",
     "hubert",
     "layoutlm",

@@ -113,6 +113,10 @@ _import_structure = {
         "GPT2AdapterModel",
         "GPT2ModelWithHeads",
     ],
+    "models.gpt_neox": [
+        "GPTNeoXAdapterModel",
+        "GPTNeoXModelWithHeads",
+    ],
     "models.gptj": ["GPTJAdapterModel"],
     "models.mbart": [
         "MBartAdapterModel",
@@ -217,6 +221,7 @@ if TYPE_CHECKING:
     from .models.debertaV2 import DebertaV2AdapterModel
     from .models.distilbert import DistilBertAdapterModel, DistilBertModelWithHeads
     from .models.gpt2 import GPT2AdapterModel, GPT2ModelWithHeads
+    from .models.gpt_neox import GPTNeoXAdapterModel, GPTNeoXModelWithHeads
     from .models.gptj import GPTJAdapterModel
     from .models.mbart import MBartAdapterModel, MBartModelWithHeads
     from .models.roberta import RobertaAdapterModel, RobertaModelWithHeads

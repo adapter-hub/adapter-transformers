@@ -22,6 +22,16 @@ from torch import nn
 from torch.nn import CrossEntropyLoss
 
 from ...activations import ACT2FN
+from ...adapters.composition import adjust_tensors_for_parallel
+from ...adapters.context import ForwardContext
+from ...adapters.lora import Linear as LoRALinear
+from ...adapters.lora import MergedLinear as LoRAMergedLinear
+from ...adapters.mixins.gpt_neox import (
+    GPTNeoXDecoderBlockAdaptersMixin,
+    GPTNeoXModelAdapterMixin,
+    GPTNeoXModelWithHeadsAdaptersMixin,
+)
+from ...adapters.prefix_tuning import PrefixTuningShim
 from ...file_utils import (
     add_code_sample_docstrings,
     add_start_docstrings,
@@ -83,6 +93,7 @@ class GPTNeoXAttention(nn.Module):
         self.hidden_size = config.hidden_size
         self.head_size = self.hidden_size // self.num_attention_heads
         self.rotary_ndims = int(self.head_size * config.rotary_pct)
+        self.prefix_tuning = PrefixTuningShim("self_prefix", config)
         max_positions = config.max_position_embeddings
         self.register_buffer(
             "bias",
@@ -95,7 +106,13 @@ class GPTNeoXAttention(nn.Module):
             self.rotary_ndims, config.max_position_embeddings, base=config.rotary_emb_base
         )
         self.norm_factor = torch.sqrt(torch.tensor(self.head_size, dtype=torch.float32)).to(torch.get_default_dtype())
-        self.query_key_value = nn.Linear(config.hidden_size, 3 * config.hidden_size)
+        self.query_key_value = LoRAMergedLinear(
+            config.hidden_size,
+            3 * config.hidden_size,
+            "selfattn",
+            config,
+            fan_in_fan_out=False,
+        )
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
 
     def forward(
@@ -148,6 +165,9 @@ class GPTNeoXAttention(nn.Module):
             key = torch.cat((past_key, key), dim=-2)
             value = torch.cat((past_value, value), dim=-2)
         present = (key, value) if use_cache else None
+
+        key, value, attention_mask = self.prefix_tuning(key, value, hidden_states, attention_mask)
+        (query,) = adjust_tensors_for_parallel(key, query)
 
         # Compute attention
         attn_output, attn_weights = self._attn(query, key, value, attention_mask, head_mask)
@@ -286,8 +306,8 @@ def apply_rotary_pos_emb(q, k, cos, sin, offset: int = 0):
 class GPTNeoXMLP(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.dense_h_to_4h = nn.Linear(config.hidden_size, config.intermediate_size)
-        self.dense_4h_to_h = nn.Linear(config.intermediate_size, config.hidden_size)
+        self.dense_h_to_4h = LoRALinear(config.hidden_size, config.intermediate_size, "intermediate", config)
+        self.dense_4h_to_h = LoRALinear(config.intermediate_size, config.hidden_size, "output", config)
         self.act = ACT2FN[config.hidden_act]
 
     def forward(self, hidden_states):
@@ -297,14 +317,16 @@ class GPTNeoXMLP(nn.Module):
         return hidden_states
 
 
-class GPTNeoXLayer(nn.Module):
+class GPTNeoXLayer(GPTNeoXDecoderBlockAdaptersMixin, nn.Module):
     def __init__(self, config):
         super().__init__()
+        self.config = config
         self.use_parallel_residual = config.use_parallel_residual
         self.input_layernorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
         self.post_attention_layernorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
         self.attention = GPTNeoXAttention(config)
         self.mlp = GPTNeoXMLP(config)
+        self._init_adapter_modules()
 
     def forward(
         self,
@@ -331,14 +353,23 @@ class GPTNeoXLayer(nn.Module):
             # pseudocode:
             # x = x + attn(ln1(x)) + mlp(ln2(x))
             mlp_output = self.mlp(self.post_attention_layernorm(hidden_states))
-            hidden_states = mlp_output + attn_output + hidden_states
+            # See https://github.com/adapter-hub/adapter-transformers/pull/426#discussion_r994450898
+            hidden_states = self.attention_adapters(attn_output, hidden_states, None)
+            hidden_states = self.output_adapters(mlp_output, hidden_states, None)
+            # hidden_states = mlp_output + attn_output + hidden_states
+
         else:
             # pseudocode:
             # x = x + attn(ln1(x))
             # x = x + mlp(ln2(x))
-            attn_output = attn_output + hidden_states
-            mlp_output = self.mlp(self.post_attention_layernorm(attn_output))
-            hidden_states = mlp_output + attn_output
+            hidden_states = self.attention_adapters(
+                attn_output, hidden_states, None
+            )  # attn_output = attn_output + hidden_states
+            residual = hidden_states
+            mlp_output = self.mlp(self.post_attention_layernorm(hidden_states))
+            # residual connection
+            hidden_states = self.output_adapters(mlp_output, residual, None)
+            # hidden_states = mlp_output + attn_output
 
         if use_cache:
             outputs = (hidden_states,) + outputs  # hidden_states, present, (attn_weights)
@@ -413,7 +444,7 @@ GPT_NEOX_INPUTS_DOCSTRING = r"""
     "The bare GPTNeoX Model transformer outputting raw hidden-states without any specific head on top.",
     GPT_NEOX_START_DOCSTRING,
 )
-class GPTNeoXModel(GPTNeoXPreTrainedModel):
+class GPTNeoXModel(GPTNeoXModelAdapterMixin, GPTNeoXPreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
         self.config = config
@@ -423,6 +454,8 @@ class GPTNeoXModel(GPTNeoXPreTrainedModel):
         self.final_layer_norm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
 
         self.gradient_checkpointing = False
+
+        self._init_adapter_modules()
 
         # Initialize weights and apply final processing
         self.post_init()
@@ -440,6 +473,7 @@ class GPTNeoXModel(GPTNeoXPreTrainedModel):
         output_type=BaseModelOutputWithPast,
         config_class=_CONFIG_FOR_DOC,
     )
+    @ForwardContext.wrap
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -511,7 +545,7 @@ class GPTNeoXModel(GPTNeoXPreTrainedModel):
 
         if inputs_embeds is None:
             inputs_embeds = self.embed_in(input_ids)
-
+        inputs_embeds = self.invertible_adapters_forward(inputs_embeds)
         hidden_states = inputs_embeds
 
         presents = () if use_cache else None
@@ -552,6 +586,8 @@ class GPTNeoXModel(GPTNeoXPreTrainedModel):
                     output_attentions=output_attentions,
                 )
             hidden_states = outputs[0]
+            (attention_mask,) = adjust_tensors_for_parallel(hidden_states, attention_mask)
+
             if use_cache is True:
                 presents = presents + (outputs[1],)
             if output_attentions:
@@ -576,7 +612,7 @@ class GPTNeoXModel(GPTNeoXPreTrainedModel):
 @add_start_docstrings(
     """GPTNeoX Model with a `language modeling` head on top for CLM fine-tuning.""", GPT_NEOX_START_DOCSTRING
 )
-class GPTNeoXForCausalLM(GPTNeoXPreTrainedModel):
+class GPTNeoXForCausalLM(GPTNeoXModelWithHeadsAdaptersMixin, GPTNeoXPreTrainedModel):
 
     _keys_to_ignore_on_load_missing = [r"position_ids", r"predictions.decoder.bias"]
 

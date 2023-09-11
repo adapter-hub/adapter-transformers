@@ -381,6 +381,13 @@ STATIC_TO_FLEX_HEAD_MAP = {
         },
         "layers": [None, "classifier"],
     },
+    # GPT-NeoX
+    "GPTNeoXForCausalLM": {
+        "config": {
+            "head_type": "causal_lm",
+        },
+        "layers": ["embed_out"],
+    },
     # GPT-J
     "GPTJForSequenceClassification": {
         "config": {
