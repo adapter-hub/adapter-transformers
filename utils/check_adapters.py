@@ -20,6 +20,7 @@ MODELS_WITH_ADAPTERS = [
     "deberta_v2",
     "vit",
     "clip",
+    "hubert",
 ]
 
 IGNORE_NOT_IMPLEMENTING_MIXIN = [
