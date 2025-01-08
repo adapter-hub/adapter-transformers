@@ -46,6 +46,12 @@ CONFIG_CLASS_KEYS_MAPPING = {
         "hidden_dropout_prob": "dropout",
         "attention_probs_dropout_prob": "attention_dropout",
     },
+    "m2m_100": {
+        "num_attention_heads": "encoder_attention_heads",
+        "hidden_size": "d_model",
+        "hidden_dropout_prob": "dropout",
+        "attention_probs_dropout_prob": "attention_dropout",
+    },
     "plbart": {
         "num_attention_heads": "encoder_attention_heads",
         "hidden_size": "d_model",

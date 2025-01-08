@@ -19,6 +19,7 @@ from .distilbert.mixin_distilbert import DistilBertModelAdaptersMixin, DistilBer
 from .gpt2.mixin_gpt2 import GPT2ModelAdapterMixin
 from .gptj.mixin_gptj import GPTJMLPAdaptersMixin, GPTJModelAdapterMixin
 from .llama.mixin_llama import LlamaForQuestionAnsweringAdapterMixin, LlamaModelAdapterMixin
+from .m2m_100.mixin_m2m_100 import M2M100DecoderAdaptersMixin, M2M100EncoderAdaptersMixin, M2M100ModelAdaptersMixin
 from .mistral.mixin_mistral import MistralModelAdapterMixin
 from .plbart.mixin_plbart import (
     PLBartDecoderAdaptersMixin,
@@ -70,6 +71,9 @@ MODEL_MIXIN_MAPPING = {
     "MBartDecoder": BartDecoderAdaptersMixin,
     "MBartDecoderWrapper": BartDecoderWrapperAdaptersMixin,
     "MBartModel": BartModelAdaptersMixin,
+    "M2M100Model": M2M100ModelAdaptersMixin,
+    "M2M100Encoder": M2M100EncoderAdaptersMixin,
+    "M2M100Decoder": M2M100DecoderAdaptersMixin,
     "MT5Block": T5BlockAdaptersMixin,
     "MT5Model": T5ModelAdaptersMixin,
     "MT5ForConditionalGeneration": T5ForCondiditionalGenerationWithHeadsMixin,
