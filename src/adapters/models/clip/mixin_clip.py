@@ -5,7 +5,7 @@ import torch.nn as nn
 from ...composition import adjust_tensors_for_parallel_
 from ...methods.bottleneck import BottleneckLayer
 from ...methods.lora import LoRALinear
-from ...methods.prefix_tuning import PrefixTuningLayer
+from ...methods.prefix_tuning import PrefixTuningLayer, PrefixTuningPool
 from ...methods.reft import ReftLayer, hook_fn
 from ...model_mixin import (
     EmbeddingAdaptersMixin,
@@ -119,6 +119,7 @@ class CLIPModelAdaptersMixin(EmbeddingAdaptersWrapperMixin, InvertibleAdaptersWr
             if hasattr(module, "init_adapters"):
                 module.init_adapters(model_config.vision_config, adapters_config)
 
+    def _default_init_adapter_methods(self, model_config, adapters_config):
         # Patch for ReFT initialization
         for layer in self.text_model.encoder.layers:
             if not hasattr(layer, "reft_layer"):
@@ -128,3 +129,6 @@ class CLIPModelAdaptersMixin(EmbeddingAdaptersWrapperMixin, InvertibleAdaptersWr
             if not hasattr(layer, "reft_layer"):
                 layer.reft_layer = ReftLayer("output", model_config.vision_config, adapters_config)
                 layer.register_forward_hook(hook_fn)
+
+        # Add prefix tuning
+        self.base_model.prefix_tuning = PrefixTuningPool(model_config, adapters_config)

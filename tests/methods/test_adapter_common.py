@@ -13,8 +13,6 @@ from adapters import (
     DoubleSeqBnConfig,
     DoubleSeqBnInvConfig,
     Fuse,
-    InvertibleAdaptersMixin,
-    InvertibleAdaptersWrapperMixin,
     MAMConfig,
     SeqBnConfig,
     SeqBnInvConfig,
@@ -75,7 +73,7 @@ class BottleneckAdapterTestMixin(AdapterMethodBaseTestMixin):
     def test_add_adapter_with_invertible(self):
         model = self.get_model().base_model
         model.eval()
-        if not isinstance(model, InvertibleAdaptersMixin) and not isinstance(model, InvertibleAdaptersWrapperMixin):
+        if not model.supports_adapter("invertible"):
             self.skipTest("Model does not support invertible adapters.")
 
         for adapter_config in [SeqBnInvConfig(), DoubleSeqBnInvConfig()]:
@@ -123,7 +121,7 @@ class BottleneckAdapterTestMixin(AdapterMethodBaseTestMixin):
         """Tests if the invertible adapters are deleted correctly."""
         model = self.get_model().base_model
         model.eval()
-        if not isinstance(model, InvertibleAdaptersMixin) and not isinstance(model, InvertibleAdaptersWrapperMixin):
+        if not model.supports_adapter("invertible"):
             self.skipTest("Model does not support invertible adapters.")
 
         # iterate through all adapter invertible adapter configs
@@ -227,6 +225,8 @@ class BottleneckAdapterTestMixin(AdapterMethodBaseTestMixin):
     def test_invertible_adapter_forward(self):
         model = self.get_model()
         model.eval()
+        if not model.supports_adapter("invertible"):
+            self.skipTest("Model does not support invertible adapters.")
 
         for adapter_config, _ in self.inv_adapter_configs_to_test:
             with self.subTest(model_class=model.__class__.__name__, config=adapter_config.__class__.__name__):
@@ -248,6 +248,8 @@ class BottleneckAdapterTestMixin(AdapterMethodBaseTestMixin):
         """
         for k, v in ADAPTER_CONFIG_MAP.items():
             model = self.get_model()
+            if not model.supports_adapter(v):
+                continue
             # HACK: reduce the reduction factor such that
             # the small test model can have a phm_dim of 4
             if hasattr(v, "phm_layer") and v.phm_layer:
@@ -260,15 +262,19 @@ class BottleneckAdapterTestMixin(AdapterMethodBaseTestMixin):
         # count model parameters before
         model = self.get_model()
         model_no_params = sum(p.numel() for p in model.parameters())
+        added = []
         for k, v in ADAPTER_CONFIG_MAP.items():
+            if not model.supports_adapter(v):
+                continue
             # HACK: reduce the reduction factor such that
             # the small test model can have a phm_dim of 4
             if hasattr(v, "phm_layer") and v.phm_layer:
                 v = v.__class__(reduction_factor=4)
             model.add_adapter(k, config=v)
+            added.append(k)
         summary = model.adapter_summary(as_dict=True)
-        self.assertEqual(len(ADAPTER_CONFIG_MAP) + 1, len(summary))
-        for name in ADAPTER_CONFIG_MAP.keys():
+        self.assertEqual(len(added) + 1, len(summary))
+        for name in added:
             self.assertTrue(any([row["name"] == name for row in summary]))
         self.assertEqual(model_no_params, summary[-1]["#param"])
 

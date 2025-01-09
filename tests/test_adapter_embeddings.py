@@ -3,7 +3,6 @@ import tempfile
 
 import torch
 
-from adapters import AutoAdapterModel
 from transformers import AutoTokenizer, Trainer, TrainingArguments
 from transformers.testing_utils import require_torch, torch_device
 
@@ -83,11 +82,10 @@ class EmbeddingTestMixin:
         tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name, use_fast=False)
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
-        model = AutoAdapterModel.from_config(self.config())
+        model = self._init_model_for_train_run("test", "dummy")
+
         model.add_embeddings("test", tokenizer)
         self.assertEqual(model.active_embeddings, "test")
-        model.add_adapter("test")
-        self.add_head(model, "test")
         model.train_adapter("test", train_embeddings=True)
 
         for k, v in filter_parameters(model, "adapters.test.").items():
@@ -103,7 +101,7 @@ class EmbeddingTestMixin:
         training_args = TrainingArguments(
             output_dir="./examples",
             do_train=True,
-            learning_rate=0.4,
+            learning_rate=1.0,
             max_steps=15,
             no_cuda=True,
             per_device_train_batch_size=2,
@@ -138,17 +136,19 @@ class EmbeddingTestMixin:
                 and "embed_tokens" not in k1
                 and "shared" not in k1
                 and "wte" not in k1
+                and "score" not in k1
             )
         )
 
     def test_reference_embedding(self):
-        model = AutoAdapterModel.from_config(self.config())  # self.get_model()
+        model = self.get_model()
         tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name, use_fast=False)
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
         new_tokenizer = AutoTokenizer.from_pretrained("tests/fixtures/SiBERT")
 
         model.add_embeddings("test", new_tokenizer, "default", tokenizer)
+        model.to(torch_device)
 
         default_embedding = model.base_model.loaded_embeddings["default"]
         test_embedding = model.base_model.loaded_embeddings["test"]
@@ -163,8 +163,8 @@ class EmbeddingTestMixin:
                 if len(input_test) >= 5:
                     break
 
-        input_default = torch.tensor([input_default])
-        input_test = torch.tensor([input_test])
+        input_default = torch.tensor([input_default]).to(torch_device)
+        input_test = torch.tensor([input_test]).to(torch_device)
 
         default = default_embedding(input_default)
         test = test_embedding(input_test)

@@ -26,7 +26,7 @@ class EncoderDecoderModelAdaptersMixin(
         # Before initializing adapters, forward adding invertible adapters to the encoder
         self.add_invertible_adapter = self.encoder.base_model.add_invertible_adapter
 
-        super().init_adapters(model_config, adapters_config, add_prefix_tuning_pool=False)
+        super().init_adapters(model_config, adapters_config)
 
         # ensure that encoder and decoder use the same shared parameters
         if hasattr(self.encoder, "set_shared_parameters"):

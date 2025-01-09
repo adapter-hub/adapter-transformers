@@ -173,6 +173,39 @@ def inherit_doc(cls):
     return cls
 
 
+def multigetattr(o: object, name: str, default=None) -> Optional[object]:
+    if not name:
+        return default
+    for n in name.split("."):
+        if hasattr(o, n):
+            o = getattr(o, n)
+        else:
+            return default
+    return o
+
+
+def multihasattr(o: object, name: str) -> bool:
+    if not name:
+        return False
+    parts = name.split(".")
+    for n in parts:
+        if hasattr(o, n):
+            o = getattr(o, n)
+        else:
+            return False
+    return True
+
+
+def multisetattr(o: object, name: str, value: object):
+    parts = name.split(".")
+    for n in parts[:-1]:
+        if hasattr(o, n):
+            o = getattr(o, n)
+        else:
+            return
+    setattr(o, parts[-1], value)
+
+
 def urljoin(*args):
     return "/".join([s.strip("/") for s in args])
 

@@ -9,9 +9,12 @@ from transformers.models.auto.auto_factory import getattribute_from_module
 from transformers.models.auto.configuration_auto import model_type_to_module_name
 
 from ..configuration import ModelAdaptersConfig
+from ..interface import AdapterModelInterface
 from ..model_mixin import (
+    EmbeddingAdaptersMixin,
     EmbeddingAdaptersWrapperMixin,
     ModelAdaptersMixin,
+    ModelBaseAdaptersMixin,
     ModelUsingSubmodelsAdaptersMixin,
     ModelWithHeadsAdaptersMixin,
 )
@@ -39,7 +42,9 @@ def replace_with_adapter_class(module: nn.Module, modules_with_adapters) -> None
             module.__class__.__name__, (MODEL_MIXIN_MAPPING[module.__class__.__name__], module.__class__), {}
         )
         module.__class__ = model_class
-    elif module.__class__.__module__.startswith("transformers.models"):
+    elif module.__class__.__module__.startswith("transformers.models") or module.__class__.__module__.startswith(
+        "adapters.wrappers.model"
+    ):
         try:
             module_class = getattribute_from_module(modules_with_adapters, module.__class__.__name__ + "WithAdapters")
             module.__class__ = module_class
@@ -48,30 +53,51 @@ def replace_with_adapter_class(module: nn.Module, modules_with_adapters) -> None
             pass
 
 
-def init(model: PreTrainedModel, adapters_config: Optional[ModelAdaptersConfig] = None) -> None:
+def init(
+    model: PreTrainedModel,
+    adapters_config: Optional[ModelAdaptersConfig] = None,
+    interface: Optional[AdapterModelInterface] = None,
+) -> None:
     if isinstance(model, ModelAdaptersMixin):
         return model
 
-    # First, replace original module classes with their adapters counterparts
-    model_name = get_module_name(model.config.model_type)
-    modules_with_adapters = importlib.import_module(f".{model_name}.modeling_{model_name}", "adapters.models")
-    submodules = list(model.modules())
+    if interface is not None:
+        base_model = model.base_model
+        model_class_name = base_model.__class__.__name__
+        model_class = type(
+            model_class_name,
+            (EmbeddingAdaptersMixin, ModelBaseAdaptersMixin, base_model.__class__),
+            {},
+        )
+        base_model.__class__ = model_class
+        base_model.adapter_interface = interface
+        base_model.support_prompt_tuning = False  # HACK: will be set to true if init_prompt_tuning() is called
+    else:
+        # First, replace original module classes with their adapters counterparts
+        model_name = get_module_name(model.config.model_type)
+        try:
+            modules_with_adapters = importlib.import_module(f".{model_name}.modeling_{model_name}", "adapters.models")
+        except ImportError:
+            raise ValueError(
+                f"Model {model_name} not pre-supported by adapters. Please specify and pass `interface` explicitly."
+            )
+        submodules = list(model.modules())
 
-    # Replace the base model class
-    replace_with_adapter_class(submodules.pop(0), modules_with_adapters)
+        # Replace the base model class
+        replace_with_adapter_class(submodules.pop(0), modules_with_adapters)
 
-    # Check if the base model class derives from ModelUsingSubmodelsAdaptersMixin
-    if isinstance(model, ModelUsingSubmodelsAdaptersMixin):
-        # Before initializing the submodels, make sure that adapters_config is set for the whole model.
-        # Otherwise, it would not be shared between the submodels.
-        init_adapters_config(model, model.config, adapters_config)
-        adapters_config = model.adapters_config
-        model.init_submodels()
-        submodules = []
+        # Check if the base model class derives from ModelUsingSubmodelsAdaptersMixin
+        if isinstance(model, ModelUsingSubmodelsAdaptersMixin):
+            # Before initializing the submodels, make sure that adapters_config is set for the whole model.
+            # Otherwise, it would not be shared between the submodels.
+            init_adapters_config(model, model.config, adapters_config)
+            adapters_config = model.adapters_config
+            model.init_submodels()
+            submodules = []
 
-    # Change the class of all child modules to their adapters class
-    for module in submodules:
-        replace_with_adapter_class(module, modules_with_adapters)
+        # Change the class of all child modules to their adapters class
+        for module in submodules:
+            replace_with_adapter_class(module, modules_with_adapters)
 
     # Next, check if model class itself is not replaced and has an adapter-supporting base class
     if not isinstance(model, ModelAdaptersMixin):
@@ -94,6 +120,7 @@ def init(model: PreTrainedModel, adapters_config: Optional[ModelAdaptersConfig] 
 def load_model(
     model_name_or_path: Optional[Union[str, os.PathLike]],
     model_class: Type[PreTrainedModel],
+    interface: Optional[AdapterModelInterface] = None,
     *model_args: Any,
     **kwargs: Any,
 ) -> PreTrainedModel:
@@ -105,6 +132,9 @@ def load_model(
             Parameter identical to PreTrainedModel.from_pretrained
         model_class (`PreTrainedModel` or `AutoModel`):
             The model class to load (e.g. EncoderDecoderModel and EncoderDecoderAdapterModel both work)
+        interface (`AdapterModelInterface`, *optional*):
+            The custom adapter interface to use for the model, to be passed to the init() method.
+            If not provided, init() will try to use one of the built-in model integrations.
         model_args (sequence of positional arguments, *optional*):
             All remaining positional arguments will be passed to the underlying model's `__init__` method.
         kwargs (remaining dictionary of keyword arguments, *optional*):
@@ -118,13 +148,11 @@ def load_model(
 
     def new_init(self, config, *args, **kwargs):
         old_init(self, config, *args, **kwargs)
-        init(self)
+        init(self, interface=interface)
 
     # wrap model after it is initialized but before the weights are loaded
-    model_class.__init__ = new_init
-    model = model_class.from_pretrained(model_name_or_path, *model_args, **kwargs)
-
-    # restore original __init__ function for when other models of the same type are created
-    model_class.__init__ = old_init
+    new_model_class = type(model_class.__name__, (model_class,), {})
+    new_model_class.__init__ = new_init
+    model = new_model_class.from_pretrained(model_name_or_path, *model_args, **kwargs)
 
     return model

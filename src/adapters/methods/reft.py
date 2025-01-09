@@ -213,6 +213,7 @@ def hook_fn(module, args, output):
 
 
 def init_reft(model):
+    model = model.base_model
     for _, layer in model.iter_layers():
         if not hasattr(layer, "reft_layer"):
             layer.reft_layer = ReftLayer("output", model.config, model.adapters_config)
