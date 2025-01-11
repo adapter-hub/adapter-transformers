@@ -1,7 +1,7 @@
 import copy
 import logging
 from collections.abc import Collection, Mapping
-from typing import List, Optional, Union
+from typing import List, Optional, Tuple, Union
 
 from .. import __version__
 from ..composition import AdapterCompositionBlock
@@ -27,6 +27,7 @@ class ModelAdaptersConfig(Collection):
 
         self.fusions: Mapping[str, str] = kwargs.pop("fusions", {})
         self.fusion_config_map = kwargs.pop("fusion_config_map", {})
+        self.fusion_name_map = kwargs.pop("fusion_name_map", {})
 
         # TODO-V2 Save this with config?
         self.active_setup: Optional[AdapterCompositionBlock] = None
@@ -131,7 +132,7 @@ class ModelAdaptersConfig(Collection):
         self.adapters[adapter_name] = config_name
         logger.info(f"Adding adapter '{adapter_name}'.")
 
-    def get_fusion(self, fusion_name: Union[str, List[str]]) -> Optional[dict]:
+    def get_fusion(self, fusion_name: Union[str, List[str]]) -> Tuple[Optional[dict], Optional[list]]:
         """
         Gets the config dictionary for a given AdapterFusion.
 
@@ -140,6 +141,7 @@ class ModelAdaptersConfig(Collection):
 
         Returns:
             Optional[dict]: The AdapterFusion configuration.
+            Optional[list]: The names of the adapters to fuse.
         """
         if isinstance(fusion_name, list):
             fusion_name = ",".join(fusion_name)
@@ -149,20 +151,31 @@ class ModelAdaptersConfig(Collection):
                 config = self.fusion_config_map.get(config_name, None)
             else:
                 config = ADAPTERFUSION_CONFIG_MAP.get(config_name, None)
-        else:
-            config = None
-        return config
 
-    def add_fusion(self, fusion_name: Union[str, List[str]], config: Optional[Union[str, dict]] = None):
+            if fusion_name in self.fusion_name_map:
+                adapter_names = self.fusion_name_map[fusion_name]
+            else:
+                adapter_names = fusion_name.split(",")
+
+            return config, adapter_names
+        else:
+            return None, None
+
+    def add_fusion(
+        self, adapter_names: List[str], config: Optional[Union[str, dict]] = None, fusion_name: Optional[str] = None
+    ):
         """
         Adds a new AdapterFusion.
 
         Args:
-            fusion_name (Union[str, List[str]]): The name of the AdapterFusion or the adapters to fuse.
+            adapter_names (List[str]): The names of the adapters to fuse.
             config (Optional[Union[str, dict]], optional): AdapterFusion config. Defaults to None.
+            fusion_name (Optional[str], optional): The name of the AdapterFusion. If not specified, will default to comma-separated adapter names.
         """
-        if isinstance(fusion_name, list):
-            fusion_name = ",".join(fusion_name)
+        if fusion_name is None:
+            fusion_name = ",".join(adapter_names)
+        else:
+            self.fusion_name_map[fusion_name] = adapter_names
         if fusion_name in self.fusions:
             raise ValueError(f"An AdapterFusion with the name '{fusion_name}' has already been added.")
         if config is None:
@@ -218,6 +231,7 @@ class ModelAdaptersConfig(Collection):
                 output_dict["fusion_config_map"][k] = v.to_dict()
             else:
                 output_dict["fusion_config_map"][k] = copy.deepcopy(v)
+        output_dict["fusion_name_map"] = copy.deepcopy(self.fusion_name_map)
         return output_dict
 
     def __eq__(self, other):

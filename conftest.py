@@ -87,3 +87,8 @@ class CustomOutputChecker(OutputChecker):
 
 
 doctest.OutputChecker = CustomOutputChecker
+
+
+def pytest_collection_modifyitems(items):
+    # Exclude the 'test_class' group from the test collection since it's not a real test class and byproduct of the generic test class generation.
+    items[:] = [item for item in items if 'test_class' not in item.nodeid]

@@ -53,6 +53,7 @@ ADAPTERFUSION_WEIGHTS_NAME = "pytorch_model_adapter_fusion.bin"
 SAFE_ADAPTERFUSION_WEIGHTS_NAME = "model_adapter_fusion.safetensors"
 EMBEDDING_FILE = "embedding.pt"
 TOKENIZER_PATH = "tokenizer"
+SETUP_CONFIG_NAME = "adapter_setup.json"
 
 ADAPTER_HUB_URL = "https://raw.githubusercontent.com/Adapter-Hub/Hub/master/dist/v2/"
 ADAPTER_HUB_INDEX_FILE = ADAPTER_HUB_URL + "index/{}.json"
@@ -671,6 +672,7 @@ def resolve_adapter_path(
     model_name: str = None,
     adapter_config: Union[dict, str] = None,
     version: str = None,
+    do_exists_check: bool = True,
     **kwargs,
 ) -> str:
     """
@@ -701,8 +703,13 @@ def resolve_adapter_path(
     # path to a local folder saved using save()
     elif isdir(adapter_name_or_path):
         if (
-            isfile(join(adapter_name_or_path, WEIGHTS_NAME)) or isfile(join(adapter_name_or_path, SAFE_WEIGHTS_NAME))
-        ) and isfile(join(adapter_name_or_path, CONFIG_NAME)):
+            not do_exists_check
+            or (
+                isfile(join(adapter_name_or_path, WEIGHTS_NAME))
+                or isfile(join(adapter_name_or_path, SAFE_WEIGHTS_NAME))
+            )
+            and isfile(join(adapter_name_or_path, CONFIG_NAME))
+        ):
             return adapter_name_or_path
         else:
             raise EnvironmentError(

@@ -639,7 +639,7 @@ class AdapterFusionLoader(WeightsLoader):
         if name not in self.model.adapters_config.fusions:
             raise ValueError(f"No AdapterFusion with name '{name}' available.")
 
-        adapter_fusion_config = self.model.adapters_config.get_fusion(name)
+        adapter_fusion_config, _ = self.model.adapters_config.get_fusion(name)
 
         config_dict = build_full_config(
             adapter_fusion_config,
@@ -676,13 +676,14 @@ class AdapterFusionLoader(WeightsLoader):
         else:
             assert isdir(save_directory), "Saving path should be a directory where the head can be saved."
 
-        adapter_fusion_config = self.model.adapters_config.get_fusion(name)
+        adapter_fusion_config, adapter_names = self.model.adapters_config.get_fusion(name)
 
         # Save the adapter fusion configuration
         config_dict = build_full_config(
             adapter_fusion_config,
             self.model.config,
             name=name,
+            adapter_names=adapter_names,
             model_name=self.model.model_name,
             model_class=self.model.__class__.__name__,
         )
@@ -746,9 +747,14 @@ class AdapterFusionLoader(WeightsLoader):
         config = self.weights_helper.load_weights_config(save_directory)
 
         adapter_fusion_name = load_as or config["name"]
+        adapter_names = config.get("adapter_names", adapter_fusion_name)
         if adapter_fusion_name not in self.model.adapters_config.fusions:
             self.model.add_adapter_fusion(
-                adapter_fusion_name, config["config"], overwrite_ok=True, set_active=kwargs.pop("set_active", True)
+                adapter_names,
+                config["config"],
+                name=adapter_fusion_name,
+                overwrite_ok=True,
+                set_active=kwargs.pop("set_active", True),
             )
         else:
             logger.warning("Overwriting existing adapter fusion module '{}'".format(adapter_fusion_name))

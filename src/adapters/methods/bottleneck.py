@@ -96,9 +96,9 @@ class BottleneckLayer(ComposableAdapterLayerBase, nn.Module):
 
     def add_fusion_layer(self, adapter_names: Union[List, str]):
         """See BertModel.add_fusion_layer"""
-        adapter_names = adapter_names if isinstance(adapter_names, list) else adapter_names.split(",")
+        fusion_name = ",".join(adapter_names) if isinstance(adapter_names, list) else adapter_names
+        fusion_config, adapter_names = self.adapters_config.get_fusion(fusion_name)
         if self.adapters_config.common_config_value(adapter_names, self.location_key):
-            fusion_config = self.adapters_config.get_fusion(adapter_names)
             dropout_prob = fusion_config.dropout_prob or getattr(self.model_config, "attention_probs_dropout_prob", 0)
             fusion = BertFusion(
                 fusion_config,
@@ -106,7 +106,7 @@ class BottleneckLayer(ComposableAdapterLayerBase, nn.Module):
                 dropout_prob,
             )
             fusion.train(self.training)  # make sure training mode is consistent
-            self.adapter_fusion_layer[",".join(adapter_names)] = fusion
+            self.adapter_fusion_layer[fusion_name] = fusion
 
     def delete_fusion_layer(self, adapter_names: Union[List, str]):
         adapter_names = adapter_names if isinstance(adapter_names, str) else ",".join(adapter_names)
@@ -223,7 +223,7 @@ class BottleneckLayer(ComposableAdapterLayerBase, nn.Module):
         context = ForwardContext.get_context()
 
         # config of _last_ fused adapter is significant
-        fusion_config = self.adapters_config.get_fusion(adapter_setup.name)
+        fusion_config, _ = self.adapters_config.get_fusion(adapter_setup.name)
         last = adapter_setup.last()
         last_adapter = self.adapters[last]
         hidden_states, query, residual = last_adapter.pre_forward(

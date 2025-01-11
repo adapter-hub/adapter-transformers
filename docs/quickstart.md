@@ -105,7 +105,7 @@ model = AutoAdapterModel.from_pretrained(example_path)
 model.load_adapter(example_path)
 ```
 
-Similar to how the weights of the full model are saved, the `save_adapter()` will create a file for saving the adapter weights and a file for saving the adapter configuration in the specified directory.
+Similar to how the weights of the full model are saved, [`save_adapter()`](adapters.ModelWithHeadsAdaptersMixin.save_adapter) will create a file for saving the adapter weights and a file for saving the adapter configuration in the specified directory.
 
 Finally, if we have finished working with adapters, we can restore the base Transformer to its original form by deactivating and deleting the adapter:
 

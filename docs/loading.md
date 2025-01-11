@@ -94,3 +94,39 @@ We will go through the different arguments and their meaning one by one:
 To load the adapter using a custom name, we can use the `load_as` parameter.
 
 - Finally, `set_active` will directly activate the loaded adapter for usage in each model forward pass. Otherwise, you have to manually activate the adapter via `set_active_adapters()`.
+
+## Saving and loading adapter compositions
+
+In addition to saving and loading individual adapters, you can also save, load and share entire [compositions of adapters](adapter_composition.md) with a single line of code.
+_Adapters_ provides three methods for this purpose that work very similar to those for single adapters:
+
+- [`save_adapter_setup()`](adapters.ModelWithHeadsAdaptersMixin.save_adapter_setup) to save an adapter composition along with prediction heads to the local file system.
+- [`load_adapter_setup()`](adapters.ModelWithHeadsAdaptersMixin.load_adapter_setup) to load a saved adapter composition from the local file system or the Model Hub.
+- [`push_adapter_setup_to_hub()`](adapters.hub_mixin.PushAdapterToHubMixin.push_adapter_setup_to_hub) to upload an adapter setup along with prediction heads to the Model Hub. See our [Hugging Face Model Hub guide](huggingface_hub.md) for more.
+
+As an example, this is how you would save and load an AdapterFusion setup of three adapters with a prediction head:
+
+```python
+# Create an AdapterFusion
+model = AutoAdapterModel.from_pretrained("bert-base-uncased")
+model.load_adapter("sentiment/sst-2@ukp", config=SeqBnConfig(), with_head=False)
+model.load_adapter("nli/multinli@ukp", config=SeqBnConfig(), with_head=False)
+model.load_adapter("sts/qqp@ukp", config=SeqBnConfig(), with_head=False)
+model.add_adapter_fusion(["sst-2", "mnli", "qqp"])
+model.add_classification_head("clf_head")
+adapter_setup = Fuse("sst-2", "mnli", "qqp")
+head_setup = "clf_head"
+model.set_active_adapters(adapter_setup)
+model.active_head = head_setup
+
+# Train AdapterFusion ...
+
+# Save
+model.save_adapter_setup("checkpoint", adapter_setup, head_setup=head_setup)
+
+# Push to Hub
+model.push_adapter_setup_to_hub("<user>/fusion_setup", adapter_setup, head_setup=head_setup)
+
+# Re-load
+# model.load_adapter_setup("checkpoint", set_active=True)
+```

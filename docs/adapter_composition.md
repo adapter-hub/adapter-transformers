@@ -125,6 +125,8 @@ model.active_adapters = ac.Fuse("d", "e", "f")
 
 To learn how training an _AdapterFusion_ layer works, check out [this Colab notebook](https://colab.research.google.com/github/Adapter-Hub/adapters/blob/main/notebooks/03_Adapter_Fusion.ipynb) from the `adapters` repo.
 
+To save and upload the full composition setup with adapters and fusion layer in one line of code, check out the docs on [saving and loading adapter compositions](loading.md#saving-and-loading-adapter-compositions).
+
 ### Retrieving AdapterFusion attentions
 
 Finally, it is possible to retrieve the attention scores computed by each fusion layer in a forward pass of the model.

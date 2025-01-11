@@ -16,12 +16,13 @@
 
 import torch
 import torch.utils.checkpoint
+from torch import nn
 
 from transformers.models.deberta.modeling_deberta import (
     DebertaOutput,
     DebertaSelfOutput,
     DisentangledSelfAttention,
-    XSoftmax,
+    scaled_size_sqrt,
 )
 
 from ...composition import adjust_tensors_for_parallel, match_attn_matrices_for_parallel
@@ -95,71 +96,83 @@ class DisentangledSelfAttentionWithAdapters(DebertaSelfAttentionAdaptersMixin, D
 
 
         """
+        # >>> START AH Changes <<<
         attention_mask = prefix_attention_mask(attention_mask, dim=3, prefix_value=1)  # type: ignore
         attention_mask = prefix_attention_mask(attention_mask, dim=2, prefix_value=1)  # type: ignore
+        # >>> END AH Changes <<<
 
         if query_states is None:
             qp = self.in_proj(hidden_states)  # .split(self.all_head_size, dim=-1)
             query_layer, key_layer, value_layer = self.transpose_for_scores(qp).chunk(3, dim=-1)
         else:
-
-            def linear(w, b, x):
-                if b is not None:
-                    return torch.matmul(x, w.t()) + b.t()
-                else:
-                    return torch.matmul(x, w.t())  # + b.t()
-
             ws = self.in_proj.weight.chunk(self.num_attention_heads * 3, dim=0)
             qkvw = [torch.cat([ws[i * 3 + k] for i in range(self.num_attention_heads)], dim=0) for k in range(3)]
-            qkvb = [None] * 3
-
-            q = linear(qkvw[0], qkvb[0], query_states.to(dtype=qkvw[0].dtype))
-            k, v = [linear(qkvw[i], qkvb[i], hidden_states.to(dtype=qkvw[i].dtype)) for i in range(1, 3)]
+            q = torch.matmul(qkvw[0], query_states.t().to(dtype=qkvw[0].dtype))
+            k = torch.matmul(qkvw[1], hidden_states.t().to(dtype=qkvw[1].dtype))
+            v = torch.matmul(qkvw[2], hidden_states.t().to(dtype=qkvw[2].dtype))
             query_layer, key_layer, value_layer = [self.transpose_for_scores(x) for x in [q, k, v]]
 
+        # >>> START AH Changes <<<
         query_layer, key_layer, value_layer = match_attn_matrices_for_parallel(query_layer, key_layer, value_layer)
         (attention_mask,) = adjust_tensors_for_parallel(query_layer, attention_mask)
+        # >>> END AH Changes <<<
 
         query_layer = query_layer + self.transpose_for_scores(self.q_bias[None, None, :])
         value_layer = value_layer + self.transpose_for_scores(self.v_bias[None, None, :])
 
+        # >>> START AH Changes <<<
         orig_key_layer = key_layer  # save this for relative attention
         key_layer, value_layer, attention_mask = self.prefix_tuning(
             key_layer, value_layer, hidden_states, attention_mask, False
         )
         (query_layer, orig_key_layer) = adjust_tensors_for_parallel(key_layer, query_layer, orig_key_layer)
+        # >>> END AH Changes <<<
 
-        rel_att = None
+        rel_att: int = 0
         # Take the dot product between "query" and "key" to get the raw attention scores.
         scale_factor = 1 + len(self.pos_att_type)
-        scale = torch.sqrt(torch.tensor(query_layer.size(-1), dtype=torch.float) * scale_factor)
+        scale = scaled_size_sqrt(query_layer, scale_factor)
         query_layer = query_layer / scale.to(dtype=query_layer.dtype)
         attention_scores = torch.matmul(query_layer, key_layer.transpose(-1, -2))
-        if self.relative_attention:
+
+        if self.relative_attention and rel_embeddings is not None and relative_pos is not None:
             rel_embeddings = self.pos_dropout(rel_embeddings)
+            # >>> START AH Changes <<<
             rel_att = self.disentangled_att_bias(
                 query_layer, orig_key_layer, relative_pos, rel_embeddings, scale_factor
             )
+            # >>> END AH Changes <<<
 
         if rel_att is not None:
-            rel_att_padded = torch.zeros_like(attention_scores)
-            rel_att_padded[:, :, :, -rel_att.size(-1) :] = rel_att
-            attention_scores = attention_scores + rel_att_padded
+            # >>> START AH Changes <<<
+            # rel_att is set to 0 by default, i.e. rel_att is always not None (don't know why HuggingFace does this).
+            # Hence, we must check whether rel_att is a tensor and if so, pad it with zeros to be able to add it to attention_scores.
+            if isinstance(rel_att, torch.Tensor):
+                rel_att_padded = torch.zeros_like(attention_scores)
+                rel_att_padded[:, :, :, -rel_att.size(-1) :] = rel_att
+                attention_scores = attention_scores + rel_att_padded
+            else:
+                attention_scores = attention_scores + rel_att
+            # >>> END AH Changes <<<
 
         # bxhxlxd
-        if self.talking_head:
+        if self.head_logits_proj is not None:
             attention_scores = self.head_logits_proj(attention_scores.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
 
-        attention_probs = XSoftmax.apply(attention_scores, attention_mask, -1)
+        attention_mask = attention_mask.bool()
+        attention_scores = attention_scores.masked_fill(~(attention_mask), torch.finfo(query_layer.dtype).min)
+        # bsz x height x length x dimension
+        attention_probs = nn.functional.softmax(attention_scores, dim=-1)
+        attention_probs.masked_fill(attention_mask, 0)
+
         attention_probs = self.dropout(attention_probs)
-        if self.talking_head:
+        if self.head_weights_proj is not None:
             attention_probs = self.head_weights_proj(attention_probs.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
 
         context_layer = torch.matmul(attention_probs, value_layer)
         context_layer = context_layer.permute(0, 2, 1, 3).contiguous()
         new_context_layer_shape = context_layer.size()[:-2] + (-1,)
         context_layer = context_layer.view(new_context_layer_shape)
-        if output_attentions:
-            return (context_layer, attention_probs)
-        else:
-            return context_layer
+        if not output_attentions:
+            return (context_layer, None)
+        return (context_layer, attention_probs)

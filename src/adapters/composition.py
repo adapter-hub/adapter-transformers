@@ -1,4 +1,5 @@
 import itertools
+import sys
 import warnings
 from collections.abc import Sequence
 from typing import List, Optional, Set, Tuple, Union
@@ -45,6 +46,31 @@ class AdapterCompositionBlock(Sequence):
     def flatten(self) -> Set[str]:
         return set(itertools.chain(*[[b] if isinstance(b, str) else b.flatten() for b in self.children]))
 
+    def _get_save_kwargs(self):
+        return None
+
+    def to_dict(self):
+        save_dict = {
+            "type": self.__class__.__name__,
+            "children": [
+                c.to_dict() if isinstance(c, AdapterCompositionBlock) else {"type": "single", "children": [c]}
+                for c in self.children
+            ],
+        }
+        if kwargs := self._get_save_kwargs():
+            save_dict["kwargs"] = kwargs
+        return save_dict
+
+    @classmethod
+    def from_dict(cls, data):
+        children = []
+        for child in data["children"]:
+            if child["type"] == "single":
+                children.append(child["children"][0])
+            else:
+                children.append(cls.from_dict(child))
+        return getattr(sys.modules[__name__], data["type"])(*children, **data.get("kwargs", {}))
+
 
 class Parallel(AdapterCompositionBlock):
     def __init__(self, *parallel_adapters: List[str]):
@@ -66,13 +92,17 @@ class Stack(AdapterCompositionBlock):
 
 
 class Fuse(AdapterCompositionBlock):
-    def __init__(self, *fuse_stacks: List[Union[AdapterCompositionBlock, str]]):
+    def __init__(self, *fuse_stacks: List[Union[AdapterCompositionBlock, str]], name: Optional[str] = None):
         super().__init__(*fuse_stacks)
+        self._name = name
 
     # TODO-V2 pull this up to all block classes?
     @property
     def name(self):
-        return ",".join([c if isinstance(c, str) else c.last() for c in self.children])
+        if self._name:
+            return self._name
+        else:
+            return ",".join([c if isinstance(c, str) else c.last() for c in self.children])
 
 
 class Split(AdapterCompositionBlock):
@@ -80,11 +110,17 @@ class Split(AdapterCompositionBlock):
         super().__init__(*split_adapters)
         self.splits = splits if isinstance(splits, list) else [splits] * len(split_adapters)
 
+    def _get_save_kwargs(self):
+        return {"splits": self.splits}
+
 
 class BatchSplit(AdapterCompositionBlock):
     def __init__(self, *split_adapters: List[Union[AdapterCompositionBlock, str]], batch_sizes: Union[List[int], int]):
         super().__init__(*split_adapters)
         self.batch_sizes = batch_sizes if isinstance(batch_sizes, list) else [batch_sizes] * len(split_adapters)
+
+    def _get_save_kwargs(self):
+        return {"batch_sizes": self.batch_sizes}
 
 
 class Average(AdapterCompositionBlock):
@@ -104,6 +140,9 @@ class Average(AdapterCompositionBlock):
                 self.weights = weights
         else:
             self.weights = [1 / len(average_adapters)] * len(average_adapters)
+
+    def _get_save_kwargs(self):
+        return {"weights": self.weights}
 
 
 # Mapping each composition block type to the allowed nested types
