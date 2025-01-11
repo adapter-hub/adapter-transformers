@@ -21,11 +21,11 @@ from tests.test_methods.method_test_impl.peft.test_compacter import CompacterTes
 from tests.test_methods.method_test_impl.peft.test_config_union import ConfigUnionAdapterTest
 from tests.test_methods.method_test_impl.peft.test_ia3 import IA3TestMixin
 from tests.test_methods.method_test_impl.peft.test_lora import LoRATestMixin
-from tests.test_methods.method_test_impl.peft.test_vera import VeraTestMixin
 from tests.test_methods.method_test_impl.peft.test_prefix_tuning import PrefixTuningTestMixin
 from tests.test_methods.method_test_impl.peft.test_prompt_tuning import PromptTuningTestMixin
 from tests.test_methods.method_test_impl.peft.test_reft import ReftTestMixin
 from tests.test_methods.method_test_impl.peft.test_unipelt import UniPELTTestMixin
+from tests.test_methods.method_test_impl.peft.test_vera import VeraTestMixin
 from tests.test_methods.method_test_impl.utils import make_config
 from transformers import AutoTokenizer, PreTrainedModel, PreTrainedTokenizer
 from transformers.testing_utils import require_torch, torch_device
