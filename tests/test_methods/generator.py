@@ -21,6 +21,7 @@ from tests.test_methods.method_test_impl.peft.test_compacter import CompacterTes
 from tests.test_methods.method_test_impl.peft.test_config_union import ConfigUnionAdapterTest
 from tests.test_methods.method_test_impl.peft.test_ia3 import IA3TestMixin
 from tests.test_methods.method_test_impl.peft.test_lora import LoRATestMixin
+from tests.test_methods.method_test_impl.peft.test_vera import VeraTestMixin
 from tests.test_methods.method_test_impl.peft.test_prefix_tuning import PrefixTuningTestMixin
 from tests.test_methods.method_test_impl.peft.test_prompt_tuning import PromptTuningTestMixin
 from tests.test_methods.method_test_impl.peft.test_reft import ReftTestMixin
@@ -190,6 +191,18 @@ def generate_method_tests(
 
     if "IA3" not in excluded_tests:
         test_classes["IA3"] = IA3
+
+    @require_torch
+    @pytest.mark.vera
+    class Vera(
+        model_test_base,
+        VeraTestMixin,
+        unittest.TestCase,
+    ):
+        pass
+
+    if "Vera" not in excluded_tests:
+        test_classes["Vera"] = Vera
 
     @require_torch
     @pytest.mark.lora
