@@ -223,3 +223,7 @@ trainer = AdapterTrainer(
 _Adapters_ supports fine-tuning of quantized language models similar to [QLoRA (Dettmers et al., 2023)](https://arxiv.org/pdf/2305.14314.pdf) via the `bitsandbytes` library integrated into Transformers.
 Quantized training is supported for LoRA-based adapters as well as bottleneck adapters and prefix tuning.
 Please refer to [this notebook](https://colab.research.google.com/github/Adapter-Hub/adapters/blob/main/notebooks/QLoRA_Llama_Finetuning.ipynb) for a hands-on guide.
+
+## Gradient Checkpointing
+Gradient checkpointing is supported for all models (e.g. Llama 1/2/3) except for the models that are not supported by Hugging Face Transformers (like ALBERT). Please refer to [this notebook](https://colab.research.google.com/github/Adapter-Hub/adapters/blob/main/notebooks/Gradient_Checkpointing_Llama.ipynb) for a hands-on guide.
+

@@ -36,6 +36,20 @@ class BeitAdapterModel(ModelWithFlexibleHeadsAdaptersMixin, BeitPreTrainedModel)
         # Initialize weights and apply final processing
         self.post_init()
 
+    # Overwrites the function from: transformers.modeling_utils.PreTrainedModel
+    def enable_input_require_grads(self):
+        """
+        Enables the gradients for the input embeddings specifically for BEiT's tuple output format.
+        """
+
+        def make_inputs_require_grads(module, input, output):
+            # >>> START AH Changes <<<
+            # Handle BEiT's specific tuple output format. Hugging Face's implementation is buggy and doesn't work for BEiT.
+            output[0].requires_grad_(True)
+            # >>> END AH Changes <<<
+
+        self._require_grads_hook = self.get_input_embeddings().register_forward_hook(make_inputs_require_grads)
+
     @add_start_docstrings_to_model_forward(BEIT_INPUTS_DOCSTRING)
     def forward(
         self,

@@ -77,3 +77,6 @@ class ReftTestMixin(AdapterMethodBaseTestMixin):
 
     def test_train_loreft(self):
         self.run_train_test(LoReftConfig(), ["refts.{name}."])
+
+    def test_reft_gradient_checkpointing_single_adapter(self):
+        self.run_gradient_checkpointing_single_adapter_test(LoReftConfig())

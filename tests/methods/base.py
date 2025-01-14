@@ -1,6 +1,7 @@
 import copy
 import os
 import tempfile
+from typing import Callable
 
 import torch
 
@@ -247,7 +248,7 @@ class AdapterMethodBaseTestMixin:
         self.assertEqual(len(output1), len(output2))
         self.assertTrue(torch.allclose(output1[0], output2[0], atol=1e-4))
 
-    def trainings_run(self, model, lr=1.0, steps=8):
+    def trainings_run(self, model, lr=1.0, steps=8, batch_size=2, gradient_accumulation_steps=1):
         # setup dataset
         train_dataset = self.dataset()
 
@@ -257,7 +258,8 @@ class AdapterMethodBaseTestMixin:
             learning_rate=lr,
             max_steps=steps,
             no_cuda=True,
-            per_device_train_batch_size=2,
+            per_device_train_batch_size=batch_size,
+            gradient_accumulation_steps=gradient_accumulation_steps,
             remove_unused_columns=False,
         )
 
@@ -370,3 +372,56 @@ class AdapterMethodBaseTestMixin:
         # check forward pass
         self.assertEqual(len(output_1), len(output_2))
         self.assertTrue(torch.allclose(output_1[0], output_2[0], atol=1e-3))
+
+    def _run_gradient_checkpointing_test_helper(self, adapter_setup_fn: Callable[[adapters.ModelAdaptersMixin], None]):
+        """
+        Test that gradient checkpointing produces the same results as normal training
+        Args:
+            adapter_setup_fn: Function that takes a model and sets up the adapter training. Must also add a head (usually via self.add_head(...)). We have this in a separate function to allow complex setups (like training a normal adapter or training parallel setups)
+        """
+
+        if not self.do_run_train_tests:
+            self.skipTest("Skipping training tests. Set `do_run_train_tests=True` to run them.")
+        if self.config_class not in ADAPTER_MODEL_MAPPING:
+            self.skipTest("Does not support flex heads.")
+
+        config = self.config()
+        state_dict_after_training = {}
+
+        for train_with_checkpointing in [True, False]:
+            # Set random seed
+            torch.manual_seed(42)
+
+            # Initialize model
+            model = adapters.AutoAdapterModel.from_config(config)
+
+            # if model doesn't support gradient checkpointing, skip the test
+            if not model.supports_gradient_checkpointing:
+                self.skipTest("Model does not support gradient checkpointing")
+
+            model.to(torch_device)
+            adapter_setup_fn(model)
+
+            # Enable gradient checkpointing
+            if train_with_checkpointing:
+                model.gradient_checkpointing_enable()
+
+            # Train & store state dict
+            self.trainings_run(model, batch_size=1, gradient_accumulation_steps=2)
+            state_dict_after_training[train_with_checkpointing] = copy.deepcopy(model.state_dict())
+
+        # Check that the state dicts are the same (we know that normal training works as expected, so we only need to check that gradient checkpointing produces the same results.)
+        for (k1, v1), (k2, v2) in zip(
+            state_dict_after_training[True].items(), state_dict_after_training[False].items()
+        ):
+            v1 = v1.to(v2.device)
+            self.assertTrue(torch.equal(v1, v2), msg=f"Key {k1} is not equal:\nv1: {v1}\nv2: {v2}")
+
+    def run_gradient_checkpointing_single_adapter_test(self, adapter_config):
+        def adapter_setup_fn(model):
+            model.add_adapter("adapter1", config=adapter_config)
+            self.add_head(model, "adapter1")
+            model.train_adapter("adapter1")
+            model.adapter_to("adapter1", torch_device)
+
+        self._run_gradient_checkpointing_test_helper(adapter_setup_fn)

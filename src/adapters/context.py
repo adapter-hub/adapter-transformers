@@ -1,10 +1,11 @@
 import functools
 import threading
+from typing import ContextManager
 
 from .composition import parse_composition, parse_heads_from_composition
 
 
-class AdapterSetup:
+class AdapterSetup(ContextManager):
     """
     Represents an adapter setup of a model including active adapters and active heads. This class is intended to be
     used as a context manager using the ``with`` statement. The setup defined by the ``AdapterSetup`` context will
@@ -67,7 +68,7 @@ class AdapterSetup:
         return None
 
 
-class ForwardContext:
+class ForwardContext(ContextManager):
     """
     Holds context information during a forward pass through a model. This class should be used via the
     ``ForwardContext.wrap()`` method.

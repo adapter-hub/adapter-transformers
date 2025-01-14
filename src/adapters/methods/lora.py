@@ -718,7 +718,9 @@ class LoRAMergedLinear(LoRALayer, nn.Linear):
                 fill_value = 1
         result = x.new_full((*x.shape[:-1], self.out_features), fill_value)
         result = result.view(-1, self.out_features)
-        result[:, lora.lora_ind] = x.reshape(-1, self.out_features // 3 * self.get_n_heads(lora))
+        # Move lora_ind to the same device as x
+        lora_ind = lora.lora_ind.to(x.device)
+        result[:, lora_ind] = x.reshape(-1, self.out_features // 3 * self.get_n_heads(lora))
         return result.view((*x.shape[:-1], self.out_features))
 
     def reset_adapter(self):

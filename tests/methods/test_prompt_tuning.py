@@ -36,3 +36,6 @@ class PromptTuningTestMixin(AdapterMethodBaseTestMixin):
 
     def test_train_prompt_tuning(self):
         self.run_train_test(PromptTuningConfig(prompt_length=10), ["prompt_tunings.{name}."])
+
+    def test_prompt_tuning_gradient_checkpointing_single_adapter(self):
+        self.run_gradient_checkpointing_single_adapter_test(PromptTuningConfig(prompt_length=10))

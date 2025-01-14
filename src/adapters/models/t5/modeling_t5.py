@@ -419,8 +419,22 @@ class T5StackWithAdapters(T5StackAdaptersMixin, T5Stack):
                 all_hidden_states = all_hidden_states + (hidden_states,)
 
             if self.gradient_checkpointing and self.training:
+                # >>> START AH Changes <<<
+                # Without this change, T5 training with gradient checkpointing will fail for reft.
+                def create_custom_forward(module):
+                    def custom_forward(*inputs):
+                        # Ensure all inputs are on the same device
+                        inputs = tuple(x.to(inputs[0].device) if isinstance(x, torch.Tensor) else x for x in inputs)
+                        return module(*inputs)
+
+                    return custom_forward
+
+                # >>> END AH Changes <<<
+
                 layer_outputs = self._gradient_checkpointing_func(
-                    layer_module.forward,
+                    # >>> START AH Changes <<<
+                    create_custom_forward(layer_module),
+                    # >>> END AH Changes <<<
                     hidden_states,
                     causal_mask,
                     position_bias,

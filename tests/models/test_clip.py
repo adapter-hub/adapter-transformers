@@ -37,3 +37,8 @@ class CLIPAdapterModelTest(AdapterModelTesterMixin, CLIPModelTest):
                             [0.0, 1.0],
                             msg=f"Parameter {name} of model {model_class} seems not properly initialized",
                         )
+
+    def test_gradient_checkpointing_enable_disable(self):
+        # CLIPAdapterModel does not support gradient checkpointing (because enable_input_require_grads is not implemented by Hugging Face,
+        # which is required for gradient checkpointing with parameter efficient fine-tuning methods).
+        self.skipTest("CLIPAdapterModel does not support gradient checkpointing")

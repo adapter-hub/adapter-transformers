@@ -101,3 +101,6 @@ class PrefixTuningTestMixin(AdapterMethodBaseTestMixin):
         input_ids = input_ids.to(torch_device)
         generated = model1.generate(input_ids, max_length=seq_output_length)
         self.assertLessEqual(generated.shape, (1, seq_output_length))
+
+    def test_prefix_tuning_gradient_checkpointing_single_adapter(self):
+        self.run_gradient_checkpointing_single_adapter_test(PrefixTuningConfig())
