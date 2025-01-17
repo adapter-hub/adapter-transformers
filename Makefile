@@ -28,18 +28,29 @@ style:
 	isort $(check_dirs)
 	${MAKE} extra_style_checks
 
-# Run tests for the library
+# Library Tests
 
+# run all tests in the library
 test:
 	python -m pytest -n auto --dist=loadfile -s -v ./tests/
+	python -c "import transformers; print(transformers.__version__)"
 
+# run all tests for the adapter methods for all adapter models
 test-adapter-methods:
-	python -m pytest --ignore ./tests/models -n auto --dist=loadfile -s -v ./tests/
+	python -m pytest -n auto --dist=loadfile -s -v ./tests/test_methods/
 
+# run a subset of the adapter method tests for all adapter models
+# list of all subsets: [core, heads, embeddings, composition, prefix_tuning, prompt_tuning, reft, unipelt, compacter, bottleneck, ia3, lora, config_union]
+subset ?=
+test-adapter-method-subset:
+	@echo "Running subset $(subset)"
+	python -m pytest -n auto --dist=loadfile -s -v ./tests/test_methods/ -m $(subset)
+
+
+# run the hugginface test suite for all adapter models
 test-adapter-models:
-	python -m pytest -n auto --dist=loadfile -s -v ./tests/models
+	python -m pytest -n auto --dist=loadfile -s -v ./tests/test_models/
 
 # Run tests for examples
-
 test-examples:
 	python -m pytest -n auto --dist=loadfile -s -v ./examples/pytorch/

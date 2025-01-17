@@ -788,6 +788,16 @@ STATIC_TO_FLEX_HEAD_MAP = {
         },
         "layers": ["proj_out"],
     },
+    "MllamaForConditionalGeneration": {
+        "config": {
+            "head_type": "causal_lm",
+            "layers": 1,
+            "activation_function": None,
+            "layer_norm": False,
+            "bias": False,
+        },
+        "layers": ["language_model.lm_head"],
+    },
 }
 
 

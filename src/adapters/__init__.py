@@ -111,6 +111,7 @@ _import_structure = {
     "models.llama": ["LlamaAdapterModel"],
     "models.mbart": ["MBartAdapterModel"],
     "models.mistral": ["MistralAdapterModel"],
+    "models.mllama": ["MllamaAdapterModel"],
     "models.mt5": ["MT5AdapterModel"],
     "models.plbart": ["PLBartAdapterModel"],
     "models.roberta": ["RobertaAdapterModel"],
@@ -222,6 +223,7 @@ if TYPE_CHECKING:
     from .models.llama import LlamaAdapterModel
     from .models.mbart import MBartAdapterModel
     from .models.mistral import MistralAdapterModel
+    from .models.mllama import MllamaAdapterModel
     from .models.mt5 import MT5AdapterModel
     from .models.plbart import PLBartAdapterModel
     from .models.roberta import RobertaAdapterModel

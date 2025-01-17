@@ -20,6 +20,19 @@ from .gpt2.mixin_gpt2 import GPT2ModelAdapterMixin
 from .gptj.mixin_gptj import GPTJMLPAdaptersMixin, GPTJModelAdapterMixin
 from .llama.mixin_llama import LlamaForQuestionAnsweringAdapterMixin, LlamaModelAdapterMixin
 from .mistral.mixin_mistral import MistralModelAdapterMixin
+from .mllama.mixin_mllama import (
+    MllamaAdaptersMixin,
+    MllamaCrossAttentionDecoderLayerAdaptersMixin,
+    MllamaForConditionalGenerationWithHeadsAdaptersMixin,
+    MllamaSelfAttentionDecoderLayerAdaptersMixin,
+    MllamaTextCrossAttentionAdaptersMixin,
+    MllamaTextModelAdaptersMixin,
+    MllamaTextSelfAttentionAdaptersMixin,
+    MllamaVisionAttentionAdaptersMixin,
+    MllamaVisionEncoderAdaptersMixin,
+    MllamaVisionEncoderLayerAdaptersMixin,
+    MllamaVisionModelAdaptersMixin,
+)
 from .plbart.mixin_plbart import (
     PLBartDecoderAdaptersMixin,
     PLBartDecoderWrapperAdaptersMixin,
@@ -109,4 +122,16 @@ MODEL_MIXIN_MAPPING = {
     "WhisperForAudioClassification": WhisperForAudioClassificationWithHeadsMixin,
     "LlamaForQuestionAnswering": LlamaForQuestionAnsweringAdapterMixin,
     "MistralModel": MistralModelAdapterMixin,
+    # Mulitmodal Llama
+    "MllamaForConditionalGeneration": MllamaForConditionalGenerationWithHeadsAdaptersMixin,
+    "MllamaModel": MllamaAdaptersMixin,
+    "MllamaVisionModel": MllamaVisionModelAdaptersMixin,
+    "MllamaTextModel": MllamaTextModelAdaptersMixin,
+    "MllamaVisionEncoder": MllamaVisionEncoderAdaptersMixin,
+    "MllamaVisionAttention": MllamaVisionAttentionAdaptersMixin,
+    "MllamaTextSelfAttention": MllamaTextSelfAttentionAdaptersMixin,
+    "MllamaTextCrossAttention": MllamaTextCrossAttentionAdaptersMixin,
+    "MllamaVisionEncoderLayer": MllamaVisionEncoderLayerAdaptersMixin,
+    "MllamaSelfAttentionDecoderLayer": MllamaSelfAttentionDecoderLayerAdaptersMixin,
+    "MllamaCrossAttentionDecoderLayer": MllamaCrossAttentionDecoderLayerAdaptersMixin,
 }

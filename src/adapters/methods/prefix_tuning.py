@@ -153,6 +153,7 @@ class PrefixTuningPool(nn.Module):
         self.prefix_tunings = nn.ModuleDict()
 
     def indicate_prefix(self, prefix_name: str, location_key: str, **kwargs):
+        """Indicate that a Prefix Tuning module should be added to the indicated layer."""
         if prefix_name not in self.prefix_counts:
             self.prefix_counts[prefix_name] = {location_key: {"count": 1, **kwargs}}
         elif location_key not in self.prefix_counts[prefix_name]:

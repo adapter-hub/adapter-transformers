@@ -177,3 +177,6 @@ tests/backwards_compatibility/Ref_Out
 
 # backwards compatibility
 model_outputs
+
+# TODO: remove after mllama dev
+explore_mllama
