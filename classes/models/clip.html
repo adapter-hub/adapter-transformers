@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CLIP &mdash; AdapterHub  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="DeBERTa" href="deberta.html" />
+    <link rel="prev" title="BertGeneration" href="bert-generation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AdapterHub
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../transitioning.html">Transitioning from <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter Methods</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../methods.html">Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../method_combinations.html">Method Combinations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../adapter_composition.html">Adapter Activation and Composition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../merging_adapters.html">Merging Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../prediction_heads.html">Prediction Heads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../embeddings.html">Embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending.html">Extending the Library</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Loading and Sharing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../loading.html">Loading Pre-Trained Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../huggingface_hub.html">Integration with Hugging Face’s Model Hub</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Supported Models</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../model_overview.html">Model Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="albert.html">ALBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto.html">Auto Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bart.html">BART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beit.html">BEiT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bert.html">BERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bert-generation.html">BertGeneration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CLIP</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cliptextmodel">CLIPTextModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clipvisionmodel">CLIPVisionModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clipmodel">CLIPModel</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deberta.html">DeBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deberta_v2.html">DeBERTa-v2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distilbert.html">DistilBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="electra.html">ELECTRA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="encoderdecoder.html">Encoder Decoder Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpt2.html">OpenAI GPT2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gptj.html">EleutherAI GPT-J-6B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="llama.html">LLaMA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mistral.html">Mistral</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mbart.html">MBart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mt5.html">MT5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plbart.html">PLBART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roberta.html">RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="t5.html">T5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vit.html">Vision Transformer (ViT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whisper.html">Whisper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xlmroberta.html">XLM-RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xmod.html">X-MOD</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter-Related Classes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../adapter_config.html">Adapter Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_adapters_config.html">Model Adapters Config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adapter_layer.html">Adapter Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_mixins.html">Model Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adapter_training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adapter_utils.html">Adapter Utilities</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing to AdapterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/adding_adapter_methods.html">Adding Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/adding_adapters_to_a_model.html">Adding Adapters to a Model</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AdapterHub</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">CLIP</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/classes/models/clip.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="clip">
+<h1>CLIP<a class="headerlink" href="#clip" title="Permalink to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>Adapter implementation notes:</dt><dd><ul class="simple">
+<li><p>CLIP consists of two separate Transformer encoder models, a ViT-style Transformer for visual features and a language model for textual features. Both encoders can be fitted with adapters. As usual, the <code class="docutils literal notranslate"><span class="pre">leave_out</span></code> parameter can be used to specify the layers in which adapters should be added. For CLIP, layer IDs are counted globally across both encoders, starting from the text encoder. I.e., for a CLIP model with 12 layers in each Transformer encoder, the text encoder will have IDs 0-11 and the vision encoder will have IDs 12-23.</p></li>
+<li><p>As CLIP does not come with pre-supported task-specific prediction heads, there is currently no <code class="docutils literal notranslate"><span class="pre">CLIPAdapterModel</span></code> class. Use <code class="docutils literal notranslate"><span class="pre">CLIPModel</span></code> instead.</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<p>The CLIP model was proposed in <a class="reference external" href="https://arxiv.org/abs/2103.00020">Learning Transferable Visual Models From Natural Language Supervision</a> by Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh,
+Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, Gretchen Krueger, Ilya Sutskever. CLIP
+(Contrastive Language-Image Pre-Training) is a neural network trained on a variety of (image, text) pairs. It can be
+instructed in natural language to predict the most relevant text snippet, given an image, without directly optimizing
+for the task, similarly to the zero-shot capabilities of GPT-2 and 3.</p>
+<p>The abstract from the paper is the following:</p>
+<p><em>State-of-the-art computer vision systems are trained to predict a fixed set of predetermined object categories. This
+restricted form of supervision limits their generality and usability since additional labeled data is needed to specify
+any other visual concept. Learning directly from raw text about images is a promising alternative which leverages a
+much broader source of supervision. We demonstrate that the simple pre-training task of predicting which caption goes
+with which image is an efficient and scalable way to learn SOTA image representations from scratch on a dataset of 400
+million (image, text) pairs collected from the internet. After pre-training, natural language is used to reference
+learned visual concepts (or describe new ones) enabling zero-shot transfer of the model to downstream tasks. We study
+the performance of this approach by benchmarking on over 30 different existing computer vision datasets, spanning tasks
+such as OCR, action recognition in videos, geo-localization, and many types of fine-grained object classification. The
+model transfers non-trivially to most tasks and is often competitive with a fully supervised baseline without the need
+for any dataset specific training. For instance, we match the accuracy of the original ResNet-50 on ImageNet zero-shot
+without needing to use any of the 1.28 million training examples it was trained on. We release our code and pre-trained
+model weights at this https URL.</em></p>
+<div class="section" id="cliptextmodel">
+<h2>CLIPTextModel<a class="headerlink" href="#cliptextmodel" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="transformers.CLIPTextModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">transformers.</span></span><span class="sig-name descname"><span class="pre">CLIPTextModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CLIPTextConfig</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#transformers.CLIPTextModel" title="Permalink to this definition"></a></dt>
+<dd><p>The text model from CLIP without any head or projection on top.
+This model inherits from [<cite>PreTrainedModel</cite>]. Check the superclass documentation for the generic methods the
+library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
+etc.)</p>
+<p>This model is also a PyTorch [torch.nn.Module](<a class="reference external" href="https://pytorch.org/docs/stable/nn.html#torch.nn.Module">https://pytorch.org/docs/stable/nn.html#torch.nn.Module</a>) subclass.
+Use it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage
+and behavior.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> ([<cite>CLIPConfig</cite>]) – Model configuration class with all the parameters of the model.
+Initializing with a config file does not load the weights associated with the model, only the
+configuration. Check out the [<cite>~PreTrainedModel.from_pretrained</cite>] method to load the model weights.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="transformers.CLIPTextModel.config_class">
+<span class="sig-name descname"><span class="pre">config_class</span></span><a class="headerlink" href="#transformers.CLIPTextModel.config_class" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">CLIPTextConfig</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="transformers.CLIPTextModel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_attentions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_hidden_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">BaseModelOutputWithPooling</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#transformers.CLIPTextModel.forward" title="Permalink to this definition"></a></dt>
+<dd><p>The [<cite>CLIPTextModel</cite>] forward method, overrides the <cite>__call__</cite> special method.</p>
+<p>&lt;Tip&gt;</p>
+<p>Although the recipe for forward pass needs to be defined within this function, one should call the [<cite>Module</cite>]
+instance afterwards instead of this since the former takes care of running the pre and post processing steps while
+the latter silently ignores them.</p>
+<p>&lt;/Tip&gt;</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_ids</strong> (<cite>torch.LongTensor</cite> of shape <cite>(batch_size, sequence_length)</cite>) – <p>Indices of input sequence tokens in the vocabulary. Padding will be ignored by default should you provide
+it.</p>
+<p>Indices can be obtained using [<cite>AutoTokenizer</cite>]. See [<cite>PreTrainedTokenizer.encode</cite>] and
+[<cite>PreTrainedTokenizer.__call__</cite>] for details.</p>
+<p>[What are input IDs?](../glossary#input-ids)</p>
+</p></li>
+<li><p><strong>attention_mask</strong> (<cite>torch.Tensor</cite> of shape <cite>(batch_size, sequence_length)</cite>, <em>optional</em>) – <p>Mask to avoid performing attention on padding token indices. Mask values selected in <cite>[0, 1]</cite>:</p>
+<ul>
+<li><p>1 for tokens that are <strong>not masked</strong>,</p></li>
+<li><p>0 for tokens that are <strong>masked</strong>.</p></li>
+</ul>
+<p>[What are attention masks?](../glossary#attention-mask)</p>
+</p></li>
+<li><p><strong>position_ids</strong> (<cite>torch.LongTensor</cite> of shape <cite>(batch_size, sequence_length)</cite>, <em>optional</em>) – <p>Indices of positions of each input sequence tokens in the position embeddings. Selected in the range <cite>[0,
+config.max_position_embeddings - 1]</cite>.</p>
+<p>[What are position IDs?](../glossary#position-ids)</p>
+</p></li>
+<li><p><strong>output_attentions</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return the attentions tensors of all attention layers. See <cite>attentions</cite> under returned
+tensors for more detail.</p></li>
+<li><p><strong>output_hidden_states</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return the hidden states of all layers. See <cite>hidden_states</cite> under returned tensors for
+more detail.</p></li>
+<li><p><strong>return_dict</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return a [<cite>~utils.ModelOutput</cite>] instead of a plain tuple.</p></li>
+<li><p><strong>Returns</strong> – <p>[<cite>transformers.modeling_outputs.BaseModelOutputWithPooling</cite>] or <cite>tuple(torch.FloatTensor)</cite>: A [<cite>transformers.modeling_outputs.BaseModelOutputWithPooling</cite>] or a tuple of
+<cite>torch.FloatTensor</cite> (if <cite>return_dict=False</cite> is passed or when <cite>config.return_dict=False</cite>) comprising various
+elements depending on the configuration ([<cite>&lt;class ‘transformers.models.clip.configuration_clip.CLIPTextConfig’&gt;</cite>]) and inputs.</p>
+<ul>
+<li><p><strong>last_hidden_state</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, sequence_length, hidden_size)</cite>) – Sequence of hidden-states at the output of the last layer of the model.</p></li>
+<li><p><strong>pooler_output</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, hidden_size)</cite>) – Last layer hidden-state of the first token of the sequence (classification token) after further processing
+through the layers used for the auxiliary pretraining task. E.g. for BERT-family of models, this returns
+the classification token after processing through a linear layer and a tanh activation function. The linear
+layer weights are trained from the next sentence prediction (classification) objective during pretraining.</p></li>
+<li><p><strong>hidden_states</strong> (<cite>tuple(torch.FloatTensor)</cite>, <em>optional</em>, returned when <cite>output_hidden_states=True</cite> is passed or when <cite>config.output_hidden_states=True</cite>) – Tuple of <cite>torch.FloatTensor</cite> (one for the output of the embeddings, if the model has an embedding layer, +
+one for the output of each layer) of shape <cite>(batch_size, sequence_length, hidden_size)</cite>.</p>
+<p>Hidden-states of the model at the output of each layer plus the optional initial embedding outputs.</p>
+</li>
+<li><p><strong>attentions</strong> (<cite>tuple(torch.FloatTensor)</cite>, <em>optional</em>, returned when <cite>output_attentions=True</cite> is passed or when <cite>config.output_attentions=True</cite>) – Tuple of <cite>torch.FloatTensor</cite> (one for each layer) of shape <cite>(batch_size, num_heads, sequence_length,
+sequence_length)</cite>.</p>
+<p>Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
+heads.</p>
+</li>
+</ul>
+</p></li>
+<li><p><strong>Examples</strong> – </p></li>
+<li><p><strong>```python</strong> – </p></li>
+<li><p><strong>AutoTokenizer</strong> (<em>&gt;&gt;&gt; from transformers import</em>) – </p></li>
+<li><p><strong>CLIPTextModel</strong> – </p></li>
+<li><p><strong>CLIPTextModel.from_pretrained</strong> (<em>&gt;&gt;&gt; model =</em>) – </p></li>
+<li><p><strong>AutoTokenizer.from_pretrained</strong> (<em>&gt;&gt;&gt; tokenizer =</em>) – </p></li>
+<li><p><strong>tokenizer</strong> (<em>&gt;&gt;&gt; inputs =</em>) – </p></li>
+<li><p><strong>model</strong> (<em>&gt;&gt;&gt; outputs =</em>) – </p></li>
+<li><p><strong>outputs.last_hidden_state</strong> (<em>&gt;&gt;&gt; last_hidden_state =</em>) – </p></li>
+<li><p><strong>pooled</strong> (<em>&gt;&gt;&gt; pooled_output = outputs.pooler_output  #</em>) – </p></li>
+<li><p><strong>```</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="transformers.CLIPTextModel.get_input_embeddings">
+<span class="sig-name descname"><span class="pre">get_input_embeddings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="headerlink" href="#transformers.CLIPTextModel.get_input_embeddings" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the model’s input embeddings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A torch module mapping vocabulary to hidden states.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>nn.Module</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="transformers.CLIPTextModel.set_input_embeddings">
+<span class="sig-name descname"><span class="pre">set_input_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#transformers.CLIPTextModel.set_input_embeddings" title="Permalink to this definition"></a></dt>
+<dd><p>Set model’s input embeddings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<cite>nn.Module</cite>) – A module mapping vocabulary to hidden states.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="clipvisionmodel">
+<h2>CLIPVisionModel<a class="headerlink" href="#clipvisionmodel" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="transformers.CLIPVisionModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">transformers.</span></span><span class="sig-name descname"><span class="pre">CLIPVisionModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CLIPVisionConfig</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#transformers.CLIPVisionModel" title="Permalink to this definition"></a></dt>
+<dd><p>The vision model from CLIP without any head or projection on top.
+This model inherits from [<cite>PreTrainedModel</cite>]. Check the superclass documentation for the generic methods the
+library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
+etc.)</p>
+<p>This model is also a PyTorch [torch.nn.Module](<a class="reference external" href="https://pytorch.org/docs/stable/nn.html#torch.nn.Module">https://pytorch.org/docs/stable/nn.html#torch.nn.Module</a>) subclass.
+Use it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage
+and behavior.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> ([<cite>CLIPConfig</cite>]) – Model configuration class with all the parameters of the model.
+Initializing with a config file does not load the weights associated with the model, only the
+configuration. Check out the [<cite>~PreTrainedModel.from_pretrained</cite>] method to load the model weights.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="transformers.CLIPVisionModel.config_class">
+<span class="sig-name descname"><span class="pre">config_class</span></span><a class="headerlink" href="#transformers.CLIPVisionModel.config_class" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">CLIPVisionConfig</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="transformers.CLIPVisionModel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pixel_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">FloatTensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_attentions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_hidden_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate_pos_encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">BaseModelOutputWithPooling</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#transformers.CLIPVisionModel.forward" title="Permalink to this definition"></a></dt>
+<dd><p>The [<cite>CLIPVisionModel</cite>] forward method, overrides the <cite>__call__</cite> special method.</p>
+<p>&lt;Tip&gt;</p>
+<p>Although the recipe for forward pass needs to be defined within this function, one should call the [<cite>Module</cite>]
+instance afterwards instead of this since the former takes care of running the pre and post processing steps while
+the latter silently ignores them.</p>
+<p>&lt;/Tip&gt;</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pixel_values</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, num_channels, height, width)</cite>) – Pixel values. Padding will be ignored by default should you provide it. Pixel values can be obtained using
+[<cite>AutoImageProcessor</cite>]. See [<cite>CLIPImageProcessor.__call__</cite>] for details.</p></li>
+<li><p><strong>output_attentions</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return the attentions tensors of all attention layers. See <cite>attentions</cite> under returned
+tensors for more detail.</p></li>
+<li><p><strong>output_hidden_states</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return the hidden states of all layers. See <cite>hidden_states</cite> under returned tensors for
+more detail.</p></li>
+<li><p><strong>interpolate_pos_encoding</strong> (<cite>bool</cite>, <em>optional</em>, defaults <cite>False</cite>) – Whether to interpolate the pre-trained position encodings.</p></li>
+<li><p><strong>return_dict</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return a [<cite>~utils.ModelOutput</cite>] instead of a plain tuple.</p></li>
+<li><p><strong>Returns</strong> – <p>[<cite>transformers.modeling_outputs.BaseModelOutputWithPooling</cite>] or <cite>tuple(torch.FloatTensor)</cite>: A [<cite>transformers.modeling_outputs.BaseModelOutputWithPooling</cite>] or a tuple of
+<cite>torch.FloatTensor</cite> (if <cite>return_dict=False</cite> is passed or when <cite>config.return_dict=False</cite>) comprising various
+elements depending on the configuration ([<cite>&lt;class ‘transformers.models.clip.configuration_clip.CLIPVisionConfig’&gt;</cite>]) and inputs.</p>
+<ul>
+<li><p><strong>last_hidden_state</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, sequence_length, hidden_size)</cite>) – Sequence of hidden-states at the output of the last layer of the model.</p></li>
+<li><p><strong>pooler_output</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, hidden_size)</cite>) – Last layer hidden-state of the first token of the sequence (classification token) after further processing
+through the layers used for the auxiliary pretraining task. E.g. for BERT-family of models, this returns
+the classification token after processing through a linear layer and a tanh activation function. The linear
+layer weights are trained from the next sentence prediction (classification) objective during pretraining.</p></li>
+<li><p><strong>hidden_states</strong> (<cite>tuple(torch.FloatTensor)</cite>, <em>optional</em>, returned when <cite>output_hidden_states=True</cite> is passed or when <cite>config.output_hidden_states=True</cite>) – Tuple of <cite>torch.FloatTensor</cite> (one for the output of the embeddings, if the model has an embedding layer, +
+one for the output of each layer) of shape <cite>(batch_size, sequence_length, hidden_size)</cite>.</p>
+<p>Hidden-states of the model at the output of each layer plus the optional initial embedding outputs.</p>
+</li>
+<li><p><strong>attentions</strong> (<cite>tuple(torch.FloatTensor)</cite>, <em>optional</em>, returned when <cite>output_attentions=True</cite> is passed or when <cite>config.output_attentions=True</cite>) – Tuple of <cite>torch.FloatTensor</cite> (one for each layer) of shape <cite>(batch_size, num_heads, sequence_length,
+sequence_length)</cite>.</p>
+<p>Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
+heads.</p>
+</li>
+</ul>
+</p></li>
+<li><p><strong>Examples</strong> – </p></li>
+<li><p><strong>```python</strong> – </p></li>
+<li><p><strong>Image</strong> (<em>&gt;&gt;&gt; from PIL import</em>) – </p></li>
+<li><p><strong>requests</strong> (<em>&gt;&gt;&gt; import</em>) – </p></li>
+<li><p><strong>AutoProcessor</strong> (<em>&gt;&gt;&gt; from transformers import</em>) – </p></li>
+<li><p><strong>CLIPVisionModel</strong> – </p></li>
+<li><p><strong>CLIPVisionModel.from_pretrained</strong> (<em>&gt;&gt;&gt; model =</em>) – </p></li>
+<li><p><strong>AutoProcessor.from_pretrained</strong> (<em>&gt;&gt;&gt; processor =</em>) – </p></li>
+<li><p><strong>&quot;http</strong> (<em>&gt;&gt;&gt; url =</em>) – //images.cocodataset.org/val2017/000000039769.jpg”</p></li>
+<li><p><strong>Image.open</strong> (<em>&gt;&gt;&gt; image =</em>) – </p></li>
+<li><p><strong>processor</strong> (<em>&gt;&gt;&gt; inputs =</em>) – </p></li>
+<li><p><strong>model</strong> (<em>&gt;&gt;&gt; outputs =</em>) – </p></li>
+<li><p><strong>outputs.last_hidden_state</strong> (<em>&gt;&gt;&gt; last_hidden_state =</em>) – </p></li>
+<li><p><strong>states</strong> (<em>&gt;&gt;&gt; pooled_output = outputs.pooler_output  # pooled CLS</em>) – </p></li>
+<li><p><strong>```</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="transformers.CLIPVisionModel.get_input_embeddings">
+<span class="sig-name descname"><span class="pre">get_input_embeddings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="headerlink" href="#transformers.CLIPVisionModel.get_input_embeddings" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the model’s input embeddings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A torch module mapping vocabulary to hidden states.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>nn.Module</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="clipmodel">
+<h2>CLIPModel<a class="headerlink" href="#clipmodel" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="transformers.CLIPModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">transformers.</span></span><span class="sig-name descname"><span class="pre">CLIPModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CLIPConfig</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#transformers.CLIPModel" title="Permalink to this definition"></a></dt>
+<dd><p>This model inherits from [<cite>PreTrainedModel</cite>]. Check the superclass documentation for the generic methods the
+library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
+etc.)</p>
+<p>This model is also a PyTorch [torch.nn.Module](<a class="reference external" href="https://pytorch.org/docs/stable/nn.html#torch.nn.Module">https://pytorch.org/docs/stable/nn.html#torch.nn.Module</a>) subclass.
+Use it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage
+and behavior.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> ([<cite>CLIPConfig</cite>]) – Model configuration class with all the parameters of the model.
+Initializing with a config file does not load the weights associated with the model, only the
+configuration. Check out the [<cite>~PreTrainedModel.from_pretrained</cite>] method to load the model weights.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="transformers.CLIPModel.config_class">
+<span class="sig-name descname"><span class="pre">config_class</span></span><a class="headerlink" href="#transformers.CLIPModel.config_class" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">CLIPConfig</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="transformers.CLIPModel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">LongTensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">FloatTensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">LongTensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_loss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_attentions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_hidden_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate_pos_encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">CLIPOutput</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#transformers.CLIPModel.forward" title="Permalink to this definition"></a></dt>
+<dd><p>The [<cite>CLIPModel</cite>] forward method, overrides the <cite>__call__</cite> special method.</p>
+<p>&lt;Tip&gt;</p>
+<p>Although the recipe for forward pass needs to be defined within this function, one should call the [<cite>Module</cite>]
+instance afterwards instead of this since the former takes care of running the pre and post processing steps while
+the latter silently ignores them.</p>
+<p>&lt;/Tip&gt;</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_ids</strong> (<cite>torch.LongTensor</cite> of shape <cite>(batch_size, sequence_length)</cite>) – <p>Indices of input sequence tokens in the vocabulary. Padding will be ignored by default should you provide
+it.</p>
+<p>Indices can be obtained using [<cite>AutoTokenizer</cite>]. See [<cite>PreTrainedTokenizer.encode</cite>] and
+[<cite>PreTrainedTokenizer.__call__</cite>] for details.</p>
+<p>[What are input IDs?](../glossary#input-ids)</p>
+</p></li>
+<li><p><strong>attention_mask</strong> (<cite>torch.Tensor</cite> of shape <cite>(batch_size, sequence_length)</cite>, <em>optional</em>) – <p>Mask to avoid performing attention on padding token indices. Mask values selected in <cite>[0, 1]</cite>:</p>
+<ul>
+<li><p>1 for tokens that are <strong>not masked</strong>,</p></li>
+<li><p>0 for tokens that are <strong>masked</strong>.</p></li>
+</ul>
+<p>[What are attention masks?](../glossary#attention-mask)</p>
+</p></li>
+<li><p><strong>position_ids</strong> (<cite>torch.LongTensor</cite> of shape <cite>(batch_size, sequence_length)</cite>, <em>optional</em>) – <p>Indices of positions of each input sequence tokens in the position embeddings. Selected in the range <cite>[0,
+config.max_position_embeddings - 1]</cite>.</p>
+<p>[What are position IDs?](../glossary#position-ids)</p>
+</p></li>
+<li><p><strong>pixel_values</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, num_channels, height, width)</cite>) – Pixel values. Padding will be ignored by default should you provide it. Pixel values can be obtained using
+[<cite>AutoImageProcessor</cite>]. See [<cite>CLIPImageProcessor.__call__</cite>] for details.</p></li>
+<li><p><strong>return_loss</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return the contrastive loss.</p></li>
+<li><p><strong>output_attentions</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return the attentions tensors of all attention layers. See <cite>attentions</cite> under returned
+tensors for more detail.</p></li>
+<li><p><strong>output_hidden_states</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return the hidden states of all layers. See <cite>hidden_states</cite> under returned tensors for
+more detail.</p></li>
+<li><p><strong>interpolate_pos_encoding</strong> (<cite>bool</cite>, <em>optional</em>, defaults <cite>False</cite>) – Whether to interpolate the pre-trained position encodings.</p></li>
+<li><p><strong>return_dict</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return a [<cite>~utils.ModelOutput</cite>] instead of a plain tuple.</p></li>
+<li><p><strong>Returns</strong> – <p>[<cite>transformers.models.clip.modeling_clip.CLIPOutput</cite>] or <cite>tuple(torch.FloatTensor)</cite>: A [<cite>transformers.models.clip.modeling_clip.CLIPOutput</cite>] or a tuple of
+<cite>torch.FloatTensor</cite> (if <cite>return_dict=False</cite> is passed or when <cite>config.return_dict=False</cite>) comprising various
+elements depending on the configuration ([<cite>&lt;class ‘transformers.models.clip.configuration_clip.CLIPConfig’&gt;</cite>]) and inputs.</p>
+<ul>
+<li><p><strong>loss</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(1,)</cite>, <em>optional</em>, returned when <cite>return_loss</cite> is <cite>True</cite>) – Contrastive loss for image-text similarity.</p></li>
+<li><p><strong>logits_per_image</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(image_batch_size, text_batch_size)</cite>) – The scaled dot product scores between <cite>image_embeds</cite> and <cite>text_embeds</cite>. This represents the image-text
+similarity scores.</p></li>
+<li><p><strong>logits_per_text</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(text_batch_size, image_batch_size)</cite>) – The scaled dot product scores between <cite>text_embeds</cite> and <cite>image_embeds</cite>. This represents the text-image
+similarity scores.</p></li>
+<li><p><strong>text_embeds</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, output_dim</cite>) – The text embeddings obtained by applying the projection layer to the pooled output of [<cite>CLIPTextModel</cite>].</p></li>
+<li><p><strong>image_embeds</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, output_dim</cite>) – The image embeddings obtained by applying the projection layer to the pooled output of [<cite>CLIPVisionModel</cite>].</p></li>
+<li><p><strong>text_model_output</strong> (<cite>BaseModelOutputWithPooling</cite>) – The output of the [<cite>CLIPTextModel</cite>].</p></li>
+<li><p><strong>vision_model_output</strong> (<cite>BaseModelOutputWithPooling</cite>) – The output of the [<cite>CLIPVisionModel</cite>].</p></li>
+</ul>
+</p></li>
+<li><p><strong>Examples</strong> – </p></li>
+<li><p><strong>```python</strong> – </p></li>
+<li><p><strong>Image</strong> (<em>&gt;&gt;&gt; from PIL import</em>) – </p></li>
+<li><p><strong>requests</strong> (<em>&gt;&gt;&gt; import</em>) – </p></li>
+<li><p><strong>AutoProcessor</strong> (<em>&gt;&gt;&gt; from transformers import</em>) – </p></li>
+<li><p><strong>CLIPModel</strong> – </p></li>
+<li><p><strong>CLIPModel.from_pretrained</strong> (<em>&gt;&gt;&gt; model =</em>) – </p></li>
+<li><p><strong>AutoProcessor.from_pretrained</strong> (<em>&gt;&gt;&gt; processor =</em>) – </p></li>
+<li><p><strong>&quot;http</strong> (<em>&gt;&gt;&gt; url =</em>) – //images.cocodataset.org/val2017/000000039769.jpg”</p></li>
+<li><p><strong>Image.open</strong> (<em>&gt;&gt;&gt; image =</em>) – </p></li>
+<li><p><strong>processor</strong><strong>(</strong> (<em>&gt;&gt;&gt; inputs =</em>) – </p></li>
+<li><p><strong>cat&quot;</strong> (<em>...</em><em>     text=</em><em>[</em><em>&quot;a photo of a</em>) – </p></li>
+<li><p><strong>dog&quot;</strong><strong>]</strong> (<em>&quot;a photo of a</em>) – </p></li>
+<li><p><strong>images=image</strong> – </p></li>
+<li><p><strong>return_tensors=&quot;pt&quot;</strong> – </p></li>
+<li><p><strong>padding=True</strong> – </p></li>
+<li><p><strong>)</strong> (<em>...</em>) – </p></li>
+<li><p><strong>model</strong> (<em>&gt;&gt;&gt; outputs =</em>) – </p></li>
+<li><p><strong>score</strong> (<em>&gt;&gt;&gt; logits_per_image = outputs.logits_per_image  # this is the image-text similarity</em>) – </p></li>
+<li><p><strong>logits_per_image.softmax</strong> (<em>&gt;&gt;&gt; probs =</em>) – </p></li>
+<li><p><strong>```</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="transformers.CLIPModel.get_image_features">
+<span class="sig-name descname"><span class="pre">get_image_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pixel_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">FloatTensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_attentions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_hidden_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate_pos_encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">FloatTensor</span></span></span><a class="headerlink" href="#transformers.CLIPModel.get_image_features" title="Permalink to this definition"></a></dt>
+<dd><p>The [<cite>CLIPModel</cite>] forward method, overrides the <cite>__call__</cite> special method.</p>
+<p>&lt;Tip&gt;</p>
+<p>Although the recipe for forward pass needs to be defined within this function, one should call the [<cite>Module</cite>]
+instance afterwards instead of this since the former takes care of running the pre and post processing steps while
+the latter silently ignores them.</p>
+<p>&lt;/Tip&gt;</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pixel_values</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, num_channels, height, width)</cite>) – Pixel values. Padding will be ignored by default should you provide it. Pixel values can be obtained using
+[<cite>AutoImageProcessor</cite>]. See [<cite>CLIPImageProcessor.__call__</cite>] for details.</p></li>
+<li><p><strong>output_attentions</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return the attentions tensors of all attention layers. See <cite>attentions</cite> under returned
+tensors for more detail.</p></li>
+<li><p><strong>output_hidden_states</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return the hidden states of all layers. See <cite>hidden_states</cite> under returned tensors for
+more detail.</p></li>
+<li><p><strong>interpolate_pos_encoding</strong> (<cite>bool</cite>, <em>optional</em>, defaults <cite>False</cite>) – Whether to interpolate the pre-trained position encodings.</p></li>
+<li><p><strong>return_dict</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return a [<cite>~utils.ModelOutput</cite>] instead of a plain tuple.</p></li>
+<li><p><strong>Returns</strong> – image_features (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, output_dim</cite>): The image embeddings obtained by
+applying the projection layer to the pooled output of [<cite>CLIPVisionModel</cite>].</p></li>
+<li><p><strong>Examples</strong> – </p></li>
+<li><p><strong>```python</strong> – </p></li>
+<li><p><strong>Image</strong> (<em>&gt;&gt;&gt; from PIL import</em>) – </p></li>
+<li><p><strong>requests</strong> (<em>&gt;&gt;&gt; import</em>) – </p></li>
+<li><p><strong>AutoProcessor</strong> (<em>&gt;&gt;&gt; from transformers import</em>) – </p></li>
+<li><p><strong>CLIPModel</strong> – </p></li>
+<li><p><strong>CLIPModel.from_pretrained</strong> (<em>&gt;&gt;&gt; model =</em>) – </p></li>
+<li><p><strong>AutoProcessor.from_pretrained</strong> (<em>&gt;&gt;&gt; processor =</em>) – </p></li>
+<li><p><strong>&quot;http</strong> (<em>&gt;&gt;&gt; url =</em>) – //images.cocodataset.org/val2017/000000039769.jpg”</p></li>
+<li><p><strong>Image.open</strong> (<em>&gt;&gt;&gt; image =</em>) – </p></li>
+<li><p><strong>processor</strong> (<em>&gt;&gt;&gt; inputs =</em>) – </p></li>
+<li><p><strong>model.get_image_features</strong> (<em>&gt;&gt;&gt; image_features =</em>) – </p></li>
+<li><p><strong>```</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="transformers.CLIPModel.get_text_features">
+<span class="sig-name descname"><span class="pre">get_text_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_attentions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_hidden_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">FloatTensor</span></span></span><a class="headerlink" href="#transformers.CLIPModel.get_text_features" title="Permalink to this definition"></a></dt>
+<dd><p>The [<cite>CLIPModel</cite>] forward method, overrides the <cite>__call__</cite> special method.</p>
+<p>&lt;Tip&gt;</p>
+<p>Although the recipe for forward pass needs to be defined within this function, one should call the [<cite>Module</cite>]
+instance afterwards instead of this since the former takes care of running the pre and post processing steps while
+the latter silently ignores them.</p>
+<p>&lt;/Tip&gt;</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_ids</strong> (<cite>torch.LongTensor</cite> of shape <cite>(batch_size, sequence_length)</cite>) – <p>Indices of input sequence tokens in the vocabulary. Padding will be ignored by default should you provide
+it.</p>
+<p>Indices can be obtained using [<cite>AutoTokenizer</cite>]. See [<cite>PreTrainedTokenizer.encode</cite>] and
+[<cite>PreTrainedTokenizer.__call__</cite>] for details.</p>
+<p>[What are input IDs?](../glossary#input-ids)</p>
+</p></li>
+<li><p><strong>attention_mask</strong> (<cite>torch.Tensor</cite> of shape <cite>(batch_size, sequence_length)</cite>, <em>optional</em>) – <p>Mask to avoid performing attention on padding token indices. Mask values selected in <cite>[0, 1]</cite>:</p>
+<ul>
+<li><p>1 for tokens that are <strong>not masked</strong>,</p></li>
+<li><p>0 for tokens that are <strong>masked</strong>.</p></li>
+</ul>
+<p>[What are attention masks?](../glossary#attention-mask)</p>
+</p></li>
+<li><p><strong>position_ids</strong> (<cite>torch.LongTensor</cite> of shape <cite>(batch_size, sequence_length)</cite>, <em>optional</em>) – <p>Indices of positions of each input sequence tokens in the position embeddings. Selected in the range <cite>[0,
+config.max_position_embeddings - 1]</cite>.</p>
+<p>[What are position IDs?](../glossary#position-ids)</p>
+</p></li>
+<li><p><strong>output_attentions</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return the attentions tensors of all attention layers. See <cite>attentions</cite> under returned
+tensors for more detail.</p></li>
+<li><p><strong>output_hidden_states</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return the hidden states of all layers. See <cite>hidden_states</cite> under returned tensors for
+more detail.</p></li>
+<li><p><strong>return_dict</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return a [<cite>~utils.ModelOutput</cite>] instead of a plain tuple.</p></li>
+<li><p><strong>Returns</strong> – text_features (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, output_dim</cite>): The text embeddings obtained by
+applying the projection layer to the pooled output of [<cite>CLIPTextModel</cite>].</p></li>
+<li><p><strong>Examples</strong> – </p></li>
+<li><p><strong>```python</strong> – </p></li>
+<li><p><strong>AutoTokenizer</strong> (<em>&gt;&gt;&gt; from transformers import</em>) – </p></li>
+<li><p><strong>CLIPModel</strong> – </p></li>
+<li><p><strong>CLIPModel.from_pretrained</strong> (<em>&gt;&gt;&gt; model =</em>) – </p></li>
+<li><p><strong>AutoTokenizer.from_pretrained</strong> (<em>&gt;&gt;&gt; tokenizer =</em>) – </p></li>
+<li><p><strong>tokenizer</strong> (<em>&gt;&gt;&gt; inputs =</em>) – </p></li>
+<li><p><strong>model.get_text_features</strong> (<em>&gt;&gt;&gt; text_features =</em>) – </p></li>
+<li><p><strong>```</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="bert-generation.html" class="btn btn-neutral float-left" title="BertGeneration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="deberta.html" class="btn btn-neutral float-right" title="DeBERTa" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020-2024, AdapterHub Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!--- IMPORTANT: This file has modifications compared to the snippet on the documentation page! -->
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="clip.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

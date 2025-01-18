@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adapter Implementation &mdash; AdapterHub  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Model Mixins" href="model_mixins.html" />
+    <link rel="prev" title="Model Adapters Config" href="model_adapters_config.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AdapterHub
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transitioning.html">Transitioning from <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter Methods</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../methods.html">Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../method_combinations.html">Method Combinations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../adapter_composition.html">Adapter Activation and Composition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../merging_adapters.html">Merging Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../prediction_heads.html">Prediction Heads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../embeddings.html">Embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending.html">Extending the Library</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Loading and Sharing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../loading.html">Loading Pre-Trained Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../huggingface_hub.html">Integration with Hugging Face’s Model Hub</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Supported Models</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../model_overview.html">Model Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/albert.html">ALBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/auto.html">Auto Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/bart.html">BART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/beit.html">BEiT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/bert.html">BERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/bert-generation.html">BertGeneration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/clip.html">CLIP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/deberta.html">DeBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/deberta_v2.html">DeBERTa-v2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/distilbert.html">DistilBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/electra.html">ELECTRA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/encoderdecoder.html">Encoder Decoder Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/gpt2.html">OpenAI GPT2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/gptj.html">EleutherAI GPT-J-6B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/llama.html">LLaMA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/mistral.html">Mistral</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/mbart.html">MBart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/mt5.html">MT5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/plbart.html">PLBART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/roberta.html">RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/t5.html">T5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/vit.html">Vision Transformer (ViT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/whisper.html">Whisper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/xlmroberta.html">XLM-RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/xmod.html">X-MOD</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter-Related Classes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="adapter_config.html">Adapter Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_adapters_config.html">Model Adapters Config</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adapter Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_mixins.html">Model Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_utils.html">Adapter Utilities</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to AdapterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/adding_adapter_methods.html">Adding Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/adding_adapters_to_a_model.html">Adding Adapters to a Model</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AdapterHub</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Adapter Implementation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/classes/adapter_layer.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="adapter-implementation">
+<h1>Adapter Implementation<a class="headerlink" href="#adapter-implementation" title="Permalink to this heading"></a></h1>
+<p>The following classes define the common interfaces for all adapter methods.
+They further hold logic shared by all adapter implementations.
+All newly added adapter methods should inherit from either one of these classes.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="adapters.AdapterLayerBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adapters.</span></span><span class="sig-name descname"><span class="pre">AdapterLayerBase</span></span><a class="headerlink" href="#adapters.AdapterLayerBase" title="Permalink to this definition"></a></dt>
+<dd><p>Base class for all adaptation methods that require per-layer modules.</p>
+<p>Make sure the ‘adapter_modules_name’ attribute is overriden in derived classes.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.AdapterLayerBase.add_adapter">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_adapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#adapters.AdapterLayerBase.add_adapter" title="Permalink to this definition"></a></dt>
+<dd><p>Adds a new adapter module to the layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adapter_name</strong> (<em>str</em>) – The name of the new adapter to add.</p></li>
+<li><p><strong>layer_idx</strong> (<em>int</em>) – The index of the adapters layer (this should be set once by the first added adapter and the kept fix).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the adapter was added, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.AdapterLayerBase.average_adapter">
+<span class="sig-name descname"><span class="pre">average_adapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_adapters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_strategy</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#adapters.AdapterLayerBase.average_adapter" title="Permalink to this definition"></a></dt>
+<dd><p>Averages a set of adapter modules into a new adapter module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adapter_name</strong> (<em>str</em>) – The name of the new (averaged) adapter module to add.</p></li>
+<li><p><strong>input_adapters</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>float</em><em>]</em>) – Dictionary of adapter names and their corresponding weights.</p></li>
+<li><p><strong>combine_strategy</strong> (<em>str</em>) – The strategy to combine the adapters. Available strategies depend on the used adapter method, see: <a class="reference external" href="https://docs.adapterhub.ml/adapter_composition.html#merging-adapters">https://docs.adapterhub.ml/adapter_composition.html#merging-adapters</a></p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments that are specific to the combine_strategy. E.g. svd_rank for LoRA.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the adapter was added, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.AdapterLayerBase.delete_adapter">
+<span class="sig-name descname"><span class="pre">delete_adapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.AdapterLayerBase.delete_adapter" title="Permalink to this definition"></a></dt>
+<dd><p>Deletes an adapter module from the layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>adapter_name</strong> (<em>str</em>) – The name of the adapter to delete.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.AdapterLayerBase.enable_adapters">
+<span class="sig-name descname"><span class="pre">enable_adapters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AdapterCompositionBlock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unfreeze_adapters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unfreeze_fusion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.AdapterLayerBase.enable_adapters" title="Permalink to this definition"></a></dt>
+<dd><p>Enables/ disables a set of adapter modules within the layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adapter_setup</strong> (<em>AdapterCompositionBlock</em>) – The adapter setup to enable/ disable.</p></li>
+<li><p><strong>unfreeze_adapters</strong> (<em>bool</em>) – Whether to unfreeze the adapters.</p></li>
+<li><p><strong>unfreeze_fusion</strong> (<em>bool</em>) – Whether to unfreeze the fusion layers.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.AdapterLayerBase.freeze_adapter">
+<span class="sig-name descname"><span class="pre">freeze_adapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freeze</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.AdapterLayerBase.freeze_adapter" title="Permalink to this definition"></a></dt>
+<dd><p>Freezes/ unfreezes an adapter module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adapter_name</strong> (<em>str</em>) – The name of the adapter to freeze/ unfreeze.</p></li>
+<li><p><strong>freeze</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to freeze the adapter. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.AdapterLayerBase.get_adapter">
+<span class="sig-name descname"><span class="pre">get_adapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="headerlink" href="#adapters.AdapterLayerBase.get_adapter" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the adapter module with the given name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>adapter_name</strong> (<em>str</em>) – The name of the adapter module.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.AdapterLayerBase.pre_save_adapters">
+<span class="sig-name descname"><span class="pre">pre_save_adapters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adapters.AdapterLayerBase.pre_save_adapters" title="Permalink to this definition"></a></dt>
+<dd><p>Called before saving the adapters to disk.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="adapters.ComposableAdapterLayerBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adapters.</span></span><span class="sig-name descname"><span class="pre">ComposableAdapterLayerBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.ComposableAdapterLayerBase" title="Permalink to this definition"></a></dt>
+<dd><p>Base class for all adapter methods that support composition.</p>
+<p>Make sure the ‘adapter_modules_name’ and ‘supported_compositions’ attributes as well as all abstract methods are
+overriden in derived classes. ‘allow_multi_parallelize’ can be set to True to allow inputs to be parallelized
+independently multiple times. This is useful when there are multiple parallel input flows through an adapter layer
+(e.g. in LoRA).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.ComposableAdapterLayerBase.check_composition_valid">
+<span class="sig-name descname"><span class="pre">check_composition_valid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AdapterCompositionBlock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AdapterCompositionBlock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.ComposableAdapterLayerBase.check_composition_valid" title="Permalink to this definition"></a></dt>
+<dd><p>Checks whether the given composition is valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parent</strong> (<em>AdapterCompositionBlock</em>) – The parent composition block.</p></li>
+<li><p><strong>child</strong> (<em>AdapterCompositionBlock</em>) – The child composition block.</p></li>
+<li><p><strong>lvl</strong> (<em>int</em>) – The composition depth.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the composition is invalid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.ComposableAdapterLayerBase.compose">
+<span class="sig-name descname"><span class="pre">compose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">AdapterCompositionBlock</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NamedTuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">NamedTuple</span></span></span><a class="headerlink" href="#adapters.ComposableAdapterLayerBase.compose" title="Permalink to this definition"></a></dt>
+<dd><p>The main composition forward method which recursively calls the composition blocks forward methods.
+This method should be called by the forward method of the derived class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adapter_setup</strong> (<em>Union</em><em>[</em><em>AdapterCompositionBlock</em><em>, </em><em>str</em><em>]</em>) – The adapter setup to be used.</p></li>
+<li><p><strong>state</strong> (<em>NamedTuple</em>) – The current state.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The state after forwarding through the adapter setup.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>NamedTuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.ComposableAdapterLayerBase.compose_average">
+<span class="sig-name descname"><span class="pre">compose_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Average</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NamedTuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.ComposableAdapterLayerBase.compose_average" title="Permalink to this definition"></a></dt>
+<dd><p>For averaging the output representations of multiple adapters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.ComposableAdapterLayerBase.compose_batch_split">
+<span class="sig-name descname"><span class="pre">compose_batch_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BatchSplit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NamedTuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.ComposableAdapterLayerBase.compose_batch_split" title="Permalink to this definition"></a></dt>
+<dd><p>For splitting to multiple adapters along the batch size dimension.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.ComposableAdapterLayerBase.compose_fuse">
+<span class="sig-name descname"><span class="pre">compose_fuse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Fuse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NamedTuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.ComposableAdapterLayerBase.compose_fuse" title="Permalink to this definition"></a></dt>
+<dd><p>For fusing multiple adapters using adapter fusion. NOTE: This method has no default implementation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.ComposableAdapterLayerBase.compose_parallel">
+<span class="sig-name descname"><span class="pre">compose_parallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Parallel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NamedTuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.ComposableAdapterLayerBase.compose_parallel" title="Permalink to this definition"></a></dt>
+<dd><p>For parallel execution of the adapters on the same input. This means that the input is repeated N times before
+feeding it to the adapters (where N is the number of adapters).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.ComposableAdapterLayerBase.compose_single">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compose_single</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NamedTuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">NamedTuple</span></span></span><a class="headerlink" href="#adapters.ComposableAdapterLayerBase.compose_single" title="Permalink to this definition"></a></dt>
+<dd><p>Forwards the given state through the given single adapter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adapter_setup</strong> (<em>str</em>) – The name of the adapter.</p></li>
+<li><p><strong>state</strong> (<em>NamedTuple</em>) – The state to be forwarded.</p></li>
+<li><p><strong>lvl</strong> (<em>int</em><em>, </em><em>optional</em>) – The composition depth. Defaults to 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The state after forwarding through the adapter.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>NamedTuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.ComposableAdapterLayerBase.compose_split">
+<span class="sig-name descname"><span class="pre">compose_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Split</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NamedTuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.ComposableAdapterLayerBase.compose_split" title="Permalink to this definition"></a></dt>
+<dd><p>For splitting to multiple adapters along the sequence length dimension. NOTE: This method has no default
+implementation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.ComposableAdapterLayerBase.compose_stack">
+<span class="sig-name descname"><span class="pre">compose_stack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Stack</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NamedTuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">NamedTuple</span></span></span><a class="headerlink" href="#adapters.ComposableAdapterLayerBase.compose_stack" title="Permalink to this definition"></a></dt>
+<dd><p>For sequentially stacking multiple adapters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.ComposableAdapterLayerBase.mean">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">NamedTuple</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">NamedTuple</span></span></span><a class="headerlink" href="#adapters.ComposableAdapterLayerBase.mean" title="Permalink to this definition"></a></dt>
+<dd><p>Averages the given states along the batch size dimension by the given weights.
+This is e.g. used by the Average composition block. IMPORTANT: Has to be implemented by all derived classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>states</strong> (<em>List</em><em>[</em><em>NamedTuple</em><em>]</em>) – The states to be averaged.</p></li>
+<li><p><strong>weights</strong> (<em>torch.Tensor</em>) – The averaging weights.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The averaged state.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>NamedTuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.ComposableAdapterLayerBase.pad_and_concat">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pad_and_concat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">NamedTuple</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">NamedTuple</span></span></span><a class="headerlink" href="#adapters.ComposableAdapterLayerBase.pad_and_concat" title="Permalink to this definition"></a></dt>
+<dd><p>Concatenates the given states along the batch size dimension.
+Pads the states before concatenation if necessary. This is e.g. used by the BatchSplit and Parallel composition
+blocks. IMPORTANT: Has to be implemented by all derived classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>states</strong> (<em>List</em><em>[</em><em>NamedTuple</em><em>]</em>) – The states to be concatenated.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The concatenated state.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>NamedTuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.ComposableAdapterLayerBase.pre_block">
+<span class="sig-name descname"><span class="pre">pre_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">AdapterCompositionBlock</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NamedTuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">NamedTuple</span></span></span><a class="headerlink" href="#adapters.ComposableAdapterLayerBase.pre_block" title="Permalink to this definition"></a></dt>
+<dd><p>Optional state pre-processing method which is invoked before passing the state to the first child block of a
+composition. By default, this method does not contain any logic. E.g. used for bottleneck adapters to implement
+residuals and LNs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adapter_setup</strong> (<em>Union</em><em>[</em><em>AdapterCompositionBlock</em><em>, </em><em>str</em><em>]</em>) – The current composition or single adapter.</p></li>
+<li><p><strong>state</strong> (<em>NamedTuple</em>) – The current state.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The pre-processed state.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>NamedTuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.ComposableAdapterLayerBase.repeat">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">repeat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NamedTuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">NamedTuple</span></span></span><a class="headerlink" href="#adapters.ComposableAdapterLayerBase.repeat" title="Permalink to this definition"></a></dt>
+<dd><p>Repeats the given state along the batch size dimension for the given number of times.
+This is e.g. used by the Parallel composition block. IMPORTANT: Has to be implemented by all derived classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<em>NamedTuple</em>) – The state to be repeated.</p></li>
+<li><p><strong>channels</strong> (<em>int</em>) – The number of times the state should be repeated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The repeated state.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>NamedTuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.ComposableAdapterLayerBase.vslice">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NamedTuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice_obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">slice</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">NamedTuple</span></span></span><a class="headerlink" href="#adapters.ComposableAdapterLayerBase.vslice" title="Permalink to this definition"></a></dt>
+<dd><p>Slices the given state along the batch size (vertical) dimension.
+This is e.g. used by the BatchSplit and Parallel composition blocks. IMPORTANT: Has to be implemented by all
+derived classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<em>NamedTuple</em>) – The state to be sliced.</p></li>
+<li><p><strong>slice_obj</strong> (<em>slice</em>) – The slice object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The sliced state.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>NamedTuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="model_adapters_config.html" class="btn btn-neutral float-left" title="Model Adapters Config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_mixins.html" class="btn btn-neutral float-right" title="Model Mixins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020-2024, AdapterHub Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!--- IMPORTANT: This file has modifications compared to the snippet on the documentation page! -->
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="adapter_layer.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

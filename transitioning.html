@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transitioning from adapter-transformers &mdash; AdapterHub  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Overview and Configuration" href="overview.html" />
+    <link rel="prev" title="Adapter Training" href="training.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AdapterHub
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training.html">Adapter Training</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Transitioning from <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#package-and-namespace">Package and Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-initialisation">Model Initialisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bottleneck-configuration-names">Bottleneck Configuration Names</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#features-that-are-not-supported-by-adapters">Features that are not supported by <code class="docutils literal notranslate"><span class="pre">adapters</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-has-remained-the-same">What has remained the same</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#where-can-i-still-find-adapter-transformers">Where can I still find <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code>?</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter Methods</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="methods.html">Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="method_combinations.html">Method Combinations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapter_composition.html">Adapter Activation and Composition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="merging_adapters.html">Merging Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prediction_heads.html">Prediction Heads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embeddings.html">Embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending the Library</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Loading and Sharing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="loading.html">Loading Pre-Trained Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="huggingface_hub.html">Integration with Hugging Face’s Model Hub</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Supported Models</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="model_overview.html">Model Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/albert.html">ALBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/auto.html">Auto Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/bart.html">BART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/beit.html">BEiT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/bert.html">BERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/bert-generation.html">BertGeneration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/clip.html">CLIP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/deberta.html">DeBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/deberta_v2.html">DeBERTa-v2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/distilbert.html">DistilBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/electra.html">ELECTRA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/encoderdecoder.html">Encoder Decoder Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/gpt2.html">OpenAI GPT2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/gptj.html">EleutherAI GPT-J-6B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/llama.html">LLaMA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/mistral.html">Mistral</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/mbart.html">MBart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/mt5.html">MT5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/plbart.html">PLBART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/roberta.html">RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/t5.html">T5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/vit.html">Vision Transformer (ViT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/whisper.html">Whisper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/xlmroberta.html">XLM-RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/xmod.html">X-MOD</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter-Related Classes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_config.html">Adapter Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/model_adapters_config.html">Model Adapters Config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_layer.html">Adapter Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/model_mixins.html">Model Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_utils.html">Adapter Utilities</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to AdapterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing/adding_adapter_methods.html">Adding Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing/adding_adapters_to_a_model.html">Adding Adapters to a Model</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AdapterHub</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Transitioning from <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/transitioning.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="tex2jax_ignore mathjax_ignore section" id="transitioning-from-adapter-transformers">
+<h1>Transitioning from <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code><a class="headerlink" href="#transitioning-from-adapter-transformers" title="Permalink to this heading"></a></h1>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><code class="docutils literal notranslate"><span class="pre">adapters</span></code> is fully compatible to <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code> in terms of model weights, meaning you can load any adapter trained with any version of <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code> to the new library without degradation.</p>
+</div>
+<p>The new <code class="docutils literal notranslate"><span class="pre">adapters</span></code> library is the successor to the <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code> library. It differs essentially in that <code class="docutils literal notranslate"><span class="pre">adapters</span></code> is now a stand-alone package, i.e., the package is disentangled from the <code class="docutils literal notranslate"><span class="pre">transformers</span></code> package from Hugging Face and is no longer a drop-in replacement.</p>
+<p>This results in some breaking changes. To transition your code from <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code> to <code class="docutils literal notranslate"><span class="pre">adapters</span></code> you need to consider the following changes:</p>
+<div class="section" id="package-and-namespace">
+<h2>Package and Namespace<a class="headerlink" href="#package-and-namespace" title="Permalink to this heading"></a></h2>
+<p>To use the library you need to install
+<code class="docutils literal notranslate"><span class="pre">transformers</span></code> and <code class="docutils literal notranslate"><span class="pre">adapters</span></code> in the same environment (unlike <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code> which contained <code class="docutils literal notranslate"><span class="pre">transformers</span></code> and could not be installed in the same environment).</p>
+<p>Run the following to install both (installing <code class="docutils literal notranslate"><span class="pre">adapters</span></code> will automatically trigger the installation of a compatible <code class="docutils literal notranslate"><span class="pre">transformers</span></code> version):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">adapters</span>
+</pre></div>
+</div>
+<p>This also changes the namespace to <code class="docutils literal notranslate"><span class="pre">adapters</span></code>. For all imports of adapter classes change the import from <code class="docutils literal notranslate"><span class="pre">transformers</span></code> to  <code class="docutils literal notranslate"><span class="pre">adapters</span></code>.
+This mainly affects the following classes:</p>
+<ul class="simple">
+<li><p>AdapterModel classes, e.g. <code class="docutils literal notranslate"><span class="pre">AutoAdapterModel</span></code> (see <a class="reference external" href="https://docs.adapterhub.ml/model_overview.html">AdapterModels</a> )</p></li>
+<li><p>Adapter configurations e.g. <code class="docutils literal notranslate"><span class="pre">PrefixTuningConfig</span></code> (see <a class="reference external" href="https://docs.adapterhub.ml/overview.html">Configurations</a> )</p></li>
+<li><p>Adapter composition blocks, e.g. <code class="docutils literal notranslate"><span class="pre">Stack</span></code> (see <a class="reference external" href="https://docs.adapterhub.ml/adapter_composition.html">Composition Blocks</a> )</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">AdapterTrainer</span></code> class</p></li>
+</ul>
+</div>
+<div class="section" id="model-initialisation">
+<h2>Model Initialisation<a class="headerlink" href="#model-initialisation" title="Permalink to this heading"></a></h2>
+<p>The Hugging Face model classes, such as <code class="docutils literal notranslate"><span class="pre">BertModel</span></code>, cannot be used directly with adapters. They must first be initialised for adding adapters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModel</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">adapters</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;bert-base-uncased&quot;</span><span class="p">)</span>
+<span class="n">adapters</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="c1"># prepare model for use with adapters</span>
+</pre></div>
+</div>
+<p>The necessary change is the call of the <code class="docutils literal notranslate"><span class="pre">adapters.init()</span></code> method.
+Note that no additional initialisation is required to use the AdapterModel classes such as the <code class="docutils literal notranslate"><span class="pre">BertAdapterModel</span></code>’. These classes are provided by the <code class="docutils literal notranslate"><span class="pre">adapters</span></code> library and are already prepared for using adapters in training and inference.</p>
+</div>
+<div class="section" id="bottleneck-configuration-names">
+<h2>Bottleneck Configuration Names<a class="headerlink" href="#bottleneck-configuration-names" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">adapters</span></code> library supports the configuration of adapters using <a class="reference external" href="https://docs.adapterhub.ml/overview.html#configuration-strings">config strings</a>. Compared to the <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code> library, we have changed some of the strings to make them more consistent and intuitive:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">houlsby</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">double_seq_bn</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pfeiffer</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">seq_bn</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parallel</span></code>-&gt; <code class="docutils literal notranslate"><span class="pre">par_seq_bn</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">houlsby+inv</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">double_seq_bn_inv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pfeiffer+inv</span></code>-&gt; <code class="docutils literal notranslate"><span class="pre">seq_bn_inv</span></code></p></li>
+</ul>
+<p>For a complete list of config strings and classes see <a class="reference external" href="https://docs.adapterhub.ml/overview.html">here</a>. We strongly recommend using the new config strings, but we will continue to support the old config strings for the time being to make the transition easier.
+Note that with the config strings the corresponding adapter config classes have changed, e.g. <code class="docutils literal notranslate"><span class="pre">PfeifferConfig</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">SeqBnConfig</span></code>.</p>
+<p>Another consequence of this that the <code class="docutils literal notranslate"><span class="pre">AdapterConfig</span></code> class is now not only for the bottleneck adapters anymore, but the base class of all the configurations (previously <code class="docutils literal notranslate"><span class="pre">AdapterConfigBase</span></code>). Hence, the function this class serves has changed. However, you can still load adapter configs with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adapter_config</span> <span class="o">=</span> <span class="n">AdapterConfig</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;lora&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="features-that-are-not-supported-by-adapters">
+<h2>Features that are not supported by <code class="docutils literal notranslate"><span class="pre">adapters</span></code><a class="headerlink" href="#features-that-are-not-supported-by-adapters" title="Permalink to this heading"></a></h2>
+<p>Compared to <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code>, there are a few features that are no longer supported by the <code class="docutils literal notranslate"><span class="pre">adapters</span></code> library:</p>
+<ul class="simple">
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">transformers</span></code> pipelines with adapters.</p></li>
+<li><p>Using invertible adapters in the Hugging Face model classes. To use invertible adapters you must use the AdapterModel class.</p></li>
+<li><p>Loading model and adapter checkpoints saved with <code class="docutils literal notranslate"><span class="pre">save_pretrained</span></code> using Hugging Face classes. This is only supported by the AdapterModel classes.</p></li>
+</ul>
+</div>
+<div class="section" id="what-has-remained-the-same">
+<h2>What has remained the same<a class="headerlink" href="#what-has-remained-the-same" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>The new library is fully backwards compatible in terms of adapter weights, i.e. you can load all adapter modules trained with <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code>.</p></li>
+<li><p>The functionality for adding, activating, and training adapters has <strong>not</strong> changed, except for the renaming of some adapter configs. You still add and activate adapters as follows:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># add adapter to the model</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;adapter_name&quot;</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="s2">&quot;lora&quot;</span><span class="p">)</span>
+<span class="c1"># activate adapter</span>
+<span class="n">model</span><span class="o">.</span><span class="n">set_active_adapters</span><span class="p">(</span><span class="s2">&quot;adapter_name&quot;</span><span class="p">)</span>
+<span class="c1"># freeze model weights and activate adapter</span>
+<span class="n">model</span><span class="o">.</span><span class="n">train_adapter</span><span class="p">(</span><span class="s2">&quot;adapter_name&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="where-can-i-still-find-adapter-transformers">
+<h2>Where can I still find <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code>?<a class="headerlink" href="#where-can-i-still-find-adapter-transformers" title="Permalink to this heading"></a></h2>
+<p>The codebase of <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code> has moved to <a class="reference external" href="https://github.com/adapter-hub/adapter-transformers-legacy">https://github.com/adapter-hub/adapter-transformers-legacy</a> for archival purposes.</p>
+<p>The full documentation of the old library is now hosted at <a class="reference external" href="https://docs-legacy.adapterhub.ml/">https://docs-legacy.adapterhub.ml</a>.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="training.html" class="btn btn-neutral float-left" title="Adapter Training" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="overview.html" class="btn btn-neutral float-right" title="Overview and Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020-2024, AdapterHub Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!--- IMPORTANT: This file has modifications compared to the snippet on the documentation page! -->
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="transitioning.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

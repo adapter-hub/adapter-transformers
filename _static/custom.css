@@ -1,0 +1,38 @@
+/* The search field on top of the toc tree */
+/* Mobile header */
+.wy-side-nav-search, .wy-nav-top {
+    background: #39B3C6;
+}
+/* toc tree text */
+.wy-menu-vertical header,
+.wy-menu-vertical p.caption {
+    color: #39B3C6
+}
+/* toc tree activated link */
+.wy-menu-vertical a:active {
+    background-color:#39B3C6;
+}
+/* Links */
+a {
+    color: #39B3C6
+}
+/* Source spans */
+.rst-content .viewcode-link, .rst-content .viewcode-back{
+    color: #39B3C6;
+}
+/* The literal code blocks */
+.rst-content tt.literal, .rst-content tt.literal, .rst-content code.literal {
+    color: #666;
+}
+.rst-content a code.literal {
+    color: #39B3C6;
+}
+/* Sidebar scroll space for version switcher */
+.wy-side-scroll {
+    padding-bottom: 1em;
+}
+
+/* override table no-wrap */
+.wy-table-responsive table td, .wy-table-responsive table th {
+    white-space: normal;
+}

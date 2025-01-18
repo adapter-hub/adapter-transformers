@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adapter Activation and Composition &mdash; AdapterHub  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Merging Adapters" href="merging_adapters.html" />
+    <link rel="prev" title="Method Combinations" href="method_combinations.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AdapterHub
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transitioning.html">Transitioning from <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter Methods</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="methods.html">Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="method_combinations.html">Method Combinations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adapter Activation and Composition</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#adapter-activation">Adapter Activation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#composition-blocks-overview">Composition Blocks - Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#stack"><code class="docutils literal notranslate"><span class="pre">Stack</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fuse"><code class="docutils literal notranslate"><span class="pre">Fuse</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#retrieving-adapterfusion-attentions">Retrieving AdapterFusion attentions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#split"><code class="docutils literal notranslate"><span class="pre">Split</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#batchsplit"><code class="docutils literal notranslate"><span class="pre">BatchSplit</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parallel"><code class="docutils literal notranslate"><span class="pre">Parallel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-averaging">Output averaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nesting-composition-blocks">Nesting composition blocks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="merging_adapters.html">Merging Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prediction_heads.html">Prediction Heads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embeddings.html">Embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending the Library</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Loading and Sharing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="loading.html">Loading Pre-Trained Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="huggingface_hub.html">Integration with Hugging Face’s Model Hub</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Supported Models</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="model_overview.html">Model Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/albert.html">ALBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/auto.html">Auto Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/bart.html">BART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/beit.html">BEiT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/bert.html">BERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/bert-generation.html">BertGeneration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/clip.html">CLIP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/deberta.html">DeBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/deberta_v2.html">DeBERTa-v2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/distilbert.html">DistilBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/electra.html">ELECTRA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/encoderdecoder.html">Encoder Decoder Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/gpt2.html">OpenAI GPT2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/gptj.html">EleutherAI GPT-J-6B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/llama.html">LLaMA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/mistral.html">Mistral</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/mbart.html">MBart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/mt5.html">MT5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/plbart.html">PLBART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/roberta.html">RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/t5.html">T5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/vit.html">Vision Transformer (ViT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/whisper.html">Whisper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/xlmroberta.html">XLM-RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/xmod.html">X-MOD</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter-Related Classes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_config.html">Adapter Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/model_adapters_config.html">Model Adapters Config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_layer.html">Adapter Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/model_mixins.html">Model Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_utils.html">Adapter Utilities</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to AdapterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing/adding_adapter_methods.html">Adding Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing/adding_adapters_to_a_model.html">Adding Adapters to a Model</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AdapterHub</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Adapter Activation and Composition</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/adapter_composition.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="tex2jax_ignore mathjax_ignore section" id="adapter-activation-and-composition">
+<h1>Adapter Activation and Composition<a class="headerlink" href="#adapter-activation-and-composition" title="Permalink to this heading"></a></h1>
+<p>With <code class="docutils literal notranslate"><span class="pre">adapters</span></code>, it becomes possible to combine multiple adapters trained on different tasks in so-called <em>adapter compositions</em>.
+To enable such compositions, <code class="docutils literal notranslate"><span class="pre">adapters</span></code> comes with a modular and flexible concept to define how the input to the model should flow through the available adapters.
+This allows, e.g., stacking (<a class="reference external" href="https://arxiv.org/pdf/2005.00052.pdf"><em>MAD-X</em></a>) and fusing (<a class="reference external" href="https://arxiv.org/pdf/2005.00247.pdf"><em>AdapterFusion</em></a>) adapters and even more complex adapter setups.</p>
+<div class="section" id="adapter-activation">
+<h2>Adapter Activation<a class="headerlink" href="#adapter-activation" title="Permalink to this heading"></a></h2>
+<p>The single location where all the adapter composition magic happens is the <code class="docutils literal notranslate"><span class="pre">active_adapters</span></code> property of the model class.
+In the simplest case, you can set the name of a single adapter here to activate it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">active_adapters</span> <span class="o">=</span> <span class="s2">&quot;adapter_name&quot;</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><code class="docutils literal notranslate"><span class="pre">active_adapters</span></code> defines which available adapters are used in each forward and backward pass through the model. This means:</p>
+<ul class="simple">
+<li><p>You cannot activate an adapter before previously adding it to the model using either <code class="docutils literal notranslate"><span class="pre">add_adapter()</span></code> or <code class="docutils literal notranslate"><span class="pre">load_adapter()</span></code>.</p></li>
+<li><p>All adapters not mentioned in the <code class="docutils literal notranslate"><span class="pre">active_adapters</span></code> setup are ignored, although they might have been loaded into the model. Thus, after adding an adapter, make sure to activate it.</p></li>
+</ul>
+</div>
+<p>Note that we also could have used the <code class="docutils literal notranslate"><span class="pre">set_active_adapters</span></code> method with <code class="docutils literal notranslate"><span class="pre">model.set_active_adapters(&quot;adapter_name&quot;)</span></code> which does the same.</p>
+<p>Alternatively, the <a class="reference internal" href="classes/adapter_config.html#adapters.AdapterSetup" title="adapters.AdapterSetup"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">AdapterSetup</span></code></span></a> context manager allows dynamic configuration of activated setups without changing the model state:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">AdapterSetup</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;adapter_name&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">AdapterSetup</span><span class="p">(</span><span class="s2">&quot;adapter_name&quot;</span><span class="p">):</span>
+    <span class="c1"># will use the adapter named &quot;adapter_name&quot; in the forward pass</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="composition-blocks-overview">
+<h2>Composition Blocks - Overview<a class="headerlink" href="#composition-blocks-overview" title="Permalink to this heading"></a></h2>
+<p>The basic building blocks of the more advanced setups are objects derived from <code class="docutils literal notranslate"><span class="pre">AdapterCompositionBlock</span></code>,
+each representing a different possibility to combine single adapters.
+The following table gives an overview on the supported composition blocks and their support by different adapter methods.</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>Block</th>
+<th>Bottleneck<br> Adapters</th>
+<th>Prefix<br> Tuning</th>
+<th>Compacter</th>
+<th>LoRA</th>
+<th>(IA)³</th>
+<th>Prompt Tuning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#stack"><code>Stack</code></a></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅(*)</td>
+<td>✅(*)</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="#fuse"><code>Fuse</code></a></td>
+<td>✅</td>
+<td></td>
+<td>✅</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="#split"><code>Split</code></a></td>
+<td>✅</td>
+<td></td>
+<td>✅</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="#batchsplit"><code>BatchSplit</code></a></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅(*)</td>
+<td>✅(*)</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="#parallel"><code>Parallel</code></a></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅(*)</td>
+<td>✅(*)</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="#output-averaging">Output averaging</a></td>
+<td>✅</td>
+<td></td>
+<td>✅</td>
+<td>✅(*)</td>
+<td>✅(*)</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="#parameter-averaging">Parameter averaging</a></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<p>(*) except for Deberta and GPT-2.</p>
+<p>Next, we present all composition blocks in more detail.</p>
+</div>
+<div class="section" id="stack">
+<h2><code class="docutils literal notranslate"><span class="pre">Stack</span></code><a class="headerlink" href="#stack" title="Permalink to this heading"></a></h2>
+<div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="_images/stacking_adapters.png"><img alt="Illustration of stacking adapters." src="_images/stacking_adapters.png" style="height: 300px;" /></a>
+<p class="caption"><span class="caption-text">Stacking adapters using the ‘Stack’ block.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">Stack</span></code> block can be used to stack multiple adapters on top of each other.
+This kind of adapter composition is used e.g. in the <em>MAD-X</em> framework for cross-lingual transfer <a class="reference external" href="https://arxiv.org/pdf/2005.00052.pdf">(Pfeiffer et al., 2020)</a>, where language and task adapters are stacked on top of each other.
+For more, check out <a class="reference external" href="https://colab.research.google.com/github/Adapter-Hub/adapters/blob/main/notebooks/04_Cross_Lingual_Transfer.ipynb">this Colab notebook</a> on cross-lingual transfer.</p>
+<p>In the following example, we stack the adapters <code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code> and <code class="docutils literal notranslate"><span class="pre">c</span></code> so that in each layer, the input is first passed through <code class="docutils literal notranslate"><span class="pre">a</span></code>, the output of <code class="docutils literal notranslate"><span class="pre">a</span></code> is then inputted to <code class="docutils literal notranslate"><span class="pre">b</span></code> and the output of <code class="docutils literal notranslate"><span class="pre">b</span></code> is finally inputted to <code class="docutils literal notranslate"><span class="pre">c</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">adapters.composition</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ac</span>
+
+<span class="o">//</span> <span class="o">...</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">active_adapters</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">Stack</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using stacking for prefix tuning the stacked prefixed are prepended to the input states from right to left, i.e. <cite>Stack(“a”, “b”, “c”)</cite> will first prepend prefix states for “a” to the input vectors, then prepend “b” to the resulting vectors etc.</p>
+</div>
+</div>
+<div class="section" id="fuse">
+<h2><code class="docutils literal notranslate"><span class="pre">Fuse</span></code><a class="headerlink" href="#fuse" title="Permalink to this heading"></a></h2>
+<div class="figure align-center" id="id2">
+<a class="reference internal image-reference" href="_images/Fusion.png"><img alt="Illustration of AdapterFusion." src="_images/Fusion.png" style="height: 300px;" /></a>
+<p class="caption"><span class="caption-text">Fusing adapters with AdapterFusion.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">Fuse</span></code> block can be used to activate a fusion layer of adapters.
+<em>AdapterFusion</em> is a non-destructive way to combine the knowledge of multiple pre-trained adapters on a new downstream task, proposed by <a class="reference external" href="https://arxiv.org/pdf/2005.00247.pdf">Pfeiffer et al., 2021</a>.
+In the following example, we activate the adapters <code class="docutils literal notranslate"><span class="pre">d</span></code>, <code class="docutils literal notranslate"><span class="pre">e</span></code> and <code class="docutils literal notranslate"><span class="pre">f</span></code> as well as the fusion layer that combines the outputs of all three.
+The fusion layer is added beforehand using <code class="docutils literal notranslate"><span class="pre">model.add_adapter_fusion()</span></code>, where we specify the names of the adapters which should be fused.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">adapters.composition</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ac</span>
+
+<span class="o">//</span> <span class="o">...</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;e&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter_fusion</span><span class="p">([</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;f&quot;</span><span class="p">])</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">active_adapters</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">Fuse</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;f&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Fusing adapters with the <code class="docutils literal notranslate"><span class="pre">Fuse</span></code> block only works successfully if an adapter fusion layer combining all of the adapters listed in the <code class="docutils literal notranslate"><span class="pre">Fuse</span></code> has been added to the model.
+This can be done either using <code class="docutils literal notranslate"><span class="pre">add_adapter_fusion()</span></code> or <code class="docutils literal notranslate"><span class="pre">load_adapter_fusion()</span></code>.</p>
+</div>
+<p>To learn how training an <em>AdapterFusion</em> layer works, check out <a class="reference external" href="https://colab.research.google.com/github/Adapter-Hub/adapters/blob/main/notebooks/03_Adapter_Fusion.ipynb">this Colab notebook</a> from the <code class="docutils literal notranslate"><span class="pre">adapters</span></code> repo.</p>
+<p>To save and upload the full composition setup with adapters and fusion layer in one line of code, check out the docs on <a class="reference internal" href="loading.html#saving-and-loading-adapter-compositions"><span class="std std-ref">saving and loading adapter compositions</span></a>.</p>
+<div class="section" id="retrieving-adapterfusion-attentions">
+<h3>Retrieving AdapterFusion attentions<a class="headerlink" href="#retrieving-adapterfusion-attentions" title="Permalink to this heading"></a></h3>
+<p>Finally, it is possible to retrieve the attention scores computed by each fusion layer in a forward pass of the model.
+These scores can be used for analyzing the fused adapter blocks and can serve as the basis for visualizations similar to those in the AdapterFusion paper.
+You can collect the fusion attention scores by passing <code class="docutils literal notranslate"><span class="pre">output_adapter_fusion_attentions=True</span></code> to the model forward call.
+The scores for each layer will then be saved in the <code class="docutils literal notranslate"><span class="pre">adapter_fusion_attentions</span></code> attribute of the output:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">output_adapter_fusion_attentions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">attention_scores</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">adapter_fusion_attentions</span>
+</pre></div>
+</div>
+<p>Note that this parameter is only available to base model classes and <a class="reference internal" href="prediction_heads.html#adaptermodel-classes"><span class="std std-ref">AdapterModel classes</span></a>.
+In the example, <code class="docutils literal notranslate"><span class="pre">attention_scores</span></code> holds a dictionary of the following form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;&lt;fusion_name&gt;&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="o">&lt;</span><span class="n">layer_id</span><span class="o">&gt;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;&lt;module_location&gt;&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">...</span><span class="p">]),</span>
+            <span class="o">...</span>
+        <span class="p">},</span>
+        <span class="o">...</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="split">
+<h2><code class="docutils literal notranslate"><span class="pre">Split</span></code><a class="headerlink" href="#split" title="Permalink to this heading"></a></h2>
+<div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="_images/splitting_adapters.png"><img alt="Illustration of splitting adapters." src="_images/splitting_adapters.png" style="height: 300px;" /></a>
+<p class="caption"><span class="caption-text">Splitting the input between two adapters using the ‘Split’ block.</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">Split</span></code> block can be used to split an input sequence between multiple adapters.
+This is done by specifying split indices at which the sequences should be divided.
+In the following example, we split each input sequence between adapters <code class="docutils literal notranslate"><span class="pre">g</span></code> and <code class="docutils literal notranslate"><span class="pre">h</span></code>.
+For each sequence, all tokens from 0 up to 63 are forwarded through <code class="docutils literal notranslate"><span class="pre">g</span></code> while the next 64 tokens are forwarded through <code class="docutils literal notranslate"><span class="pre">h</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">adapters.composition</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ac</span>
+
+<span class="o">//</span> <span class="o">...</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;h&quot;</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">active_adapters</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">Split</span><span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="n">splits</span><span class="o">=</span><span class="p">[</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="batchsplit">
+<h2><code class="docutils literal notranslate"><span class="pre">BatchSplit</span></code><a class="headerlink" href="#batchsplit" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">BatchSplit</span></code> block is an alternative to split the input between several adapters. It does not split the input sequences but the
+batch into smaller batches. As a result, the input sequences remain untouched.</p>
+<p>In the following example, we split the batch between adapters <code class="docutils literal notranslate"><span class="pre">i</span></code>, <code class="docutils literal notranslate"><span class="pre">k</span></code> and <code class="docutils literal notranslate"><span class="pre">l</span></code>. The <code class="docutils literal notranslate"><span class="pre">batch_sizes</span></code>parameter specifies
+the batch size for each of the adapters. The adapter <code class="docutils literal notranslate"><span class="pre">i</span></code> gets two sequences, <code class="docutils literal notranslate"><span class="pre">k</span></code>gets 1 sequence and <code class="docutils literal notranslate"><span class="pre">l</span></code> gets two sequences.
+If all adapters should get the same batch size this can be specified by passing one batch size e.g. <code class="docutils literal notranslate"><span class="pre">batch_sizes</span> <span class="pre">=</span> <span class="pre">2</span></code>. The sum
+specified batch has to match the batch size of the input.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">adapters.composition</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ac</span>
+
+<span class="o">//</span> <span class="o">...</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;i&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;l&quot;</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">active_adapters</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">BatchSplit</span><span class="p">(</span><span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="n">batch_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+</pre></div>
+</div>
+</div>
+<div class="section" id="parallel">
+<h2><code class="docutils literal notranslate"><span class="pre">Parallel</span></code><a class="headerlink" href="#parallel" title="Permalink to this heading"></a></h2>
+<div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="_images/parallel.png"><img alt="Illustration of parallel adapter forward pass." src="_images/parallel.png" style="height: 300px;" /></a>
+<p class="caption"><span class="caption-text">Parallel adapter forward pass as implemented by the ‘Parallel’ block. The input is replicated at the first layer with parallel adapters.</span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">Parallel</span></code> block can be used to enable parallel multi-task training and inference on different adapters, each with their own prediction head.
+Parallel adapter inference was first used in <em>AdapterDrop: On the Efficiency of Adapters in Transformers</em> <a class="reference external" href="https://arxiv.org/pdf/2010.11918.pdf">(Rücklé et al., 2020)</a>.</p>
+<p>In the following example, we load two adapters for semantic textual similarity (STS) from the Hub, one trained on the STS benchmark, the other trained on the MRPC dataset.
+We activate a parallel setup where the input is passed through both adapters and their respective prediction heads.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">adapters.composition</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ac</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoAdapterModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;distilbert-base-uncased&quot;</span><span class="p">)</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;distilbert-base-uncased&quot;</span><span class="p">)</span>
+
+<span class="n">adapter1</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">load_adapter</span><span class="p">(</span><span class="s2">&quot;sts/sts-b@ukp&quot;</span><span class="p">)</span>
+<span class="n">adapter2</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">load_adapter</span><span class="p">(</span><span class="s2">&quot;sts/mrpc@ukp&quot;</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">active_adapters</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">Parallel</span><span class="p">(</span><span class="n">adapter1</span><span class="p">,</span> <span class="n">adapter2</span><span class="p">)</span>
+
+<span class="n">input_ids</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="s2">&quot;Adapters are great!&quot;</span><span class="p">,</span> <span class="s2">&quot;Adapters are awesome!&quot;</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span>
+
+<span class="n">output1</span><span class="p">,</span> <span class="n">output2</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">input_ids</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;STS-B adapter output:&quot;</span><span class="p">,</span> <span class="n">output1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MRPC adapter output:&quot;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">output2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">item</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="output-averaging">
+<h2>Output averaging<a class="headerlink" href="#output-averaging" title="Permalink to this heading"></a></h2>
+<p>Recent work on adapters has explored methods to ensemble models for better generalization.
+This includes averaging output representations of adapters (<a class="reference external" href="https://aclanthology.org/2021.findings-emnlp.63">Wang et al., 2021</a>) as well as averaging adapter parameters (<a class="reference external" href="https://aclanthology.org/2022.emnlp-main.388/">Wang et al., 2022</a>, <a class="reference external" href="https://aclanthology.org/2023.findings-eacl.153.pdf">Chronopoulou et al., 2023</a>). <em>Adapters</em> provides built-in support for both types of inference-time averaging methods. The output averaging composition block is described below and merging adapter parameters is explained in the <a class="reference internal" href="merging_adapters.html"><span class="std std-doc">Merging Adapters</span></a> documentation page.</p>
+<p>Output averaging allows the dynamic aggregation of output representations of multiple adapters in a model forward pass via weighted averaging. This is realized via the <code class="docutils literal notranslate"><span class="pre">Average</span></code> composition block, which works similarly to other composition blocks.
+In the example below, the three adapters are averaged with the weights <code class="docutils literal notranslate"><span class="pre">0.1</span></code> for <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">0.6</span></code> for <code class="docutils literal notranslate"><span class="pre">n</span></code> and <code class="docutils literal notranslate"><span class="pre">0.3</span></code> for <code class="docutils literal notranslate"><span class="pre">o</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">adapters.composition</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ac</span>
+
+<span class="o">//</span> <span class="o">...</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;m&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;n&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="s2">&quot;o&quot;</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">active_adapters</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">Average</span><span class="p">(</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="nesting-composition-blocks">
+<h2>Nesting composition blocks<a class="headerlink" href="#nesting-composition-blocks" title="Permalink to this heading"></a></h2>
+<p>Of course, it is also possible to combine different composition blocks in one adapter setup.
+E.g., we can nest a <code class="docutils literal notranslate"><span class="pre">Split</span></code> block within a <code class="docutils literal notranslate"><span class="pre">Stack</span></code> of adapters:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">adapters.composition</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ac</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">active_adapters</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">Stack</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">ac</span><span class="o">.</span><span class="n">Split</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="n">splits</span><span class="o">=</span><span class="mi">60</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>However, combinations of adapter composition blocks cannot be arbitrarily deep. All currently supported possibilities are visualized in the table below.</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>Block</th>
+<th>Supported Nesting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#stack"><code>Stack</code></a></td>
+<td>[str, Fuse, Split, Parallel, BatchSplit, Average]</td>
+</tr>
+<tr>
+<td><a href="#fuse"><code>Fuse</code></a></td>
+<td>[str, Stack]</td>
+</tr>
+<tr>
+<td><a href="#split"><code>Split</code></a></td>
+<td>[str, Split, Stack, BatchSplit, Average]</td>
+</tr>
+<tr>
+<td><a href="#parallel"><code>Parallel</code></a></td>
+<td>[str, Stack, BatchSplit, Average]</td>
+</tr>
+<tr>
+<td><a href="#batchsplit"><code>BatchSplit</code></a></td>
+<td>[str, Stack, Split, BatchSplit, Average]</td>
+</tr>
+<tr>
+<td><a href="#output-averaging"><code>Average</code></a></td>
+<td>[str, Stack, Split, BatchSplit]</td>
+</tr>
+</tbody>
+</table>
+<p>In the table, <code class="docutils literal notranslate"><span class="pre">str</span></code> represents an adapter, e.g. adapter “a” in the nesting example above. Depending on the individual model, some nested compositions might not be possible.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="method_combinations.html" class="btn btn-neutral float-left" title="Method Combinations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="merging_adapters.html" class="btn btn-neutral float-right" title="Merging Adapters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020-2024, AdapterHub Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!--- IMPORTANT: This file has modifications compared to the snippet on the documentation page! -->
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="adapter_composition.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

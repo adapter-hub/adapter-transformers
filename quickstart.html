@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Start &mdash; AdapterHub  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Adapter Training" href="training.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AdapterHub
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#initialize-a-model-with-adapters">Initialize a Model with Adapters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-a-pre-trained-adapter-for-inference">Using a Pre-Trained Adapter for Inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adapter-training">Adapter training</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transitioning.html">Transitioning from <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter Methods</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="methods.html">Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="method_combinations.html">Method Combinations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapter_composition.html">Adapter Activation and Composition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="merging_adapters.html">Merging Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prediction_heads.html">Prediction Heads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embeddings.html">Embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending the Library</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Loading and Sharing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="loading.html">Loading Pre-Trained Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="huggingface_hub.html">Integration with Hugging Face’s Model Hub</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Supported Models</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="model_overview.html">Model Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/albert.html">ALBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/auto.html">Auto Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/bart.html">BART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/beit.html">BEiT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/bert.html">BERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/bert-generation.html">BertGeneration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/clip.html">CLIP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/deberta.html">DeBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/deberta_v2.html">DeBERTa-v2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/distilbert.html">DistilBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/electra.html">ELECTRA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/encoderdecoder.html">Encoder Decoder Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/gpt2.html">OpenAI GPT2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/gptj.html">EleutherAI GPT-J-6B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/llama.html">LLaMA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/mistral.html">Mistral</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/mbart.html">MBart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/mt5.html">MT5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/plbart.html">PLBART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/roberta.html">RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/t5.html">T5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/vit.html">Vision Transformer (ViT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/whisper.html">Whisper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/xlmroberta.html">XLM-RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/xmod.html">X-MOD</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter-Related Classes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_config.html">Adapter Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/model_adapters_config.html">Model Adapters Config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_layer.html">Adapter Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/model_mixins.html">Model Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_utils.html">Adapter Utilities</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to AdapterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing/adding_adapter_methods.html">Adding Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing/adding_adapters_to_a_model.html">Adding Adapters to a Model</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AdapterHub</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quick Start</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/quickstart.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="tex2jax_ignore mathjax_ignore section" id="quick-start">
+<h1>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this heading"></a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">adapters</span></code> adds adapter functionality to the PyTorch implementations of all Transformer models listed in the <a class="reference external" href="https://docs.adapterhub.ml/model_overview.html">Model Overview</a>.
+For working with adapters, a couple of methods, e.g. for creation (<code class="docutils literal notranslate"><span class="pre">add_adapter()</span></code>), loading (<code class="docutils literal notranslate"><span class="pre">load_adapter()</span></code>),
+storing (<code class="docutils literal notranslate"><span class="pre">save_adapter()</span></code>) and deletion (<code class="docutils literal notranslate"><span class="pre">delete_adapter()</span></code>) are added to the model classes.
+In the following, we will briefly go through some examples to showcase these methods.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This document focuses on the adapter-related functionalities added by <code class="docutils literal notranslate"><span class="pre">adapters</span></code>.
+For a more general overview of the <em>transformers</em> library, visit
+<a class="reference external" href="https://huggingface.co/docs/transformers/main/en/quicktour">the ‘Usage’ section in Hugging Face’s documentation</a>.</p>
+</div>
+</div>
+<div class="section" id="initialize-a-model-with-adapters">
+<h2>Initialize a Model with Adapters<a class="headerlink" href="#initialize-a-model-with-adapters" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">XAdapterModel</span></code> is the recommended model for training and inference of adapters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoAdapterModel</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoAdapterModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This handles the initialization of the adapter-related functionality internally and provides you with the initialized model. The <code class="docutils literal notranslate"><span class="pre">XAdapterModel</span></code> also supports the dynamic adding, loading, and storing of heads for different tasks.</p>
+<p>If you want to use adapters in Hugging Face models, the models need to be initialized with the adapters library. This initializes the functionality of adding, loading and storing of adapters within the <code class="docutils literal notranslate"><span class="pre">transformers</span></code> models.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">adapters</span>
+
+<span class="n">adapters</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-a-pre-trained-adapter-for-inference">
+<h2>Using a Pre-Trained Adapter for Inference<a class="headerlink" href="#using-a-pre-trained-adapter-for-inference" title="Permalink to this heading"></a></h2>
+<p><em>We also have a Quickstart Colab notebook for adapter inference:</em> <a class="reference external" href="https://colab.research.google.com/github/Adapter-Hub/adapters/blob/main/notebooks/02_Adapter_Inference.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>The following example shows the usage of a basic pre-trained Transformer model with adapters.
+Our goal here is to predict the sentiment of a given sentence.</p>
+<p>We use BERT in this example, so we first load a pre-trained <code class="docutils literal notranslate"><span class="pre">BertTokenizer</span></code> to encode the input sentence and a pre-trained
+<code class="docutils literal notranslate"><span class="pre">bert-base-uncased</span></code> checkpoint from Hugging Face’s Model Hub using the <a class="reference internal" href="classes/models/bert.html#adapters.BertAdapterModel" title="adapters.BertAdapterModel"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">BertAdapterModel</span></code></span></a> class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">BertTokenizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">BertAdapterModel</span>
+
+<span class="c1"># Load pre-trained BERT tokenizer from Hugging Face</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">BertTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">&#39;bert-base-uncased&#39;</span><span class="p">)</span>
+
+<span class="c1"># An input sentence</span>
+<span class="n">sentence</span> <span class="o">=</span> <span class="s2">&quot;It&#39;s also, clearly, great fun.&quot;</span>
+
+<span class="c1"># Tokenize the input sentence and create a PyTorch input tensor</span>
+<span class="n">input_data</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">sentence</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span>
+
+<span class="c1"># Load pre-trained BERT model from Hugging Face Hub</span>
+<span class="c1"># The `BertAdapterModel` class is specifically designed for working with adapters</span>
+<span class="c1"># It can be used with different prediction heads</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">BertAdapterModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">&#39;bert-base-uncased&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Having loaded the model, we now add a pre-trained task adapter that is useful to our task from AdapterHub.
+In this case, for sentiment classification, we thus use <a class="reference external" href="https://adapterhub.ml/adapters/ukp/bert-base-uncased_sentiment_sst-2_pfeiffer/">an adapter trained on the SST-2 dataset</a>.
+The task prediction head loaded together with the adapter gives us a class label for our sentence:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load pre-trained task adapter from Adapter Hub</span>
+<span class="c1"># This method call will also load a pre-trained classification head for the adapter task</span>
+<span class="n">adapter_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">load_adapter</span><span class="p">(</span><span class="s2">&quot;sentiment/sst-2@ukp&quot;</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="s1">&#39;pfeiffer&#39;</span><span class="p">)</span>
+
+<span class="c1"># Activate the adapter we just loaded, so that it is used in every forward pass</span>
+<span class="n">model</span><span class="o">.</span><span class="n">set_active_adapters</span><span class="p">(</span><span class="n">adapter_name</span><span class="p">)</span>
+
+<span class="c1"># Predict output tensor</span>
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">input_data</span><span class="p">)</span>
+
+<span class="c1"># Retrieve the predicted class label</span>
+<span class="n">predicted</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">predicted</span> <span class="o">==</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>To save our pre-trained model and adapters, we can easily store and reload them as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For the sake of this demonstration an example path for loading and storing is given below</span>
+<span class="n">example_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;adapter-quickstart&quot;</span><span class="p">)</span>
+
+<span class="c1"># Save model</span>
+<span class="n">model</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">example_path</span><span class="p">)</span>
+<span class="c1"># Save adapter</span>
+<span class="n">model</span><span class="o">.</span><span class="n">save_adapter</span><span class="p">(</span><span class="n">example_path</span><span class="p">,</span> <span class="n">adapter_name</span><span class="p">)</span>
+
+<span class="c1"># Load model, similar to Hugging Face&#39;s AutoModel class, </span>
+<span class="c1"># you can also use AutoAdapterModel instead of BertAdapterModel</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoAdapterModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">example_path</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">load_adapter</span><span class="p">(</span><span class="n">example_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Similar to how the weights of the full model are saved, <a class="reference internal" href="classes/model_mixins.html#adapters.ModelWithHeadsAdaptersMixin.save_adapter" title="adapters.ModelWithHeadsAdaptersMixin.save_adapter"><span class="xref myst py py-meth"><code class="docutils literal notranslate"><span class="pre">save_adapter()</span></code></span></a> will create a file for saving the adapter weights and a file for saving the adapter configuration in the specified directory.</p>
+<p>Finally, if we have finished working with adapters, we can restore the base Transformer to its original form by deactivating and deleting the adapter:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Deactivate all adapters</span>
+<span class="n">model</span><span class="o">.</span><span class="n">set_active_adapters</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="c1"># Delete the added adapter</span>
+<span class="n">model</span><span class="o">.</span><span class="n">delete_adapter</span><span class="p">(</span><span class="n">adapter_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adapter-training">
+<h2>Adapter training<a class="headerlink" href="#adapter-training" title="Permalink to this heading"></a></h2>
+<p><em>We also have a Quickstart Colab notebook for adapter training:</em> <a class="reference external" href="https://colab.research.google.com/github/Adapter-Hub/adapters/blob/main/notebooks/01_Adapter_Training.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>For more examples of training different adapter setups, refer to the section on <a class="reference internal" href="training.html"><span class="std std-doc">Adapter Training</span></a>.
+Further information on using adapters with prediction heads can be found in the <a class="reference internal" href="prediction_heads.html"><span class="std std-doc">Prediction Heads</span></a> section.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="training.html" class="btn btn-neutral float-right" title="Adapter Training" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020-2024, AdapterHub Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!--- IMPORTANT: This file has modifications compared to the snippet on the documentation page! -->
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="quickstart.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

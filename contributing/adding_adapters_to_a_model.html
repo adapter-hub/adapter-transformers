@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adding Adapters to a Model &mdash; AdapterHub  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Adding Adapter Methods" href="adding_adapter_methods.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AdapterHub
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transitioning.html">Transitioning from <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter Methods</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../methods.html">Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../method_combinations.html">Method Combinations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../adapter_composition.html">Adapter Activation and Composition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../merging_adapters.html">Merging Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../prediction_heads.html">Prediction Heads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../embeddings.html">Embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending.html">Extending the Library</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Loading and Sharing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../loading.html">Loading Pre-Trained Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../huggingface_hub.html">Integration with Hugging Face’s Model Hub</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Supported Models</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../model_overview.html">Model Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/albert.html">ALBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/auto.html">Auto Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/bart.html">BART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/beit.html">BEiT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/bert.html">BERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/bert-generation.html">BertGeneration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/clip.html">CLIP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/deberta.html">DeBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/deberta_v2.html">DeBERTa-v2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/distilbert.html">DistilBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/electra.html">ELECTRA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/encoderdecoder.html">Encoder Decoder Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/gpt2.html">OpenAI GPT2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/gptj.html">EleutherAI GPT-J-6B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/llama.html">LLaMA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/mistral.html">Mistral</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/mbart.html">MBart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/mt5.html">MT5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/plbart.html">PLBART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/roberta.html">RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/t5.html">T5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/vit.html">Vision Transformer (ViT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/whisper.html">Whisper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/xlmroberta.html">XLM-RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/models/xmod.html">X-MOD</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter-Related Classes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../classes/adapter_config.html">Adapter Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/model_adapters_config.html">Model Adapters Config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/adapter_layer.html">Adapter Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/model_mixins.html">Model Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/adapter_training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/adapter_utils.html">Adapter Utilities</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to AdapterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adding_adapter_methods.html">Adding Adapter Methods</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adding Adapters to a Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#relevant-classes">Relevant Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementation-steps">Implementation Steps 📝</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#additional-optional-implementation-steps">Additional (optional) implementation steps 📝</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#training-example-adapters">Training Example Adapters</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AdapterHub</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Adding Adapters to a Model</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/contributing/adding_adapters_to_a_model.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="tex2jax_ignore mathjax_ignore section" id="adding-adapters-to-a-model">
+<h1>Adding Adapters to a Model<a class="headerlink" href="#adding-adapters-to-a-model" title="Permalink to this heading"></a></h1>
+<p>This document gives an overview of how new model architectures of Hugging Face Transformers can be supported by <code class="docutils literal notranslate"><span class="pre">adapters</span></code>.
+Before delving into implementation details, you should familiarize yourself with the main design philosophies of <code class="docutils literal notranslate"><span class="pre">adapters</span></code>:</p>
+<ul class="simple">
+<li><p><em>Adapters should integrate seamlessly with existing model classes</em>: If a model architecture supports adapters, it should be possible to use them with all model classes of this architecture.</p></li>
+<li><p><em>Copied code should be minimal</em>: <code class="docutils literal notranslate"><span class="pre">adapters</span></code> extensively uses Python mixins to add adapter support to HF models. Functions that cannot be sufficiently modified by mixins are copied and then modified. Try to avoid copying functions as much as possible.</p></li>
+</ul>
+<div class="section" id="relevant-classes">
+<h2>Relevant Classes<a class="headerlink" href="#relevant-classes" title="Permalink to this heading"></a></h2>
+<p>Adding adapter support to an existing model architecture requires modifying some parts of the model forward pass logic. These modifications are realized by the four files in the <code class="docutils literal notranslate"><span class="pre">src/adapters/models/&lt;model_type&gt;/</span></code> directory. Let’s examine the purpose of these files in the example of BERT. It’s important to note that we are adapting the original Hugging Face model, implemented in <a class="reference external" href="https://github.com/huggingface/transformers/blob/main/src/transformers/models/bert/modeling_bert.py">transformers/models/bert/modeling_bert.py</a>. The files in <code class="docutils literal notranslate"><span class="pre">src/adapters/models/bert/</span></code> are:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">src/adapters/models/bert/mixin_bert.py</span></code>:
+This file contains mixins for each class we want to change. For example, in the <code class="docutils literal notranslate"><span class="pre">BertSelfAttention</span></code> class, we need to make changes for LoRA and Prefix Tuning. For this, we create a <code class="docutils literal notranslate"><span class="pre">BertSelfAttentionAdaptersMixin</span></code> to implement these changes. We will discuss how this works in detail below.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/adapters/models/bert/modeling_bert.py</span></code>:
+For some classes of the BERT implementation (e.g. <code class="docutils literal notranslate"><span class="pre">BertModel</span></code> or <code class="docutils literal notranslate"><span class="pre">BertLayer</span></code>) the code can be sufficiently customized via mixins. For other classes (like <code class="docutils literal notranslate"><span class="pre">BertSelfAttention</span></code>), we need to edit the original code directly. These classes are copied into <code class="docutils literal notranslate"><span class="pre">src/adapters/models/bert/modeling_bert.py</span></code> and modified.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/adapters/models/bert/adapter_model.py</span></code>:
+In this file, the adapter model class is defined. This class allows flexible adding of and switching between multiple prediction heads of different types. This looks about the same for each model, except that each model has different heads and thus different <code class="docutils literal notranslate"><span class="pre">add_..._head()</span></code> functions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/adapters/models/bert/__init__.py</span></code>: Defines Python’s import structure.</p></li>
+</ol>
+</div>
+<div class="section" id="implementation-steps">
+<h2>Implementation Steps 📝<a class="headerlink" href="#implementation-steps" title="Permalink to this heading"></a></h2>
+<p>Now that we have discussed the purpose of every file in <code class="docutils literal notranslate"><span class="pre">src/adapters/models/&lt;model_type&gt;/</span></code>, we go through the integration of adapters into an existing model architecture step by step. <strong>The following steps might not be applicable to every model architecture.</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Files:</strong></p>
+<ul class="simple">
+<li><p>Create the <code class="docutils literal notranslate"><span class="pre">src/adapters/models/&lt;model_type&gt;/</span></code> directory and in it the 4 files: <code class="docutils literal notranslate"><span class="pre">mixin_&lt;model_type&gt;.py</span></code>, <code class="docutils literal notranslate"><span class="pre">modeling_&lt;model_type&gt;.py</span></code> <code class="docutils literal notranslate"><span class="pre">adapter_model.py</span></code> and <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>Mixins:</strong></p>
+<ul class="simple">
+<li><p>In <code class="docutils literal notranslate"><span class="pre">src/adapters/models/&lt;model_type&gt;/mixin_&lt;model_type&gt;.py</span></code>, create mixins for any class you want to change and where you can’t reuse an existing mixin from another class.</p>
+<ul>
+<li><p>To figure out which classes to change, think about where to insert LoRA, Prefix Tuning, and bottleneck adapters.</p></li>
+<li><p>You can use similar model implementations for guidance.</p></li>
+<li><p>Often, existing mixins of another class can be reused. E.g. <code class="docutils literal notranslate"><span class="pre">BertLayer</span></code>, <code class="docutils literal notranslate"><span class="pre">RobertaLayer</span></code>, <code class="docutils literal notranslate"><span class="pre">XLMRobertaLayer</span></code>, <code class="docutils literal notranslate"><span class="pre">DebertaLayer</span></code>, <code class="docutils literal notranslate"><span class="pre">DebertaV2Layer</span></code> and <code class="docutils literal notranslate"><span class="pre">BertGenerationLayer</span></code> (all models derived from BERT) use the <code class="docutils literal notranslate"><span class="pre">BertLayerAdaptersMixin</span></code>.</p></li>
+</ul>
+</li>
+<li><p>To additionally support Prefix Tuning, it’s necessary to apply the forward call to the <code class="docutils literal notranslate"><span class="pre">PrefixTuningLayer</span></code> module in the respective attention layer (see step 3 for how to modify the code of an Hugging Face class).</p></li>
+<li><p>Make sure the calls to <code class="docutils literal notranslate"><span class="pre">bottleneck_layer_forward()</span></code> are added in the right places.</p></li>
+<li><p>The mixin for the whole base model class (e.g., <code class="docutils literal notranslate"><span class="pre">BertModel</span></code>) should derive from <code class="docutils literal notranslate"><span class="pre">ModelBaseAdaptersMixin</span></code> and (if possible) <code class="docutils literal notranslate"><span class="pre">EmbeddingAdaptersMixin</span></code> and/or <code class="docutils literal notranslate"><span class="pre">InvertibleAdaptersMixin</span></code>. This mixin should at least implement the <code class="docutils literal notranslate"><span class="pre">iter_layers()</span></code> method but might require additional modifications depending on the architecture.</p>
+<ul>
+<li><p>If the model is a combination of different models, such as the EncoderDecoderModel, use <code class="docutils literal notranslate"><span class="pre">ModelUsingSubmodelsAdaptersMixin</span></code> instead of <code class="docutils literal notranslate"><span class="pre">ModelBaseAdaptersMixin</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Copied functions:</strong></p>
+<ul class="simple">
+<li><p>For those classes where the mixin is not enough to realize the wanted behavior, you must:</p></li>
+<li><p>Create a new class in <code class="docutils literal notranslate"><span class="pre">src/adapters/models/&lt;model_type&gt;/modeling_&lt;model_type&gt;.py</span></code> with the name <code class="docutils literal notranslate"><span class="pre">&lt;class&gt;WithAdapters</span></code>. This class should derive from the corresponding mixin and HF class.</p></li>
+<li><p>Copy the function you want to change into this class and modify it.</p>
+<ul>
+<li><p>e.g., the <code class="docutils literal notranslate"><span class="pre">forward</span></code> method of the <code class="docutils literal notranslate"><span class="pre">BertSelfAttention</span></code> class must be adapted to support prefix tuning. We therefore create a class <code class="docutils literal notranslate"><span class="pre">BertSelfAttentionWithAdapters(BertSelfAttentionAdaptersMixin,</span> <span class="pre">BertSelfAttention)</span></code>, copy the forward method into it and modify it.</p></li>
+<li><p>if the <code class="docutils literal notranslate"><span class="pre">forward</span></code> method of a module is copied and modified, make sure to call <code class="docutils literal notranslate"><span class="pre">adapters.utils.patch_forward()</span></code> in the module’s <code class="docutils literal notranslate"><span class="pre">init_adapters()</span></code> method. This ensures adapters work correctly with the <code class="docutils literal notranslate"><span class="pre">accelerate</span></code> package.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Modify MODEL_MIXIN_MAPPING</strong></p>
+<ul class="simple">
+<li><p>For each mixin whose class was not copied into <code class="docutils literal notranslate"><span class="pre">modeling_&lt;model_type&gt;.py</span></code>, add the mixin/class combination into <code class="docutils literal notranslate"><span class="pre">MODEL_MIXIN_MAPPING</span></code> in the file <code class="docutils literal notranslate"><span class="pre">src/adapters/models/__init__.py</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Create the adapter model:</strong></p>
+<ul class="simple">
+<li><p>Adapter-supporting architectures should provide a new model class <code class="docutils literal notranslate"><span class="pre">&lt;model_type&gt;AdapterModel</span></code>. This class allows flexible adding of and switching between multiple prediction heads of different types.</p></li>
+<li><p>This is done in the <code class="docutils literal notranslate"><span class="pre">adapter_model.py</span></code> file:</p>
+<ul>
+<li><p>This module should implement the <code class="docutils literal notranslate"><span class="pre">&lt;model_type&gt;AdapterModel</span></code> class, deriving from <code class="docutils literal notranslate"><span class="pre">ModelWithFlexibleHeadsAdaptersMixin</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;model_type&gt;PreTrainedModel</span></code>.</p></li>
+<li><p>In the model class, add methods for those prediction heads that make sense for the new model architecture.</p></li>
+<li><p>Again, have a look at existing implementations.</p></li>
+</ul>
+</li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">&lt;model_type&gt;AdapterModel</span></code> to the <code class="docutils literal notranslate"><span class="pre">ADAPTER_MODEL_MAPPING_NAMES</span></code> mapping in <code class="docutils literal notranslate"><span class="pre">src/adapters/models/auto/adapter_model.py</span></code> and to <code class="docutils literal notranslate"><span class="pre">src/adapters/__init__.py</span></code>.</p></li>
+<li><p>Define the classes to be added to Python’s import structure in <code class="docutils literal notranslate"><span class="pre">src/adapters/models/&lt;model_type&gt;/__init__.py</span></code>. This will likely only be the <code class="docutils literal notranslate"><span class="pre">&lt;model_type&gt;AdapterModel</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Adapt the config classes:</strong></p>
+<ul class="simple">
+<li><p>Adapt the config class to the requirements of adapters in <code class="docutils literal notranslate"><span class="pre">src/adapters/wrappers/configuration.py</span></code>.</p></li>
+<li><p>There are some naming differences in the config attributes of different model architectures. The adapter implementation requires some additional attributes with a specific name to be available. These currently are <code class="docutils literal notranslate"><span class="pre">num_attention_heads</span></code>, <code class="docutils literal notranslate"><span class="pre">hidden_size</span></code>, <code class="docutils literal notranslate"><span class="pre">hidden_dropout_prob</span></code> and <code class="docutils literal notranslate"><span class="pre">attention_probs_dropout_prob</span></code> as in the <code class="docutils literal notranslate"><span class="pre">BertConfig</span></code> class.
+If your model config does not provide these, add corresponding mappings to <code class="docutils literal notranslate"><span class="pre">CONFIG_CLASS_KEYS_MAPPING</span></code>.</p></li>
+</ul>
+</li>
+</ol>
+<div class="section" id="additional-optional-implementation-steps">
+<h3>Additional (optional) implementation steps 📝<a class="headerlink" href="#additional-optional-implementation-steps" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Parallel adapter inference via <code class="docutils literal notranslate"><span class="pre">Parallel</span></code> composition block (cf. <a class="reference external" href="https://docs.adapterhub.ml/adapter_composition.html#parallel">documentation</a>, <a class="reference external" href="https://github.com/Adapter-Hub/adapters/pull/150">PR#150</a>).</p></li>
+<li><p>Provide mappings for an architecture’s existing (static) prediction heads into <code class="docutils literal notranslate"><span class="pre">adapters</span></code> flex heads (cf. <a class="reference external" href="https://github.com/adapter-hub/adapters/blob/main/src/adapters/head_utils.py#L11">implementation</a>).</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this heading"></a></h2>
+<p>❓ In addition to the general Hugging Face model tests, there are adapter-specific test cases. All tests are executed from the <code class="docutils literal notranslate"><span class="pre">tests</span></code> folder. You need to add two different test classes.</p>
+<p><strong>📝 Steps</strong></p>
+<ol class="arabic simple">
+<li><p>Add a new <code class="docutils literal notranslate"><span class="pre">test_&lt;model_type&gt;.py</span></code> module in <code class="docutils literal notranslate"><span class="pre">tests/</span></code></p>
+<ul class="simple">
+<li><p>This file is used to test that everything related to the usage of adapters (adding, removing, activating, …) works.</p></li>
+<li><p>This module typically holds 2 test classes and a test base class:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;model_type&gt;AdapterTestBase</span></code>: This class contains the <code class="docutils literal notranslate"><span class="pre">tokenizer_name</span></code>, <code class="docutils literal notranslate"><span class="pre">config_class</span></code> and <code class="docutils literal notranslate"><span class="pre">config</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;model_type&gt;AdapterTest</span></code> derives from a collection of test mixins that hold various adapter tests (depending on the implementation).</p></li>
+<li><p>(optionally) <code class="docutils literal notranslate"><span class="pre">&lt;model_type&gt;ClassConversionTest</span></code> runs tests for correct class conversion if conversion of prediction heads is implemented.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Add a new <code class="docutils literal notranslate"><span class="pre">test_&lt;model_type&gt;.py</span></code> module in <code class="docutils literal notranslate"><span class="pre">tests/models/</span></code></p>
+<ul class="simple">
+<li><p>This file is used to test the AdapterModel class.</p></li>
+<li><p>This module typically holds 1 test class with the name <code class="docutils literal notranslate"><span class="pre">&lt;model_type&gt;AdapterModelTest</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;model_type&gt;AdapterModelTest</span></code> derives directly from Hugging Face’s existing model test class <code class="docutils literal notranslate"><span class="pre">&lt;model_type&gt;ModelTest</span></code> and adds <code class="docutils literal notranslate"><span class="pre">&lt;model_type&gt;AdapterModel</span></code> as a class to test.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h2>
+<p>❓ The documentation for <code class="docutils literal notranslate"><span class="pre">adapters</span></code> lives in the <code class="docutils literal notranslate"><span class="pre">docs</span></code> folder.</p>
+<p><strong>📝 Steps</strong></p>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">docs/classes/models/&lt;model_type&gt;.rst</span></code> (oriented at the doc file in the HF docs). Make sure to include <code class="docutils literal notranslate"><span class="pre">&lt;model_type&gt;AdapterModel</span></code> autodoc. Finally, list the file in <code class="docutils literal notranslate"><span class="pre">index.rst</span></code>.</p></li>
+<li><p>Add a new row for the model in the model table of the overview page at <code class="docutils literal notranslate"><span class="pre">docs/model_overview.md</span></code>, listing all the methods implemented by the new model.</p></li>
+</ul>
+</div>
+<div class="section" id="training-example-adapters">
+<h2>Training Example Adapters<a class="headerlink" href="#training-example-adapters" title="Permalink to this heading"></a></h2>
+<p>❓ To make sure the new adapter implementation works properly, it is useful to train some example adapters and compare the training results to full model fine-tuning. Ideally, this would include training adapters on one (or more) tasks that are good for demonstrating the new model architecture (e.g. GLUE benchmark for BERT, summarization for BART) and uploading them to AdapterHub.</p>
+<p>We provide training scripts for many tasks here: <a class="reference external" href="https://github.com/Adapter-Hub/adapters/tree/main/examples/pytorch/">https://github.com/Adapter-Hub/adapters/tree/main/examples/pytorch/</a></p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="adding_adapter_methods.html" class="btn btn-neutral float-left" title="Adding Adapter Methods" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020-2024, AdapterHub Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!--- IMPORTANT: This file has modifications compared to the snippet on the documentation page! -->
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="adding_adapters_to_a_model.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Encoder Decoder Models &mdash; AdapterHub  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="OpenAI GPT2" href="gpt2.html" />
+    <link rel="prev" title="ELECTRA" href="electra.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AdapterHub
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../transitioning.html">Transitioning from <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter Methods</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../methods.html">Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../method_combinations.html">Method Combinations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../adapter_composition.html">Adapter Activation and Composition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../merging_adapters.html">Merging Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../prediction_heads.html">Prediction Heads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../embeddings.html">Embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending.html">Extending the Library</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Loading and Sharing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../loading.html">Loading Pre-Trained Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../huggingface_hub.html">Integration with Hugging Face’s Model Hub</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Supported Models</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../model_overview.html">Model Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="albert.html">ALBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto.html">Auto Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bart.html">BART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beit.html">BEiT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bert.html">BERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bert-generation.html">BertGeneration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clip.html">CLIP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deberta.html">DeBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deberta_v2.html">DeBERTa-v2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distilbert.html">DistilBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="electra.html">ELECTRA</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Encoder Decoder Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#encoderdecodermodel">EncoderDecoderModel</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gpt2.html">OpenAI GPT2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gptj.html">EleutherAI GPT-J-6B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="llama.html">LLaMA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mistral.html">Mistral</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mbart.html">MBart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mt5.html">MT5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plbart.html">PLBART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roberta.html">RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="t5.html">T5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vit.html">Vision Transformer (ViT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whisper.html">Whisper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xlmroberta.html">XLM-RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xmod.html">X-MOD</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter-Related Classes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../adapter_config.html">Adapter Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_adapters_config.html">Model Adapters Config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adapter_layer.html">Adapter Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_mixins.html">Model Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adapter_training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adapter_utils.html">Adapter Utilities</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing to AdapterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/adding_adapter_methods.html">Adding Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/adding_adapters_to_a_model.html">Adding Adapters to a Model</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AdapterHub</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Encoder Decoder Models</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/classes/models/encoderdecoder.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="encoder-decoder-models">
+<h1>Encoder Decoder Models<a class="headerlink" href="#encoder-decoder-models" title="Permalink to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl>
+<dt>Adapter implementation notes:</dt><dd><ul>
+<li><p>Unlike other models, an explicit EncoderDecoderAdapterModel for the EncoderDecoderModel has not been implemented. This decision was made due to the lack of support for the EncoderDecoderModel in Hugging Face Transformers’ <code class="docutils literal notranslate"><span class="pre">AutoModel</span></code> class. As a result, our <code class="docutils literal notranslate"><span class="pre">AutoAdapterModel</span></code> class would not support the EncoderDecoderAdapterModel either. Thus, to use an EncoderDecoderModel with <em>Adapters</em>, follow these steps:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>First, create an <a class="reference internal" href="#transformers.EncoderDecoderModel" title="transformers.EncoderDecoderModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">EncoderDecoderModel</span></code></a> instance, for example, using <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">=</span> <span class="pre">EncoderDecoderModel.from_encoder_decoder_pretrained(&quot;bert-base-uncased&quot;,</span> <span class="pre">&quot;bert-base-uncased&quot;)</span></code>.</p></li>
+<li><p>Next, convert this model to an adapter model using the <code class="docutils literal notranslate"><span class="pre">adapters.init(model)</span></code> function.</p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>Adapters can be added to both the encoder and the decoder. As usual, the <code class="docutils literal notranslate"><span class="pre">leave_out</span></code> parameter can be used to specify the layers where adapters are to be added. For the EncoderDecoderModel the layer IDs are counted seperately over the encoder and decoder starting from 0. Thus, specifying <code class="docutils literal notranslate"><span class="pre">leave_out=[0,1]</span></code> will leave out the first and second layer of the encoder and the first and second layer of the decoder.</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<p>The <a class="reference internal" href="#transformers.EncoderDecoderModel" title="transformers.EncoderDecoderModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">EncoderDecoderModel</span></code></a> can be used to initialize a sequence-to-sequence model with any
+pretrained autoencoding model as the encoder and any pretrained autoregressive model as the decoder.</p>
+<p>The effectiveness of initializing sequence-to-sequence models with pretrained checkpoints for sequence generation tasks
+was shown in <a class="reference external" href="https://arxiv.org/abs/1907.12461">Leveraging Pre-trained Checkpoints for Sequence Generation Tasks</a> by
+Sascha Rothe, Shashi Narayan, Aliaksei Severyn.</p>
+<p>After such an <a class="reference internal" href="#transformers.EncoderDecoderModel" title="transformers.EncoderDecoderModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">EncoderDecoderModel</span></code></a> has been trained/fine-tuned, it can be saved/loaded just like
+any other models (see the examples for more information).</p>
+<p>An application of this architecture could be to leverage two pretrained <code class="xref py py-class docutils literal notranslate"><span class="pre">BertModel</span></code> as the encoder
+and decoder for a summarization model as was shown in: <a class="reference external" href="https://arxiv.org/abs/1908.08345">Text Summarization with Pretrained Encoders</a> by Yang Liu and Mirella Lapata.</p>
+<div class="section" id="encoderdecodermodel">
+<h2>EncoderDecoderModel<a class="headerlink" href="#encoderdecodermodel" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="transformers.EncoderDecoderModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">transformers.</span></span><span class="sig-name descname"><span class="pre">EncoderDecoderModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">PretrainedConfig</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">PreTrainedModel</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decoder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">PreTrainedModel</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#transformers.EncoderDecoderModel" title="Permalink to this definition"></a></dt>
+<dd><p>This class can be used to initialize a sequence-to-sequence model with any pretrained autoencoding model as the
+encoder and any pretrained autoregressive model as the decoder. The encoder is loaded via
+[<cite>~AutoModel.from_pretrained</cite>] function and the decoder is loaded via [<cite>~AutoModelForCausalLM.from_pretrained</cite>]
+function. Cross-attention layers are automatically added to the decoder and should be fine-tuned on a downstream
+generative task, like summarization.</p>
+<p>The effectiveness of initializing sequence-to-sequence models with pretrained checkpoints for sequence generation
+tasks was shown in [Leveraging Pre-trained Checkpoints for Sequence Generation
+Tasks](<a class="reference external" href="https://arxiv.org/abs/1907.12461">https://arxiv.org/abs/1907.12461</a>) by Sascha Rothe, Shashi Narayan, Aliaksei Severyn. Michael Matena, Yanqi
+Zhou, Wei Li, Peter J. Liu.</p>
+<p>After such an Encoder Decoder model has been trained/fine-tuned, it can be saved/loaded just like any other models
+(see the examples for more information).</p>
+<p>This model inherits from [<cite>PreTrainedModel</cite>]. Check the superclass documentation for the generic methods the
+library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
+etc.)</p>
+<p>This model is also a PyTorch [torch.nn.Module](<a class="reference external" href="https://pytorch.org/docs/stable/nn.html#torch.nn.Module">https://pytorch.org/docs/stable/nn.html#torch.nn.Module</a>) subclass.
+Use it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage
+and behavior.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> ([<cite>EncoderDecoderConfig</cite>]) – Model configuration class with all the parameters of the model.
+Initializing with a config file does not load the weights associated with the model, only the
+configuration. Check out the [<cite>~PreTrainedModel.from_pretrained</cite>] method to load the model weights.</p>
+</dd>
+</dl>
+<p>[<cite>EncoderDecoderModel</cite>] is a generic model class that will be instantiated as a transformer architecture with one
+of the base model classes of the library as encoder and another one as decoder when created with the
+:meth*~transformers.AutoModel.from_pretrained* class method for the encoder and
+:meth*~transformers.AutoModelForCausalLM.from_pretrained* class method for the decoder.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="transformers.EncoderDecoderModel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">LongTensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">FloatTensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decoder_input_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">LongTensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decoder_attention_mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">BoolTensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoder_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">FloatTensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">past_key_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">FloatTensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs_embeds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">FloatTensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decoder_inputs_embeds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">FloatTensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">LongTensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cache</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_attentions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_hidden_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Seq2SeqLMOutput</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#transformers.EncoderDecoderModel.forward" title="Permalink to this definition"></a></dt>
+<dd><p>The [<cite>EncoderDecoderModel</cite>] forward method, overrides the <cite>__call__</cite> special method.</p>
+<p>&lt;Tip&gt;</p>
+<p>Although the recipe for forward pass needs to be defined within this function, one should call the [<cite>Module</cite>]
+instance afterwards instead of this since the former takes care of running the pre and post processing steps while
+the latter silently ignores them.</p>
+<p>&lt;/Tip&gt;</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_ids</strong> (<cite>torch.LongTensor</cite> of shape <cite>(batch_size, sequence_length)</cite>) – <p>Indices of input sequence tokens in the vocabulary.</p>
+<p>Indices can be obtained using [<cite>PreTrainedTokenizer</cite>]. See [<cite>PreTrainedTokenizer.encode</cite>] and
+[<cite>PreTrainedTokenizer.__call__</cite>] for details.</p>
+<p>[What are input IDs?](../glossary#input-ids)</p>
+</p></li>
+<li><p><strong>attention_mask</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, sequence_length)</cite>, <em>optional</em>) – <p>Mask to avoid performing attention on padding token indices. Mask values selected in <cite>[0, 1]</cite>:</p>
+<ul>
+<li><p>1 for tokens that are <strong>not masked</strong>,</p></li>
+<li><p>0 for tokens that are <strong>masked</strong>.</p></li>
+</ul>
+<p>[What are attention masks?](../glossary#attention-mask)</p>
+</p></li>
+<li><p><strong>decoder_input_ids</strong> (<cite>torch.LongTensor</cite> of shape <cite>(batch_size, target_sequence_length)</cite>, <em>optional</em>) – <p>Indices of decoder input sequence tokens in the vocabulary.</p>
+<p>Indices can be obtained using [<cite>PreTrainedTokenizer</cite>]. See [<cite>PreTrainedTokenizer.encode</cite>] and
+[<cite>PreTrainedTokenizer.__call__</cite>] for details.</p>
+<p>[What are input IDs?](../glossary#input-ids)</p>
+<p>If <cite>past_key_values</cite> is used, optionally only the last <cite>decoder_input_ids</cite> have to be input (see
+<cite>past_key_values</cite>).</p>
+<p>For training, <cite>decoder_input_ids</cite> are automatically created by the model by shifting the <cite>labels</cite> to the
+right, replacing -100 by the <cite>pad_token_id</cite> and prepending them with the <cite>decoder_start_token_id</cite>.</p>
+</p></li>
+<li><p><strong>decoder_attention_mask</strong> (<cite>torch.BoolTensor</cite> of shape <cite>(batch_size, target_sequence_length)</cite>, <em>optional</em>) – Default behavior: generate a tensor that ignores pad tokens in <cite>decoder_input_ids</cite>. Causal mask will also
+be used by default.</p></li>
+<li><p><strong>encoder_outputs</strong> (<cite>tuple(torch.FloatTensor)</cite>, <em>optional</em>) – This tuple must consist of (<cite>last_hidden_state</cite>, <em>optional</em>: <cite>hidden_states</cite>, <em>optional</em>: <cite>attentions</cite>)
+<cite>last_hidden_state</cite> (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, sequence_length, hidden_size)</cite>) is a tensor
+of hidden-states at the output of the last layer of the encoder. Used in the cross-attention of the
+decoder.</p></li>
+<li><p><strong>past_key_values</strong> (<cite>tuple(tuple(torch.FloatTensor))</cite> of length <cite>config.n_layers</cite> with each tuple having 4 tensors of shape <cite>(batch_size, num_heads, sequence_length - 1, embed_size_per_head)</cite>) – <p>Contains precomputed key and value hidden states of the attention blocks. Can be used to speed up decoding.</p>
+<p>If <cite>past_key_values</cite> are used, the user can optionally input only the last <cite>decoder_input_ids</cite> (those that
+don’t have their past key value states given to this model) of shape <cite>(batch_size, 1)</cite> instead of all
+<cite>decoder_input_ids</cite> of shape <cite>(batch_size, sequence_length)</cite>.</p>
+</p></li>
+<li><p><strong>inputs_embeds</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, sequence_length, hidden_size)</cite>, <em>optional</em>) – Optionally, instead of passing <cite>input_ids</cite> you can choose to directly pass an embedded representation. This
+is useful if you want more control over how to convert <cite>input_ids</cite> indices into associated vectors than the
+model’s internal embedding lookup matrix.</p></li>
+<li><p><strong>decoder_inputs_embeds</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, target_sequence_length, hidden_size)</cite>, <em>optional</em>) – Optionally, instead of passing <cite>decoder_input_ids</cite> you can choose to directly pass an embedded
+representation. This is useful if you want more control over how to convert <cite>decoder_input_ids</cite> indices
+into associated vectors than the model’s internal embedding lookup matrix.</p></li>
+<li><p><strong>labels</strong> (<cite>torch.LongTensor</cite> of shape <cite>(batch_size, sequence_length)</cite>, <em>optional</em>) – Labels for computing the masked language modeling loss for the decoder. Indices should be in <cite>[-100, 0,
+…, config.vocab_size]</cite> (see <cite>input_ids</cite> docstring) Tokens with indices set to <cite>-100</cite> are ignored
+(masked), the loss is only computed for the tokens with labels in <cite>[0, …, config.vocab_size]</cite></p></li>
+<li><p><strong>use_cache</strong> (<cite>bool</cite>, <em>optional</em>) – If set to <cite>True</cite>, <cite>past_key_values</cite> key value states are returned and can be used to speed up decoding (see
+<cite>past_key_values</cite>).</p></li>
+<li><p><strong>output_attentions</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return the attentions tensors of all attention layers. See <cite>attentions</cite> under returned
+tensors for more detail.</p></li>
+<li><p><strong>output_hidden_states</strong> (<cite>bool</cite>, <em>optional</em>) – Whether or not to return the hidden states of all layers. See <cite>hidden_states</cite> under returned tensors for
+more detail.</p></li>
+<li><p><strong>return_dict</strong> (<cite>bool</cite>, <em>optional</em>) – If set to <cite>True</cite>, the model will return a [<cite>~utils.Seq2SeqLMOutput</cite>] instead of a plain tuple.</p></li>
+<li><p><strong>kwargs</strong> (<em>optional</em>) – <p>Remaining dictionary of keyword arguments. Keyword arguments come in two flavors:</p>
+<ul>
+<li><p>Without a prefix which will be input as <cite>**encoder_kwargs</cite> for the encoder forward function.</p></li>
+<li><p>With a <em>decoder_</em> prefix which will be input as <cite>**decoder_kwargs</cite> for the decoder forward function.</p></li>
+</ul>
+</p></li>
+<li><p><strong>Returns</strong> – <p>[<cite>transformers.modeling_outputs.Seq2SeqLMOutput</cite>] or <cite>tuple(torch.FloatTensor)</cite>: A [<cite>transformers.modeling_outputs.Seq2SeqLMOutput</cite>] or a tuple of
+<cite>torch.FloatTensor</cite> (if <cite>return_dict=False</cite> is passed or when <cite>config.return_dict=False</cite>) comprising various
+elements depending on the configuration ([<cite>EncoderDecoderConfig</cite>]) and inputs.</p>
+<ul>
+<li><p><strong>loss</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(1,)</cite>, <em>optional</em>, returned when <cite>labels</cite> is provided) – Language modeling loss.</p></li>
+<li><p><strong>logits</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, sequence_length, config.vocab_size)</cite>) – Prediction scores of the language modeling head (scores for each vocabulary token before SoftMax).</p></li>
+<li><p><strong>past_key_values</strong> (<cite>tuple(tuple(torch.FloatTensor))</cite>, <em>optional</em>, returned when <cite>use_cache=True</cite> is passed or when <cite>config.use_cache=True</cite>) – Tuple of <cite>tuple(torch.FloatTensor)</cite> of length <cite>config.n_layers</cite>, with each tuple having 2 tensors of shape
+<cite>(batch_size, num_heads, sequence_length, embed_size_per_head)</cite>) and 2 additional tensors of shape
+<cite>(batch_size, num_heads, encoder_sequence_length, embed_size_per_head)</cite>.</p>
+<p>Contains pre-computed hidden-states (key and values in the self-attention blocks and in the cross-attention
+blocks) that can be used (see <cite>past_key_values</cite> input) to speed up sequential decoding.</p>
+</li>
+<li><p><strong>decoder_hidden_states</strong> (<cite>tuple(torch.FloatTensor)</cite>, <em>optional</em>, returned when <cite>output_hidden_states=True</cite> is passed or when <cite>config.output_hidden_states=True</cite>) – Tuple of <cite>torch.FloatTensor</cite> (one for the output of the embeddings, if the model has an embedding layer, +
+one for the output of each layer) of shape <cite>(batch_size, sequence_length, hidden_size)</cite>.</p>
+<p>Hidden-states of the decoder at the output of each layer plus the initial embedding outputs.</p>
+</li>
+<li><p><strong>decoder_attentions</strong> (<cite>tuple(torch.FloatTensor)</cite>, <em>optional</em>, returned when <cite>output_attentions=True</cite> is passed or when <cite>config.output_attentions=True</cite>) – Tuple of <cite>torch.FloatTensor</cite> (one for each layer) of shape <cite>(batch_size, num_heads, sequence_length,
+sequence_length)</cite>.</p>
+<p>Attentions weights of the decoder, after the attention softmax, used to compute the weighted average in the
+self-attention heads.</p>
+</li>
+<li><p><strong>cross_attentions</strong> (<cite>tuple(torch.FloatTensor)</cite>, <em>optional</em>, returned when <cite>output_attentions=True</cite> is passed or when <cite>config.output_attentions=True</cite>) – Tuple of <cite>torch.FloatTensor</cite> (one for each layer) of shape <cite>(batch_size, num_heads, sequence_length,
+sequence_length)</cite>.</p>
+<p>Attentions weights of the decoder’s cross-attention layer, after the attention softmax, used to compute the
+weighted average in the cross-attention heads.</p>
+</li>
+<li><p><strong>encoder_last_hidden_state</strong> (<cite>torch.FloatTensor</cite> of shape <cite>(batch_size, sequence_length, hidden_size)</cite>, <em>optional</em>) – Sequence of hidden-states at the output of the last layer of the encoder of the model.</p></li>
+<li><p><strong>encoder_hidden_states</strong> (<cite>tuple(torch.FloatTensor)</cite>, <em>optional</em>, returned when <cite>output_hidden_states=True</cite> is passed or when <cite>config.output_hidden_states=True</cite>) – Tuple of <cite>torch.FloatTensor</cite> (one for the output of the embeddings, if the model has an embedding layer, +
+one for the output of each layer) of shape <cite>(batch_size, sequence_length, hidden_size)</cite>.</p>
+<p>Hidden-states of the encoder at the output of each layer plus the initial embedding outputs.</p>
+</li>
+<li><p><strong>encoder_attentions</strong> (<cite>tuple(torch.FloatTensor)</cite>, <em>optional</em>, returned when <cite>output_attentions=True</cite> is passed or when <cite>config.output_attentions=True</cite>) – Tuple of <cite>torch.FloatTensor</cite> (one for each layer) of shape <cite>(batch_size, num_heads, sequence_length,
+sequence_length)</cite>.</p>
+<p>Attentions weights of the encoder, after the attention softmax, used to compute the weighted average in the
+self-attention heads.</p>
+</li>
+</ul>
+</p></li>
+<li><p><strong>Examples</strong> – </p></li>
+<li><p><strong>```python</strong> – </p></li>
+<li><p><strong>EncoderDecoderModel</strong> (<em>&gt;&gt;&gt; from transformers import</em>) – </p></li>
+<li><p><strong>BertTokenizer</strong> – </p></li>
+<li><p><strong>torch</strong> (<em>&gt;&gt;&gt; import</em>) – </p></li>
+<li><p><strong>BertTokenizer.from_pretrained</strong> (<em>&gt;&gt;&gt; tokenizer =</em>) – </p></li>
+<li><p><strong>EncoderDecoderModel.from_encoder_decoder_pretrained</strong><strong>(</strong> (<em>&gt;&gt;&gt; model =</em>) – </p></li>
+<li><p><strong>&quot;google-bert/bert-base-uncased&quot;</strong> (<em>...</em>) – </p></li>
+<li><p><strong>&quot;google-bert/bert-base-uncased&quot;</strong> – </p></li>
+<li><p><strong>checkpoints</strong> (<em>...</em><em> )  </em><em># initialize Bert2Bert from pre-trained</em>) – </p></li>
+<li><p><strong>training</strong> (<em>&gt;&gt;&gt; #</em>) – </p></li>
+<li><p><strong>tokenizer.cls_token_id</strong> (<em>&gt;&gt;&gt; model.config.decoder_start_token_id =</em>) – </p></li>
+<li><p><strong>tokenizer.pad_token_id</strong> (<em>&gt;&gt;&gt; model.config.pad_token_id =</em>) – </p></li>
+<li><p><strong>model.config.decoder.vocab_size</strong> (<em>&gt;&gt;&gt; model.config.vocab_size =</em>) – </p></li>
+<li><p><strong>tokenizer</strong> (<em>&gt;&gt;&gt; labels =</em>) – </p></li>
+<li><p><strong>tokenizer</strong> – </p></li>
+<li><p><strong>model</strong> (<em>&gt;&gt;&gt; outputs =</em>) – </p></li>
+<li><p><strong>loss</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
+<li><p><strong>outputs.loss</strong> (<em>logits =</em>) – </p></li>
+<li><p><strong>outputs.logits</strong> – </p></li>
+<li><p><strong>pretrained</strong> (<em>&gt;&gt;&gt; # save and load from</em>) – </p></li>
+<li><p><strong>model.save_pretrained</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
+<li><p><strong>EncoderDecoderModel.from_pretrained</strong> (<em>&gt;&gt;&gt; model =</em>) – </p></li>
+<li><p><strong>generation</strong> (<em>&gt;&gt;&gt; #</em>) – </p></li>
+<li><p><strong>model.generate</strong> (<em>&gt;&gt;&gt; generated =</em>) – </p></li>
+<li><p><strong>```</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="transformers.EncoderDecoderModel.from_encoder_decoder_pretrained">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_encoder_decoder_pretrained</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoder_pretrained_model_name_or_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decoder_pretrained_model_name_or_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">model_args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">PreTrainedModel</span></span></span><a class="headerlink" href="#transformers.EncoderDecoderModel.from_encoder_decoder_pretrained" title="Permalink to this definition"></a></dt>
+<dd><p>Instantiate an encoder and a decoder from one or two base classes of the library from pretrained model
+checkpoints.</p>
+<p>The model is set in evaluation mode by default using <cite>model.eval()</cite> (Dropout modules are deactivated). To train
+the model, you need to first set it back in training mode with <cite>model.train()</cite>.</p>
+<dl>
+<dt>Params:</dt><dd><dl>
+<dt>encoder_pretrained_model_name_or_path (<cite>str</cite>, <em>optional</em>):</dt><dd><p>Information necessary to initiate the encoder. Can be either:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A string, the <em>model id</em> of a pretrained model hosted inside a model repo on huggingface.co.</p></li>
+<li><p>A path to a <em>directory</em> containing model weights saved using
+[<cite>~PreTrainedModel.save_pretrained</cite>], e.g., <cite>./my_model_directory/</cite>.</p></li>
+<li><p>A path or url to a <em>tensorflow index checkpoint file</em> (e.g, <cite>./tf_model/model.ckpt.index</cite>). In
+this case, <cite>from_tf</cite> should be set to <cite>True</cite> and a configuration object should be provided as
+<cite>config</cite> argument. This loading path is slower than converting the TensorFlow checkpoint in a
+PyTorch model using the provided conversion scripts and loading the PyTorch model afterwards.</p></li>
+</ul>
+</div></blockquote>
+</dd>
+<dt>decoder_pretrained_model_name_or_path (<cite>str</cite>, <em>optional</em>, defaults to <cite>None</cite>):</dt><dd><p>Information necessary to initiate the decoder. Can be either:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A string, the <em>model id</em> of a pretrained model hosted inside a model repo on huggingface.co.</p></li>
+<li><p>A path to a <em>directory</em> containing model weights saved using
+[<cite>~PreTrainedModel.save_pretrained</cite>], e.g., <cite>./my_model_directory/</cite>.</p></li>
+<li><p>A path or url to a <em>tensorflow index checkpoint file</em> (e.g, <cite>./tf_model/model.ckpt.index</cite>). In
+this case, <cite>from_tf</cite> should be set to <cite>True</cite> and a configuration object should be provided as
+<cite>config</cite> argument. This loading path is slower than converting the TensorFlow checkpoint in a
+PyTorch model using the provided conversion scripts and loading the PyTorch model afterwards.</p></li>
+</ul>
+</div></blockquote>
+</dd>
+<dt>model_args (remaining positional arguments, <em>optional</em>):</dt><dd><p>All remaining positional arguments will be passed to the underlying model’s <cite>__init__</cite> method.</p>
+</dd>
+<dt>kwargs (remaining dictionary of keyword arguments, <em>optional</em>):</dt><dd><p>Can be used to update the configuration object (after it being loaded) and initiate the model (e.g.,
+<cite>output_attentions=True</cite>).</p>
+<ul class="simple">
+<li><p>To update the encoder configuration, use the prefix <em>encoder_</em> for each configuration parameter.</p></li>
+<li><p>To update the decoder configuration, use the prefix <em>decoder_</em> for each configuration parameter.</p></li>
+<li><p>To update the parent model configuration, do not use a prefix for each configuration parameter.</p></li>
+</ul>
+<p>Behaves differently depending on whether a <cite>config</cite> is provided or automatically loaded.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Example:</p>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>python
+&gt;&gt;&gt; from transformers import EncoderDecoderModel</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># initialize a bert2bert from two pretrained BERT models. Note that the cross-attention layers will be randomly initialized</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">EncoderDecoderModel</span><span class="o">.</span><span class="n">from_encoder_decoder_pretrained</span><span class="p">(</span><span class="s2">&quot;google-bert/bert-base-uncased&quot;</span><span class="p">,</span> <span class="s2">&quot;google-bert/bert-base-uncased&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># saving model after fine-tuning</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="s2">&quot;./bert2bert&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># load fine-tuned model</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">EncoderDecoderModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;./bert2bert&quot;</span><span class="p">)</span>
+<span class="go">```</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="electra.html" class="btn btn-neutral float-left" title="ELECTRA" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gpt2.html" class="btn btn-neutral float-right" title="OpenAI GPT2" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020-2024, AdapterHub Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!--- IMPORTANT: This file has modifications compared to the snippet on the documentation page! -->
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="encoderdecoder.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

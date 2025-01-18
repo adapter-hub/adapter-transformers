@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adapter Utilities &mdash; AdapterHub  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributing to AdapterHub" href="../contributing.html" />
+    <link rel="prev" title="Adapter Training" href="adapter_training.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AdapterHub
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transitioning.html">Transitioning from <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter Methods</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../methods.html">Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../method_combinations.html">Method Combinations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../adapter_composition.html">Adapter Activation and Composition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../merging_adapters.html">Merging Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../prediction_heads.html">Prediction Heads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../embeddings.html">Embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending.html">Extending the Library</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Loading and Sharing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../loading.html">Loading Pre-Trained Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../huggingface_hub.html">Integration with Hugging Face’s Model Hub</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Supported Models</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../model_overview.html">Model Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/albert.html">ALBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/auto.html">Auto Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/bart.html">BART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/beit.html">BEiT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/bert.html">BERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/bert-generation.html">BertGeneration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/clip.html">CLIP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/deberta.html">DeBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/deberta_v2.html">DeBERTa-v2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/distilbert.html">DistilBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/electra.html">ELECTRA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/encoderdecoder.html">Encoder Decoder Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/gpt2.html">OpenAI GPT2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/gptj.html">EleutherAI GPT-J-6B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/llama.html">LLaMA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/mistral.html">Mistral</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/mbart.html">MBart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/mt5.html">MT5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/plbart.html">PLBART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/roberta.html">RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/t5.html">T5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/vit.html">Vision Transformer (ViT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/whisper.html">Whisper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/xlmroberta.html">XLM-RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/xmod.html">X-MOD</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter-Related Classes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="adapter_config.html">Adapter Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_adapters_config.html">Model Adapters Config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_layer.html">Adapter Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_mixins.html">Model Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_training.html">Adapter Training</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adapter Utilities</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to AdapterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/adding_adapter_methods.html">Adding Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/adding_adapters_to_a_model.html">Adding Adapters to a Model</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AdapterHub</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Adapter Utilities</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/classes/adapter_utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="adapter-utilities">
+<h1>Adapter Utilities<a class="headerlink" href="#adapter-utilities" title="Permalink to this heading"></a></h1>
+<p>A collection of utility methods mainly related to searching and loading adapter modules from
+Adapter-Hub.</p>
+<span class="target" id="module-adapters.utils"></span><dl class="py class">
+<dt class="sig sig-object py" id="adapters.utils.AdapterInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adapters.utils.</span></span><span class="sig-name descname"><span class="pre">AdapterInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapter_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapter_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sha1_checksum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.utils.AdapterInfo" title="Permalink to this definition"></a></dt>
+<dd><p>Holds information about an adapter publicly available on the Hub. Returned by
+<a class="reference internal" href="#adapters.utils.list_adapters" title="adapters.utils.list_adapters"><code class="xref py py-func docutils literal notranslate"><span class="pre">list_adapters()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<em>str</em>) – The source repository of this adapter. Always ‘hf’ for adapters available on HF Model Hub.</p></li>
+<li><p><strong>adapter_id</strong> (<em>str</em>) – The unique identifier of this adapter.</p></li>
+<li><p><strong>model_name</strong> (<em>str</em><em>, </em><em>optional</em>) – The identifier of the model this adapter was trained for.</p></li>
+<li><p><strong>task</strong> (<em>str</em><em>, </em><em>optional</em>) – The task this adapter was trained for.</p></li>
+<li><p><strong>subtask</strong> (<em>str</em><em>, </em><em>optional</em>) – The subtask or dataset this adapter was trained on.</p></li>
+<li><p><strong>username</strong> (<em>str</em><em>, </em><em>optional</em>) – The username of author(s) of this adapter.</p></li>
+<li><p><strong>adapter_config</strong> (<em>dict</em><em>, </em><em>optional</em>) – The configuration dictionary of this adapter.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="adapters.utils.AdapterType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adapters.utils.</span></span><span class="sig-name descname"><span class="pre">AdapterType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.utils.AdapterType" title="Permalink to this definition"></a></dt>
+<dd><p>Models all currently available model adapter types.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adapters.utils.download_cached">
+<span class="sig-prename descclassname"><span class="pre">adapters.utils.</span></span><span class="sig-name descname"><span class="pre">download_cached</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checksum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checksum_algo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sha1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_extract</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.utils.download_cached" title="Permalink to this definition"></a></dt>
+<dd><p>This method downloads a file and caches it.</p>
+<p>For more information on why this is needed, refer to the explanation in this Pull Request: <a class="reference external" href="https://github.com/adapter-hub/adapters/pull/750">https://github.com/adapter-hub/adapters/pull/750</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adapters.utils.get_adapter_config_hash">
+<span class="sig-prename descclassname"><span class="pre">adapters.utils.</span></span><span class="sig-name descname"><span class="pre">get_adapter_config_hash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.utils.get_adapter_config_hash" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the hash of a given adapter configuration which is used to identify this configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The resulting hash of the given config dict.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adapters.utils.get_adapter_info">
+<span class="sig-prename descclassname"><span class="pre">adapters.utils.</span></span><span class="sig-name descname"><span class="pre">get_adapter_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#adapters.utils.AdapterInfo" title="adapters.utils.AdapterInfo"><span class="pre">AdapterInfo</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#adapters.utils.get_adapter_info" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves information about a specific adapter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>adapter_id</strong> (<em>str</em>) – The identifier of the adapter to retrieve.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The adapter information or None if the adapter was not found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#adapters.utils.AdapterInfo" title="adapters.utils.AdapterInfo">AdapterInfo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adapters.utils.get_from_cache">
+<span class="sig-prename descclassname"><span class="pre">adapters.utils.</span></span><span class="sig-name descname"><span class="pre">get_from_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">etag_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resume_download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_auth_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_files_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#adapters.utils.get_from_cache" title="Permalink to this definition"></a></dt>
+<dd><p>Given a URL, look for the corresponding file in the local cache. If it’s not there, download it. Then return the
+path to the cached file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Local path (string) of file or if networking is off, last version of file cached on disk.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>In case of non-recoverable file</strong><strong> (</strong><strong>non-existent</strong><strong> or </strong><strong>inaccessible url + no cache on disk</strong><strong>)</strong><strong>.</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adapters.utils.list_adapters">
+<span class="sig-prename descclassname"><span class="pre">adapters.utils.</span></span><span class="sig-name descname"><span class="pre">list_adapters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#adapters.utils.AdapterInfo" title="adapters.utils.AdapterInfo"><span class="pre">AdapterInfo</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#adapters.utils.list_adapters" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves a list of all publicly available adapters on AdapterHub.ml or on huggingface.co.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model_name</strong> (<em>str</em><em>, </em><em>optional</em>) – If specified, only returns adapters trained for the model with this identifier.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adapters.utils.parse_adapter_config_string">
+<span class="sig-prename descclassname"><span class="pre">adapters.utils.</span></span><span class="sig-name descname"><span class="pre">parse_adapter_config_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#adapters.utils.parse_adapter_config_string" title="Permalink to this definition"></a></dt>
+<dd><p>Parses an adapter configuration string into a list of tuples. Each tuple constists of an adapter config identifier
+and dictionary.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adapters.utils.prefix_attention_mask">
+<span class="sig-prename descclassname"><span class="pre">adapters.utils.</span></span><span class="sig-name descname"><span class="pre">prefix_attention_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attention_mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.utils.prefix_attention_mask" title="Permalink to this definition"></a></dt>
+<dd><p>Adds a prefix to an attention mask. The length of the prefix is determined by the <cite>prefix_attention_mask_length</cite>
+attribute in the ForwardContext.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attention_mask</strong> – The attention mask to add the prefix to.</p></li>
+<li><p><strong>dim</strong> (<em>int</em>) – The dimension along which to concatenate the prefix_attention_mask. Defaults to 3.</p></li>
+<li><p><strong>prefix_value</strong> (<em>int</em>) – The value to use for the prefix_attention_mask. Defaults to 0, however some models, e.g. DistilBert, use
+different values. BERT like models invert their extended_attention_mask, hence they use 0 as value for not
+masked tokens. This inversion is usually done in the forward method of the model in 2 different ways:
+1) by calling self.invert_attention_mask, as BERT does 2) by doing the inversion manually, e.g. ALBERT
+does: <cite>extended_attention_mask = (1.0 - extended_attention_mask) * torch.finfo(self.dtype).min</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adapters.utils.pull_from_hub">
+<span class="sig-prename descclassname"><span class="pre">adapters.utils.</span></span><span class="sig-name descname"><span class="pre">pull_from_hub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">specifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapter_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#adapters.utils.pull_from_hub" title="Permalink to this definition"></a></dt>
+<dd><p>Redirects loading from the archived Hub repository to HuggingFace Model Hub.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>specifier</strong> (<em>str</em>) – A string specifying the adapter to be loaded.</p></li>
+<li><p><strong>model_name</strong> (<em>str</em>) – The identifier of the pre-trained model for which to load an adapter.</p></li>
+<li><p><strong>adapter_config</strong> (<em>Union</em><em>[</em><em>dict</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The configuration of the adapter to be loaded.</p></li>
+<li><p><strong>version</strong> (<em>str</em><em>, </em><em>optional</em>) – The version of the adapter to be loaded. Defaults to None.</p></li>
+<li><p><strong>strict</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set to True, only allow adapters exactly matching the given config to be loaded. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The local path to which the adapter has been downloaded.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adapters.utils.resolve_adapter_config">
+<span class="sig-prename descclassname"><span class="pre">adapters.utils.</span></span><span class="sig-name descname"><span class="pre">resolve_adapter_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#adapters.utils.resolve_adapter_config" title="Permalink to this definition"></a></dt>
+<dd><p>Resolves a given adapter configuration specifier to a full configuration dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> (<em>Union</em><em>[</em><em>dict</em><em>, </em><em>str</em><em>]</em>) – <p>The configuration to resolve. Can be either:</p>
+<ul class="simple">
+<li><p>a dictionary: returned without further action</p></li>
+<li><p>an identifier string available in local_map</p></li>
+<li><p>the path to a file containing a full adapter configuration</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The resolved adapter configuration dictionary.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adapters.utils.resolve_adapter_path">
+<span class="sig-prename descclassname"><span class="pre">adapters.utils.</span></span><span class="sig-name descname"><span class="pre">resolve_adapter_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_name_or_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapter_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_exists_check</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#adapters.utils.resolve_adapter_path" title="Permalink to this definition"></a></dt>
+<dd><p>Resolves the path to a pre-trained adapter module. Note: If attempting to resolve an adapter from the Hub,
+adapter_config and model_name must be present.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adapter_name_or_path</strong> (<em>str</em>) – <p>Can be either:</p>
+<ul>
+<li><p>the path to a folder in the file system containing the adapter configuration and weights</p></li>
+<li><p>an url pointing to a zip folder containing the adapter configuration and weights</p></li>
+<li><p>a specifier matching a pre-trained adapter uploaded to Adapter-Hub</p></li>
+</ul>
+</p></li>
+<li><p><strong>model_name</strong> (<em>str</em><em>, </em><em>optional</em>) – The identifier of the pre-trained model for which to load an adapter.</p></li>
+<li><p><strong>adapter_config</strong> (<em>Union</em><em>[</em><em>dict</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The configuration of the adapter to be loaded.</p></li>
+<li><p><strong>version</strong> (<em>str</em><em>, </em><em>optional</em>) – The version of the adapter to be loaded. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The local path from where the adapter module can be loaded.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adapters.utils.url_to_filename">
+<span class="sig-prename descclassname"><span class="pre">adapters.utils.</span></span><span class="sig-name descname"><span class="pre">url_to_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">etag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#adapters.utils.url_to_filename" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a local filename from a url.</p>
+<p>Convert <cite>url</cite> into a hashed filename in a reproducible way. If <cite>etag</cite> is
+specified, append its hash to the url’s, delimited by a period. If the url
+ends with .h5 (Keras HDF5 weights) adds ‘.h5’ to the name so that TF 2.0 can
+identify it as a HDF5 file (see
+<a class="reference external" href="https://github.com/tensorflow/tensorflow/blob/00fad90125b18b80fe054de1055770cfb8fe4ba3/tensorflow/python/keras/engine/network.py#L1380">https://github.com/tensorflow/tensorflow/blob/00fad90125b18b80fe054de1055770cfb8fe4ba3/tensorflow/python/keras/engine/network.py#L1380</a>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<cite>str</cite>) – The address to the file.</p></li>
+<li><p><strong>etag</strong> (<cite>str</cite>, <em>optional</em>) – The ETag of the file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The generated filename.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="adapter_training.html" class="btn btn-neutral float-left" title="Adapter Training" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../contributing.html" class="btn btn-neutral float-right" title="Contributing to AdapterHub" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020-2024, AdapterHub Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!--- IMPORTANT: This file has modifications compared to the snippet on the documentation page! -->
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="adapter_utils.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

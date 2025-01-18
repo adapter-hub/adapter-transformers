@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adapter Training &mdash; AdapterHub  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Transitioning from adapter-transformers" href="transitioning.html" />
+    <link rel="prev" title="Quick Start" href="quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AdapterHub
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adapter Training</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#train-a-task-adapter">Train a Task Adapter</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-a-parse-adapterarguments">Step A - Parse <code class="docutils literal notranslate"><span class="pre">AdapterArguments</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-b-switch-model-class-optional">Step B - Switch model class (optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-c-setup-adapter-methods">Step C - Setup adapter methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-d-switch-to-adaptertrainer-class">Step D - Switch to <code class="docutils literal notranslate"><span class="pre">AdapterTrainer</span></code> class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-e-start-training">Step E - Start training</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#train-a-language-adapter">Train a Language Adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#train-adapterfusion">Train AdapterFusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adaptertrainer">AdapterTrainer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quantized-model-training">Quantized Model Training</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transitioning.html">Transitioning from <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter Methods</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="methods.html">Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="method_combinations.html">Method Combinations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapter_composition.html">Adapter Activation and Composition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="merging_adapters.html">Merging Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prediction_heads.html">Prediction Heads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embeddings.html">Embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending the Library</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Loading and Sharing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="loading.html">Loading Pre-Trained Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="huggingface_hub.html">Integration with Hugging Face’s Model Hub</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Supported Models</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="model_overview.html">Model Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/albert.html">ALBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/auto.html">Auto Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/bart.html">BART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/beit.html">BEiT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/bert.html">BERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/bert-generation.html">BertGeneration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/clip.html">CLIP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/deberta.html">DeBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/deberta_v2.html">DeBERTa-v2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/distilbert.html">DistilBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/electra.html">ELECTRA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/encoderdecoder.html">Encoder Decoder Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/gpt2.html">OpenAI GPT2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/gptj.html">EleutherAI GPT-J-6B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/llama.html">LLaMA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/mistral.html">Mistral</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/mbart.html">MBart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/mt5.html">MT5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/plbart.html">PLBART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/roberta.html">RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/t5.html">T5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/vit.html">Vision Transformer (ViT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/whisper.html">Whisper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/xlmroberta.html">XLM-RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/models/xmod.html">X-MOD</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter-Related Classes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_config.html">Adapter Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/model_adapters_config.html">Model Adapters Config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_layer.html">Adapter Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/model_mixins.html">Model Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes/adapter_utils.html">Adapter Utilities</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to AdapterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing/adding_adapter_methods.html">Adding Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing/adding_adapters_to_a_model.html">Adding Adapters to a Model</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AdapterHub</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Adapter Training</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/training.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="tex2jax_ignore mathjax_ignore section" id="adapter-training">
+<h1>Adapter Training<a class="headerlink" href="#adapter-training" title="Permalink to this heading"></a></h1>
+<p>This section describes some examples of training adapter methods for different scenarios. We focus on integrating adapter methods into existing training scripts for Transformer models.
+All presented scripts are only slightly modified from the original <a class="reference external" href="https://github.com/huggingface/transformers/tree/main/examples/pytorch#examples">examples from Hugging Face Transformers</a>.
+To run the scripts, make sure you have the latest version of the repository and have installed some additional requirements:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">adapter</span><span class="o">-</span><span class="n">hub</span><span class="o">/</span><span class="n">adapters</span>
+<span class="n">cd</span> <span class="n">adapters</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">.</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="o">./</span><span class="n">examples</span><span class="o">/</span><span class="n">pytorch</span><span class="o">/&lt;</span><span class="n">your_examples_folder</span><span class="o">&gt;/</span><span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<div class="section" id="train-a-task-adapter">
+<h2>Train a Task Adapter<a class="headerlink" href="#train-a-task-adapter" title="Permalink to this heading"></a></h2>
+<p>Training a task adapter module on a dataset only requires minor modifications compared to training the entire model.
+Suppose we have an existing script for training a Transformer model.
+In the following, we will use Hugging Face’s <a class="reference external" href="https://github.com/Adapter-Hub/adapters/blob/main/examples/pytorch/text-classification/run_glue.py">run_glue.py</a> example script for training on the GLUE benchmark.
+We go through all required changes step by step:</p>
+<div class="section" id="step-a-parse-adapterarguments">
+<h3>Step A - Parse <code class="docutils literal notranslate"><span class="pre">AdapterArguments</span></code><a class="headerlink" href="#step-a-parse-adapterarguments" title="Permalink to this heading"></a></h3>
+<p>The <a class="reference internal" href="classes/adapter_training.html#adapters.training.AdapterArguments" title="adapters.training.AdapterArguments"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">AdapterArguments</span></code></span></a> class integrated into adapters provides a set of command-line options useful for training adapters.
+These include options such as <code class="docutils literal notranslate"><span class="pre">--train_adapter</span></code> for activating adapter training and <code class="docutils literal notranslate"><span class="pre">--load_adapter</span></code> for loading adapters from checkpoints.
+Thus, the first step of integrating adapters is to add these arguments to the line where <code class="docutils literal notranslate"><span class="pre">HfArgumentParser</span></code> is instantiated:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">HfArgumentParser</span><span class="p">((</span><span class="n">ModelArguments</span><span class="p">,</span> <span class="n">DataTrainingArguments</span><span class="p">,</span> <span class="n">TrainingArguments</span><span class="p">,</span> <span class="n">AdapterArguments</span><span class="p">))</span>
+<span class="c1"># ...</span>
+<span class="n">model_args</span><span class="p">,</span> <span class="n">data_args</span><span class="p">,</span> <span class="n">training_args</span><span class="p">,</span> <span class="n">adapter_args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args_into_dataclasses</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-b-switch-model-class-optional">
+<h3>Step B - Switch model class (optional)<a class="headerlink" href="#step-b-switch-model-class-optional" title="Permalink to this heading"></a></h3>
+<p>In our example, we replace the built-in <code class="docutils literal notranslate"><span class="pre">AutoModelForSequenceClassification</span></code> class with the <code class="docutils literal notranslate"><span class="pre">AutoAdapterModel</span></code> class introduced by <code class="docutils literal notranslate"><span class="pre">adapters</span></code>.
+Therefore, the model instantiation changed to:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">AutoAdapterModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+        <span class="n">model_args</span><span class="o">.</span><span class="n">model_name_or_path</span><span class="p">,</span>
+        <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add_classification_head</span><span class="p">(</span><span class="n">data_args</span><span class="o">.</span><span class="n">task_name</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="n">num_labels</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Alternatively, you can also use the original <code class="docutils literal notranslate"><span class="pre">transformers</span></code> class and initialize the model for the usage of adapters by calling <code class="docutils literal notranslate"><span class="pre">adapters.init(model)</span></code>.
+Learn more about the benefits of AdapterModel classes <a class="reference internal" href="prediction_heads.html"><span class="std std-doc">here</span></a></p>
+</div>
+<div class="section" id="step-c-setup-adapter-methods">
+<h3>Step C - Setup adapter methods<a class="headerlink" href="#step-c-setup-adapter-methods" title="Permalink to this heading"></a></h3>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In the following, we show how to set up adapters manually. In most cases, you can use the built-in <code class="docutils literal notranslate"><span class="pre">setup_adapter_training()</span></code> method to perform this job automatically. Just add a statement similar to this anywhere between model instantiation and training start in your script: <code class="docutils literal notranslate"><span class="pre">setup_adapter_training(model,</span> <span class="pre">adapter_args,</span> <span class="pre">task_name)</span></code></p>
+</div>
+<p>Compared to fine-tuning the entire model, we have to make only one significant adaptation: adding an adapter setup and activating it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># task adapter - only add if not existing</span>
+<span class="k">if</span> <span class="n">task_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">adapters_config</span><span class="p">:</span>
+    <span class="c1"># resolve the adapter config</span>
+    <span class="n">adapter_config</span> <span class="o">=</span> <span class="n">AdapterConfig</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">adapter_args</span><span class="o">.</span><span class="n">adapter_config</span><span class="p">)</span>
+    <span class="c1"># add a new adapter</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="n">task_name</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">adapter_config</span><span class="p">)</span>
+<span class="c1"># Enable adapter training</span>
+<span class="n">model</span><span class="o">.</span><span class="n">train_adapter</span><span class="p">(</span><span class="n">task_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The most crucial step when training an adapter module is to freeze all weights in the model except for those of the
+adapter. In the previous snippet, this is achieved by calling the <code class="docutils literal notranslate"><span class="pre">train_adapter()</span></code> method, which disables training
+of all weights outside the task adapter. In case you want to unfreeze all model weights later on, you can use
+<code class="docutils literal notranslate"><span class="pre">freeze_model(False)</span></code>.</p>
+</div>
+<p>Besides this, we only have to make sure that the task adapter and prediction head are activated so that they are used in every forward pass. To specify the adapter modules to use, we can use the <code class="docutils literal notranslate"><span class="pre">model.set_active_adapters()</span></code>
+method and pass the adapter setup. If you only use a single adapter, you can simply pass the name of the adapter. For more information
+on complex setups, checkout the <a class="reference external" href="https://docs.adapterhub.ml/adapter_composition.html">Composition Blocks</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">set_active_adapters</span><span class="p">(</span><span class="n">task_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-d-switch-to-adaptertrainer-class">
+<h3>Step D - Switch to <code class="docutils literal notranslate"><span class="pre">AdapterTrainer</span></code> class<a class="headerlink" href="#step-d-switch-to-adaptertrainer-class" title="Permalink to this heading"></a></h3>
+<p>Finally, we exchange the <code class="docutils literal notranslate"><span class="pre">Trainer</span></code> class built into Transformers for the <a class="reference internal" href="classes/adapter_training.html#adapters.trainer.AdapterTrainer" title="adapters.trainer.AdapterTrainer"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">AdapterTrainer</span></code></span></a> class that is optimized for training adapter methods.
+See <a class="reference internal" href="#adaptertrainer">below for more information</a>.</p>
+<p>Technically, this change is not required as no changes to the training loop are required for training adapters.
+However, <code class="docutils literal notranslate"><span class="pre">AdapterTrainer</span></code> e.g., provides better support for checkpointing and reloading adapter weights.</p>
+</div>
+<div class="section" id="step-e-start-training">
+<h3>Step E - Start training<a class="headerlink" href="#step-e-start-training" title="Permalink to this heading"></a></h3>
+<p>The rest of the training procedure does not require any further changes in code.</p>
+<p>You can find the full version of the modified training script for GLUE at <a class="reference external" href="https://github.com/Adapter-Hub/adapters/blob/master/examples/pytorch/text-classification/run_glue.py">run_glue.py</a> in the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of our repository.
+We also adapted <a class="reference external" href="https://github.com/Adapter-Hub/adapters/tree/master/examples/pytorch">various other example scripts</a> (e.g., <code class="docutils literal notranslate"><span class="pre">run_glue.py</span></code>, <code class="docutils literal notranslate"><span class="pre">run_multiple_choice.py</span></code>, <code class="docutils literal notranslate"><span class="pre">run_squad.py</span></code>, …) to support adapter training.</p>
+<p>To start adapter training on a GLUE task, you can run something similar to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export TASK_NAME=mrpc
+
+python run_glue.py \
+  --model_name_or_path bert-base-uncased \
+  --task_name $TASK_NAME \
+  --do_train \
+  --do_eval \
+  --max_seq_length 128 \
+  --per_device_train_batch_size 32 \
+  --learning_rate 1e-4 \
+  --num_train_epochs 10.0 \
+  --output_dir /tmp/$TASK_NAME \
+  --overwrite_output_dir \
+  --train_adapter \
+  --adapter_config seq_bn
+</pre></div>
+</div>
+<p>The important flag here is <code class="docutils literal notranslate"><span class="pre">--train_adapter</span></code>, which switches from fine-tuning the entire model to training an adapter module for the given GLUE task.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Adapter weights are usually initialized randomly, which is why we require a higher learning rate. We have found that a default adapter learning rate of <code class="docutils literal notranslate"><span class="pre">1e-4</span></code> works well for most settings.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Depending on your data set size, you might also need to train longer than usual. To avoid overfitting, you can evaluate the adapters after each epoch on the development set and only save the best model.</p>
+</div>
+</div>
+</div>
+<div class="section" id="train-a-language-adapter">
+<h2>Train a Language Adapter<a class="headerlink" href="#train-a-language-adapter" title="Permalink to this heading"></a></h2>
+<p>Training a language adapter is equally straightforward as training a task adapter. Similarly to the steps for task adapters
+described above, we add a language adapter module to an existing model training script. Here, we modified Hugging Face’s <a class="reference external" href="https://github.com/Adapter-Hub/adapters/blob/main/examples/pytorch/language-modeling/run_mlm.py">run_mlm.py</a> script for masked language modeling with BERT-based models.</p>
+<p>Training a language adapter on BERT using this script may look like the following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">TRAIN_FILE</span><span class="o">=</span>/path/to/dataset/train
+<span class="nb">export</span><span class="w"> </span><span class="nv">VALIDATION_FILE</span><span class="o">=</span>/path/to/dataset/validation
+
+python<span class="w"> </span>run_mlm.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model_name_or_path<span class="w"> </span>bert-base-uncased<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--train_file<span class="w"> </span><span class="nv">$TRAIN_FILE</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--validation_file<span class="w"> </span><span class="nv">$VALIDATION_FILE</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--do_train<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--do_eval<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--learning_rate<span class="w"> </span>1e-4<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--num_train_epochs<span class="w"> </span><span class="m">10</span>.0<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output_dir<span class="w"> </span>/tmp/test-mlm<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--train_adapter<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--adapter_config<span class="w"> </span><span class="s2">&quot;seq_bn_inv&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="train-adapterfusion">
+<h2>Train AdapterFusion<a class="headerlink" href="#train-adapterfusion" title="Permalink to this heading"></a></h2>
+<p>We provide an example for training <em>AdapterFusion</em> (<a class="reference external" href="https://arxiv.org/pdf/2005.00247">Pfeiffer et al., 2020</a>) on the GLUE dataset: <a class="reference external" href="https://github.com/Adapter-Hub/adapters/blob/main/examples/pytorch/adapterfusion/run_fusion_glue.py">run_fusion_glue.py</a>.
+You can adapt this script to train AdapterFusion with different pre-trained adapters on your own dataset.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>AdapterFusion on a target task is trained in a second training stage after independently training adapters on individual tasks.
+When setting up a fusion architecture on your model, make sure to load the pre-trained adapter modules to be fused using <code class="docutils literal notranslate"><span class="pre">model.load_adapter()</span></code> before adding a fusion layer.
+For more on AdapterFusion, also refer to <a class="reference external" href="https://arxiv.org/pdf/2005.00247">Pfeiffer et al., 2020</a>.</p>
+</div>
+<p>To start fusion training on SST-2 as the target task, you can run something like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export GLUE_DIR=/path/to/glue
+export TASK_NAME=SST-2
+
+python run_fusion_glue.py \
+  --model_name_or_path bert-base-uncased \
+  --task_name $TASK_NAME \
+  --do_train \
+  --do_eval \
+  --data_dir $GLUE_DIR/$TASK_NAME \
+  --max_seq_length 128 \
+  --per_device_train_batch_size 32 \
+  --learning_rate 5e-5 \
+  --num_train_epochs 10.0 \
+  --output_dir /tmp/$TASK_NAME \
+  --overwrite_output_dir
+</pre></div>
+</div>
+</div>
+<div class="section" id="adaptertrainer">
+<h2>AdapterTrainer<a class="headerlink" href="#adaptertrainer" title="Permalink to this heading"></a></h2>
+<p>Similar to the <code class="docutils literal notranslate"><span class="pre">Trainer</span></code> class provided by Hugging Face, adapters provides an <code class="docutils literal notranslate"><span class="pre">AdapterTrainer</span></code> class. This class is only
+intended for training adapters. The <code class="docutils literal notranslate"><span class="pre">Trainer</span></code> class should still be used to fully fine-tune models. To train adapters with the <code class="docutils literal notranslate"><span class="pre">AdapterTrainer</span></code>
+class, simply initialize it the same way you would initialize the <code class="docutils literal notranslate"><span class="pre">Trainer</span></code> class, e.g.:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">transformers.training_args</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrainingArguments</span> 
+
+<span class="n">model</span><span class="o">.</span><span class="n">add_adapter</span><span class="p">(</span><span class="n">task_name</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">train_adapter</span><span class="p">(</span><span class="n">task_name</span><span class="p">)</span>
+
+<span class="n">training_args</span> <span class="o">=</span>  <span class="n">TrainingArguments</span><span class="p">(</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span>
+    <span class="n">num_train_epochs</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">AdapterTrainer</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">=</span><span class="n">training_args</span><span class="p">,</span>
+        <span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span>
+        <span class="n">eval_dataset</span><span class="o">=</span><span class="n">eval_dataset</span><span class="p">,</span>
+        <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
+        <span class="n">data_collator</span><span class="o">=</span><span class="n">data_collator</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>When you migrate from the previous versions, which use the Trainer class for adapter training and fully fine-tuning, note that the
+specialized AdapterTrainer class does not have the parameters <cite>do_save_full_model</cite>, <cite>do_save_adapters</cite> and <cite>do_save_adapter_fusion</cite>.</p>
+</div>
+</div>
+<div class="section" id="quantized-model-training">
+<h2>Quantized Model Training<a class="headerlink" href="#quantized-model-training" title="Permalink to this heading"></a></h2>
+<p><em>Adapters</em> supports fine-tuning of quantized language models similar to <a class="reference external" href="https://arxiv.org/pdf/2305.14314.pdf">QLoRA (Dettmers et al., 2023)</a> via the <code class="docutils literal notranslate"><span class="pre">bitsandbytes</span></code> library integrated into Transformers.
+Quantized training is supported for LoRA-based adapters as well as bottleneck adapters and prefix tuning.
+Please refer to <a class="reference external" href="https://colab.research.google.com/github/Adapter-Hub/adapters/blob/main/notebooks/QLoRA_Llama_Finetuning.ipynb">this notebook</a> for a hands-on guide.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quick Start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="transitioning.html" class="btn btn-neutral float-right" title="Transitioning from adapter-transformers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020-2024, AdapterHub Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!--- IMPORTANT: This file has modifications compared to the snippet on the documentation page! -->
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="training.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

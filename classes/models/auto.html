@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auto Classes &mdash; AdapterHub  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="BART" href="bart.html" />
+    <link rel="prev" title="ALBERT" href="albert.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AdapterHub
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../transitioning.html">Transitioning from <code class="docutils literal notranslate"><span class="pre">adapter-transformers</span></code></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter Methods</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../methods.html">Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../method_combinations.html">Method Combinations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../adapter_composition.html">Adapter Activation and Composition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../merging_adapters.html">Merging Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../prediction_heads.html">Prediction Heads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../embeddings.html">Embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending.html">Extending the Library</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Loading and Sharing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../loading.html">Loading Pre-Trained Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../huggingface_hub.html">Integration with Hugging Face’s Model Hub</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Supported Models</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../model_overview.html">Model Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="albert.html">ALBERT</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Auto Classes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#autoadaptermodel">AutoAdapterModel</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bart.html">BART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beit.html">BEiT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bert.html">BERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bert-generation.html">BertGeneration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clip.html">CLIP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deberta.html">DeBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deberta_v2.html">DeBERTa-v2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distilbert.html">DistilBERT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="electra.html">ELECTRA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="encoderdecoder.html">Encoder Decoder Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpt2.html">OpenAI GPT2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gptj.html">EleutherAI GPT-J-6B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="llama.html">LLaMA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mistral.html">Mistral</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mbart.html">MBart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mt5.html">MT5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plbart.html">PLBART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roberta.html">RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="t5.html">T5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vit.html">Vision Transformer (ViT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whisper.html">Whisper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xlmroberta.html">XLM-RoBERTa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xmod.html">X-MOD</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Adapter-Related Classes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../adapter_config.html">Adapter Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_adapters_config.html">Model Adapters Config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adapter_layer.html">Adapter Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_mixins.html">Model Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adapter_training.html">Adapter Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adapter_utils.html">Adapter Utilities</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing to AdapterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/adding_adapter_methods.html">Adding Adapter Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/adding_adapters_to_a_model.html">Adding Adapters to a Model</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AdapterHub</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Auto Classes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/classes/models/auto.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="auto-classes">
+<h1>Auto Classes<a class="headerlink" href="#auto-classes" title="Permalink to this heading"></a></h1>
+<p>Similar to the <code class="docutils literal notranslate"><span class="pre">AutoModel</span></code> classes built-in into HuggingFace Transformers, adapters provides an <code class="docutils literal notranslate"><span class="pre">AutoAdapterModel</span></code> class.
+As with other auto classes, the correct adapter model class is automatically instantiated based on the pre-trained model passed to the <code class="docutils literal notranslate"><span class="pre">from_pretrained()</span></code> method.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the model loaded with the <code class="docutils literal notranslate"><span class="pre">from_pretrained(...)</span></code> function has a head, this head gets loaded as well. However, this only works for non-sharded models. If you want to load a sharded model with a head, you first need to load the model and then the head separately.</p>
+</div>
+<div class="section" id="autoadaptermodel">
+<h2>AutoAdapterModel<a class="headerlink" href="#autoadaptermodel" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="adapters.AutoAdapterModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adapters.</span></span><span class="sig-name descname"><span class="pre">AutoAdapterModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.AutoAdapterModel" title="Permalink to this definition"></a></dt>
+<dd><p>This is a generic model class that will be instantiated as one of the model classes of the library (with a adapters and flexible heads head) when created
+with the [<cite>~AutoAdapterModel.from_pretrained</cite>] class method or the [<cite>~AutoAdapterModel.from_config</cite>] class
+method.</p>
+<p>This class cannot be instantiated directly using <cite>__init__()</cite> (throws an error).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.AutoAdapterModel.from_config">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.AutoAdapterModel.from_config" title="Permalink to this definition"></a></dt>
+<dd><p>Instantiates one of the model classes of the library (with a adapters and flexible heads head) from a configuration.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Loading a model from its configuration file does <strong>not</strong> load the model weights. It only affects the
+model’s configuration. Use [<cite>~AutoAdapterModel.from_pretrained</cite>] to load the model weights.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> ([<cite>PretrainedConfig</cite>]) – <p>The model class to instantiate is selected based on the configuration class:</p>
+<ul>
+<li><p>[<cite>AlbertConfig</cite>] configuration class: [<cite>AlbertAdapterModel</cite>] (ALBERT model)</p></li>
+<li><p>[<cite>BartConfig</cite>] configuration class: [<cite>BartAdapterModel</cite>] (BART model)</p></li>
+<li><p>[<cite>BeitConfig</cite>] configuration class: [<cite>BeitAdapterModel</cite>] (BEiT model)</p></li>
+<li><p>[<cite>BertConfig</cite>] configuration class: [<cite>BertAdapterModel</cite>] (BERT model)</p></li>
+<li><p>[<cite>BertGenerationConfig</cite>] configuration class: [<cite>BertGenerationAdapterModel</cite>] (Bert Generation model)</p></li>
+<li><p>[<cite>CLIPConfig</cite>] configuration class: [<cite>CLIPAdapterModel</cite>] (CLIP model)</p></li>
+<li><p>[<cite>DebertaConfig</cite>] configuration class: [<cite>DebertaAdapterModel</cite>] (DeBERTa model)</p></li>
+<li><p>[<cite>DebertaV2Config</cite>] configuration class: [<cite>DebertaV2AdapterModel</cite>] (DeBERTa-v2 model)</p></li>
+<li><p>[<cite>DistilBertConfig</cite>] configuration class: [<cite>DistilBertAdapterModel</cite>] (DistilBERT model)</p></li>
+<li><p>[<cite>ElectraConfig</cite>] configuration class: [<cite>ElectraAdapterModel</cite>] (ELECTRA model)</p></li>
+<li><p>[<cite>GPT2Config</cite>] configuration class: [<cite>GPT2AdapterModel</cite>] (OpenAI GPT-2 model)</p></li>
+<li><p>[<cite>GPTJConfig</cite>] configuration class: [<cite>GPTJAdapterModel</cite>] (GPT-J model)</p></li>
+<li><p>[<cite>LlamaConfig</cite>] configuration class: [<cite>LlamaAdapterModel</cite>] (LLaMA model)</p></li>
+<li><p>[<cite>MBartConfig</cite>] configuration class: [<cite>MBartAdapterModel</cite>] (mBART model)</p></li>
+<li><p>[<cite>MT5Config</cite>] configuration class: [<cite>MT5AdapterModel</cite>] (MT5 model)</p></li>
+<li><p>[<cite>MistralConfig</cite>] configuration class: [<cite>MistralAdapterModel</cite>] (Mistral model)</p></li>
+<li><p>[<cite>PLBartConfig</cite>] configuration class: [<cite>PLBartAdapterModel</cite>] (PLBart model)</p></li>
+<li><p>[<cite>RobertaConfig</cite>] configuration class: [<cite>RobertaAdapterModel</cite>] (RoBERTa model)</p></li>
+<li><p>[<cite>T5Config</cite>] configuration class: [<cite>T5AdapterModel</cite>] (T5 model)</p></li>
+<li><p>[<cite>ViTConfig</cite>] configuration class: [<cite>ViTAdapterModel</cite>] (ViT model)</p></li>
+<li><p>[<cite>WhisperConfig</cite>] configuration class: [<cite>WhisperAdapterModel</cite>] (Whisper model)</p></li>
+<li><p>[<cite>XLMRobertaConfig</cite>] configuration class: [<cite>XLMRobertaAdapterModel</cite>] (XLM-RoBERTa model)</p></li>
+<li><p>[<cite>XmodConfig</cite>] configuration class: [<cite>XmodAdapterModel</cite>] (X-MOD model)</p></li>
+</ul>
+</p></li>
+<li><p><strong>attn_implementation</strong> (<cite>str</cite>, <em>optional</em>) – The attention implementation to use in the model (if relevant). Can be any of <cite>“eager”</cite> (manual implementation of the attention), <cite>“sdpa”</cite> (using [<cite>F.scaled_dot_product_attention</cite>](<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.functional.scaled_dot_product_attention.html">https://pytorch.org/docs/master/generated/torch.nn.functional.scaled_dot_product_attention.html</a>)), or <cite>“flash_attention_2”</cite> (using [Dao-AILab/flash-attention](<a class="reference external" href="https://github.com/Dao-AILab/flash-attention">https://github.com/Dao-AILab/flash-attention</a>)). By default, if available, SDPA will be used for torch&gt;=2.1.1. The default is otherwise the manual <cite>“eager”</cite> implementation.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Examples:</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+&gt;&gt;&gt; from transformers import AutoConfig, AutoAdapterModel</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Download configuration from huggingface.co and cache.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">AutoConfig</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;google-bert/bert-base-cased&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">AutoAdapterModel</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+<span class="go">```</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adapters.AutoAdapterModel.from_pretrained">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_pretrained</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">model_args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adapters.AutoAdapterModel.from_pretrained" title="Permalink to this definition"></a></dt>
+<dd><p>Instantiate one of the model classes of the library (with a adapters and flexible heads head) from a pretrained model.</p>
+<p>The model class to instantiate is selected based on the <cite>model_type</cite> property of the config object (either
+passed as an argument or loaded from <cite>pretrained_model_name_or_path</cite> if possible), or when it’s missing, by
+falling back to using pattern matching on <cite>pretrained_model_name_or_path</cite>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>albert</strong> – [<cite>AlbertAdapterModel</cite>] (ALBERT model)</p></li>
+<li><p><strong>bart</strong> – [<cite>BartAdapterModel</cite>] (BART model)</p></li>
+<li><p><strong>beit</strong> – [<cite>BeitAdapterModel</cite>] (BEiT model)</p></li>
+<li><p><strong>bert</strong> – [<cite>BertAdapterModel</cite>] (BERT model)</p></li>
+<li><p><strong>bert-generation</strong> – [<cite>BertGenerationAdapterModel</cite>] (Bert Generation model)</p></li>
+<li><p><strong>clip</strong> – [<cite>CLIPAdapterModel</cite>] (CLIP model)</p></li>
+<li><p><strong>deberta</strong> – [<cite>DebertaAdapterModel</cite>] (DeBERTa model)</p></li>
+<li><p><strong>deberta-v2</strong> – [<cite>DebertaV2AdapterModel</cite>] (DeBERTa-v2 model)</p></li>
+<li><p><strong>distilbert</strong> – [<cite>DistilBertAdapterModel</cite>] (DistilBERT model)</p></li>
+<li><p><strong>electra</strong> – [<cite>ElectraAdapterModel</cite>] (ELECTRA model)</p></li>
+<li><p><strong>gpt2</strong> – [<cite>GPT2AdapterModel</cite>] (OpenAI GPT-2 model)</p></li>
+<li><p><strong>gptj</strong> – [<cite>GPTJAdapterModel</cite>] (GPT-J model)</p></li>
+<li><p><strong>llama</strong> – [<cite>LlamaAdapterModel</cite>] (LLaMA model)</p></li>
+<li><p><strong>mbart</strong> – [<cite>MBartAdapterModel</cite>] (mBART model)</p></li>
+<li><p><strong>mistral</strong> – [<cite>MistralAdapterModel</cite>] (Mistral model)</p></li>
+<li><p><strong>mt5</strong> – [<cite>MT5AdapterModel</cite>] (MT5 model)</p></li>
+<li><p><strong>plbart</strong> – [<cite>PLBartAdapterModel</cite>] (PLBart model)</p></li>
+<li><p><strong>roberta</strong> – [<cite>RobertaAdapterModel</cite>] (RoBERTa model)</p></li>
+<li><p><strong>t5</strong> – [<cite>T5AdapterModel</cite>] (T5 model)</p></li>
+<li><p><strong>vit</strong> – [<cite>ViTAdapterModel</cite>] (ViT model)</p></li>
+<li><p><strong>whisper</strong> – [<cite>WhisperAdapterModel</cite>] (Whisper model)</p></li>
+<li><p><strong>xlm-roberta</strong> – [<cite>XLMRobertaAdapterModel</cite>] (XLM-RoBERTa model)</p></li>
+<li><p><strong>xmod</strong> – [<cite>XmodAdapterModel</cite>] (X-MOD model)</p></li>
+</ul>
+</div></blockquote>
+<p>The model is set in evaluation mode by default using <cite>model.eval()</cite> (so for instance, dropout modules are
+deactivated). To train the model, you should first set it back in training mode with <cite>model.train()</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pretrained_model_name_or_path</strong> (<cite>str</cite> or <cite>os.PathLike</cite>) – <p>Can be either:</p>
+<blockquote>
+<div><ul>
+<li><p>A string, the <em>model id</em> of a pretrained model hosted inside a model repo on huggingface.co.</p></li>
+<li><p>A path to a <em>directory</em> containing model weights saved using
+[<cite>~PreTrainedModel.save_pretrained</cite>], e.g., <cite>./my_model_directory/</cite>.</p></li>
+<li><p>A path or url to a <em>tensorflow index checkpoint file</em> (e.g, <cite>./tf_model/model.ckpt.index</cite>). In
+this case, <cite>from_tf</cite> should be set to <cite>True</cite> and a configuration object should be provided as
+<cite>config</cite> argument. This loading path is slower than converting the TensorFlow checkpoint in a
+PyTorch model using the provided conversion scripts and loading the PyTorch model afterwards.</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>model_args</strong> (additional positional arguments, <em>optional</em>) – Will be passed along to the underlying model <cite>__init__()</cite> method.</p></li>
+<li><p><strong>config</strong> ([<cite>PretrainedConfig</cite>], <em>optional</em>) – <p>Configuration for the model to use instead of an automatically loaded configuration. Configuration can
+be automatically loaded when:</p>
+<blockquote>
+<div><ul>
+<li><p>The model is a model provided by the library (loaded with the <em>model id</em> string of a pretrained
+model).</p></li>
+<li><p>The model was saved using [<cite>~PreTrainedModel.save_pretrained</cite>] and is reloaded by supplying the
+save directory.</p></li>
+<li><p>The model is loaded by supplying a local directory as <cite>pretrained_model_name_or_path</cite> and a
+configuration JSON file named <em>config.json</em> is found in the directory.</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>state_dict</strong> (<em>Dict[str, torch.Tensor]</em>, <em>optional</em>) – <p>A state dictionary to use instead of a state dictionary loaded from saved weights file.</p>
+<p>This option can be used if you want to create a model from a pretrained configuration but load your own
+weights. In this case though, you should check if using [<cite>~PreTrainedModel.save_pretrained</cite>] and
+[<cite>~PreTrainedModel.from_pretrained</cite>] is not a simpler option.</p>
+</p></li>
+<li><p><strong>cache_dir</strong> (<cite>str</cite> or <cite>os.PathLike</cite>, <em>optional</em>) – Path to a directory in which a downloaded pretrained model configuration should be cached if the
+standard cache should not be used.</p></li>
+<li><p><strong>from_tf</strong> (<cite>bool</cite>, <em>optional</em>, defaults to <cite>False</cite>) – Load the model weights from a TensorFlow checkpoint save file (see docstring of
+<cite>pretrained_model_name_or_path</cite> argument).</p></li>
+<li><p><strong>force_download</strong> (<cite>bool</cite>, <em>optional</em>, defaults to <cite>False</cite>) – Whether or not to force the (re-)download of the model weights and configuration files, overriding the
+cached versions if they exist.</p></li>
+<li><p><strong>resume_download</strong> – Deprecated and ignored. All downloads are now resumed by default when possible.
+Will be removed in v5 of Transformers.</p></li>
+<li><p><strong>proxies</strong> (<cite>Dict[str, str]</cite>, <em>optional</em>) – A dictionary of proxy servers to use by protocol or endpoint, e.g., <cite>{‘http’: ‘foo.bar:3128’,
+‘http://hostname’: ‘foo.bar:4012’}</cite>. The proxies are used on each request.</p></li>
+<li><p><strong>output_loading_info</strong> (<cite>bool</cite>, <em>optional</em>, defaults to <cite>False</cite>) – Whether ot not to also return a dictionary containing missing keys, unexpected keys and error messages.</p></li>
+<li><p><strong>local_files_only</strong> (<cite>bool</cite>, <em>optional</em>, defaults to <cite>False</cite>) – Whether or not to only look at local files (e.g., not try downloading the model).</p></li>
+<li><p><strong>revision</strong> (<cite>str</cite>, <em>optional</em>, defaults to <cite>“main”</cite>) – The specific model version to use. It can be a branch name, a tag name, or a commit id, since we use a
+git-based system for storing models and other artifacts on huggingface.co, so <cite>revision</cite> can be any
+identifier allowed by git.</p></li>
+<li><p><strong>trust_remote_code</strong> (<cite>bool</cite>, <em>optional</em>, defaults to <cite>False</cite>) – Whether or not to allow for custom models defined on the Hub in their own modeling files. This option
+should only be set to <cite>True</cite> for repositories you trust and in which you have read the code, as it will
+execute code present on the Hub on your local machine.</p></li>
+<li><p><strong>code_revision</strong> (<cite>str</cite>, <em>optional</em>, defaults to <cite>“main”</cite>) – The specific revision to use for the code on the Hub, if the code leaves in a different repository than
+the rest of the model. It can be a branch name, a tag name, or a commit id, since we use a git-based
+system for storing models and other artifacts on huggingface.co, so <cite>revision</cite> can be any identifier
+allowed by git.</p></li>
+<li><p><strong>kwargs</strong> (additional keyword arguments, <em>optional</em>) – <p>Can be used to update the configuration object (after it being loaded) and initiate the model (e.g.,
+<cite>output_attentions=True</cite>). Behaves differently depending on whether a <cite>config</cite> is provided or
+automatically loaded:</p>
+<blockquote>
+<div><ul>
+<li><p>If a configuration is provided with <cite>config</cite>, <cite>**kwargs</cite> will be directly passed to the
+underlying model’s <cite>__init__</cite> method (we assume all relevant updates to the configuration have
+already been done)</p></li>
+<li><p>If a configuration is not provided, <cite>kwargs</cite> will be first passed to the configuration class
+initialization function ([<cite>~PretrainedConfig.from_pretrained</cite>]). Each key of <cite>kwargs</cite> that
+corresponds to a configuration attribute will be used to override said attribute with the
+supplied <cite>kwargs</cite> value. Remaining keys that do not correspond to any configuration attribute
+will be passed to the underlying model’s <cite>__init__</cite> function.</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+</dl>
+<p>Examples:</p>
+<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a>python
+&gt;&gt;&gt; from transformers import AutoConfig, AutoAdapterModel</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Download model and configuration from huggingface.co and cache.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">AutoAdapterModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;google-bert/bert-base-cased&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Update configuration during loading</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">AutoAdapterModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;google-bert/bert-base-cased&quot;</span><span class="p">,</span> <span class="n">output_attentions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">output_attentions</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Loading from a TF checkpoint file instead of a PyTorch model (slower)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">AutoConfig</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;./tf_model/bert_tf_model_config.json&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">AutoAdapterModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;./tf_model/bert_tf_checkpoint.ckpt.index&quot;</span><span class="p">,</span> <span class="n">from_tf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">```</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="albert.html" class="btn btn-neutral float-left" title="ALBERT" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bart.html" class="btn btn-neutral float-right" title="BART" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020-2024, AdapterHub Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!--- IMPORTANT: This file has modifications compared to the snippet on the documentation page! -->
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="auto.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
