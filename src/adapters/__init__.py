@@ -64,6 +64,7 @@ _import_structure = {
         "SeqBnInvConfig",
         "StaticAdapterFusionConfig",
         "UniPELTConfig",
+        "VeraConfig",
     ],
     "context": [
         "AdapterSetup",
@@ -181,6 +182,7 @@ if TYPE_CHECKING:
         SeqBnInvConfig,
         StaticAdapterFusionConfig,
         UniPELTConfig,
+        VeraConfig,
     )
     from .context import AdapterSetup, ForwardContext
     from .heads import (
