@@ -1521,18 +1521,27 @@ class ModelAdaptersMixin(PushAdapterToHubMixin, ABC):
         Args:
             name (str): LoRA module to merge.
         """
-        for module in self.modules():
-            if isinstance(module, LoRALayer):
-                if name in module.loras:
-                    module.merge_adapter(name)
+        with ForwardContext(self, torch.empty(0, 1)):
+            #check if there are shared parameters between adapter weights
+            if self.base_model.shared_parameters:
+                ForwardContext.get_context().shared_parameters = self.base_model.shared_parameters
+                
+            for module in self.modules():
+                if isinstance(module, LoRALayer):
+                    if name in module.loras:
+                        module.merge_adapter(name)
 
     def reset_adapter(self):
         """
         Resets weights of a LoRA module merged using `model.merge_adapter(name)`.
         """
-        for module in self.modules():
-            if isinstance(module, LoRALayer):
-                module.reset_adapter()
+        with ForwardContext(self, torch.empty(0, 1)):
+            if self.base_model.shared_parameters:
+                ForwardContext.get_context().shared_parameters = self.base_model.shared_parameters
+                
+            for module in self.modules():
+                if isinstance(module, LoRALayer):
+                    module.reset_adapter()
 
     # HACK Copied from transformers/generation/utils.py
     def _prepare_encoder_decoder_kwargs_for_generation(
