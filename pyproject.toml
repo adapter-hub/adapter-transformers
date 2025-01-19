@@ -1,10 +1,21 @@
 [tool.black]
 line-length = 119
 target-version = ['py38', 'py39', 'py310']
-
-# copied from HF for testing
 [tool.pytest.ini_options]
 markers = [
+    "core: marks tests as core adapter test",
+    "composition: marks tests as composition adapter test",
+    "heads: marks tests as heads adapter test",
+    "embeddings: marks tests as embeddings adapter test",
+    "class_conversion: marks tests as class conversion adapter test",
+    "prefix_tuning: marks tests as prefix tuning adapter test",
+    "prompt_tuning: marks tests as prompt tuning adapter test",
+    "reft: marks tests as reft adapter test",
+    "unipelt: marks tests as unipelt adapter test",
+    "compacter: marks tests as compacter adapter test",
+    "bottleneck: marks tests as bottleneck adapter test",
+    "ia3: marks tests as ia3 adapter test",
+    "lora: marks tests as lora adapter test",
     "flash_attn_test: marks tests related to flash attention (deselect with '-m \"not flash_attn_test\"')",
     "bitsandbytes: select (or deselect with `not`) bitsandbytes integration tests",
     "generate: marks tests that use the GenerationTesterMixin"
