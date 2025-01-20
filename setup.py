@@ -61,7 +61,7 @@ _deps = [
     "timeout-decorator",
     "torch",
     "torchvision",
-    "transformers~=4.47.1",
+    "transformers~=4.48.0",
 ]
 
 
